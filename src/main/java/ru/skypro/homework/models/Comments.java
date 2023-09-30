@@ -12,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 /*
+комменты за Тимуром
 проработать связь сущностей автор-комментарий и/или комментарий-объявление
  */
 @Component
