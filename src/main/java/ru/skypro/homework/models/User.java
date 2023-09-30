@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+/*
+Юзер за Настей
+ */
 
 @Data
 @Entity
