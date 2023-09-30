@@ -60,9 +60,9 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    @Bean
-    public ModelMapper getMapper() {
-        return new ModelMapper();
-    }
+//    @Bean
+//    public ModelMapper getMapper() {
+//        return new ModelMapper();
+//    }
 
 }

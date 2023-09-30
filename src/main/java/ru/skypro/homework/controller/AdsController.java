@@ -24,6 +24,7 @@ import java.util.List;
 // для данного контроллера. Указывает, что этот контроллер может обрабатывать запросы с указанного домена
 // (http://localhost:3000), даже если он отличается от домена, на котором запущено приложение.
 @RequiredArgsConstructor // генерирует конструктор с аргументами для всех полей, помеченных аннотацией @NonNull
+
 @RestController
 @RequestMapping("/ads")
 public class AdsController {
@@ -49,7 +50,7 @@ public class AdsController {
 
     // получение всех объявлений
     @GetMapping("/{adId}")
-        @Operation(summary = "Получение объявления по id")
+    @Operation(summary = "Получение объявления по id")
     public ResponseEntity<ExtendedAdDTO> getAdById(@PathVariable int adId) {
         ExtendedAdDTO extendedAdDTO = new ExtendedAdDTO();
         return ResponseEntity.ok().body(extendedAdDTO);
