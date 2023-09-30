@@ -1,10 +1,10 @@
-package ru.skypro.homework.service;
+package ru.skypro.homework.service.interfaces;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.models.Comments;
+import ru.skypro.homework.entity.Comments;
 
 import java.util.List;
-import java.util.Map;
+
 @Service
 public interface CommentsService {
 

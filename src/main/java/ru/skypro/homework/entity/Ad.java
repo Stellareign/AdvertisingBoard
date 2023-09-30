@@ -1,4 +1,4 @@
-package ru.skypro.homework.models;
+package ru.skypro.homework.entity;
 
 import lombok.*;
 import org.springframework.stereotype.Component;
@@ -24,8 +24,10 @@ public class Ad {
     private int price;              // 'цена объявления'
     private String title;           // 'заголовок объявления'
     private String adsDescription;  // 'описание объявления'
+
     private int authorId;              // id автора объявления
 
 //    @ManyToOne
+//    @JoinColumn(name ="user_id")/
 //    private User user;           //' автор объявления'
 }

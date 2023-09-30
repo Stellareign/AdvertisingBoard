@@ -1,7 +1,7 @@
-package ru.skypro.homework.service;
+package ru.skypro.homework.service.interfaces;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.models.Ad;
+import ru.skypro.homework.entity.Ad;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;

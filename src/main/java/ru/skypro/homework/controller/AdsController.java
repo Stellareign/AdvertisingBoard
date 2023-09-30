@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +13,9 @@ import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
 import ru.skypro.homework.dto.user.AddUserDTO;
-import ru.skypro.homework.models.Ad;
-import ru.skypro.homework.models.User;
-import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.User;
+import ru.skypro.homework.service.interfaces.AdsService;
 
 import java.util.List;
 

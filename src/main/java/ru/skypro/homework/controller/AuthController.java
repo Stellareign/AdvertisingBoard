@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.authorization.Login;
 import ru.skypro.homework.dto.authorization.Register;
-import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.interfaces.AuthService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")

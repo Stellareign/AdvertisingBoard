@@ -1,13 +1,11 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 
-import ru.skypro.homework.models.Ad;
+import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.repository.AdsRepository;
-import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.interfaces.AdsService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ru.skypro.homework.models;
+package ru.skypro.homework.entity;
 
 import lombok.*;
 import org.springframework.stereotype.Component;
@@ -30,8 +30,9 @@ public class User {
     private String phone;
 
     @Column(name = "avatar")
-    private String image;
+    private String image; // ссылка на аватар
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
 
