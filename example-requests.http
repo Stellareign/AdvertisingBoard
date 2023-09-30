@@ -1,4 +1,4 @@
-GET http://localhost:8080/ads/1/comments
+GET http://localhost:8080/ads/1/comment
 Content-Type: application/json
 Authorization: Basic user@gmail.com password
 

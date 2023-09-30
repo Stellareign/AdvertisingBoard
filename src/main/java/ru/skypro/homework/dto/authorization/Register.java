@@ -1,6 +1,7 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.dto.authorization;
 
 import lombok.Data;
+import ru.skypro.homework.dto.Role;
 
 @Data
 public class Register {
