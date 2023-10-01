@@ -21,7 +21,7 @@ import java.util.List;
 @CrossOrigin(value = "http://localhost:3000") // Позволяет настроить CORS (Cross-Origin Resource Sharing)
 // для данного контроллера. Указывает, что этот контроллер может обрабатывать запросы с указанного домена
 // (http://localhost:3000), даже если он отличается от домена, на котором запущено приложение.
-@RequiredArgsConstructor // генерирует конструктор с аргументами для всех полей, помеченных аннотацией @NonNull
+//@RequiredArgsConstructor // генерирует конструктор с аргументами для всех полей, помеченных аннотацией @NonNull
 @RestController
 @RequestMapping("/ads")
 public class AdsController {
@@ -32,9 +32,9 @@ public class AdsController {
         this.mapperUtil = mapperUtil;
     }
 
-    private AdsService adsService;
-    private UserRepository userRepository;
-    private MapperUtil mapperUtil;
+    private final AdsService adsService;
+    private final UserRepository userRepository;
+    private final MapperUtil mapperUtil;
 
 
     //****************************************************
@@ -88,8 +88,7 @@ public class AdsController {
 //      "title": "string",
 //              "price": 10000000,
 //              "description": "string"
-    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestParam String title, int price,
-                                       String description) {
+    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestParam String title, int price, String description) {
         CreateOrUpdateAdDTO updateAd = new CreateOrUpdateAdDTO(title, price, description);
         return ResponseEntity.ok(adsService.editAdById(adId, updateAd));
     }
@@ -118,7 +117,7 @@ public class AdsController {
         return ResponseEntity.ok().body(new AdsDTO(adList.size(), adList));
     }
 
-    @PatchMapping("/{adId}")//image
+    @PatchMapping("/{adId}/image")
     @Operation(summary = "Обновление картинки объявления")
     public ResponseEntity<Ad> editImageAdById(@PathVariable int adId, @RequestParam String imagePath) {
         if (adsService.getAdById(adId) == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

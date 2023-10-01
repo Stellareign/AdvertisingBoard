@@ -74,7 +74,6 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public Ad editImageAdById(int id, String imagePath)
             throws EntityNotFoundException {
-
         Optional<Ad> optionalAd = adsRepository.findById(id);
         if (optionalAd.isEmpty())        throwException(String.valueOf(id));
         Ad existingAd = optionalAd.get();
