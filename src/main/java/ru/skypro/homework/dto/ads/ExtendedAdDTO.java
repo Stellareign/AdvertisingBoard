@@ -1,7 +1,8 @@
 package ru.skypro.homework.dto.ads;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
+@AllArgsConstructor
 @Data
 public class ExtendedAdDTO {
     private int pk; //id объявления

@@ -1,4 +1,4 @@
-package ru.skypro.homework.models;
+package ru.skypro.homework.entity;
 
 import lombok.*;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,6 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Component
 @Table(name = "author")
 public class User {
 

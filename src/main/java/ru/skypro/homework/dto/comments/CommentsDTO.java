@@ -3,7 +3,7 @@ package ru.skypro.homework.dto.comments;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.skypro.homework.models.Comments;
+import ru.skypro.homework.entity.Comments;
 
 import java.util.List;
 /*

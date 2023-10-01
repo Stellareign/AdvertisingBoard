@@ -11,7 +11,7 @@ import ru.skypro.homework.dto.authorization.PasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UpdateUserImageDTO;
 import ru.skypro.homework.dto.user.AddUserDTO;
-import ru.skypro.homework.models.Password;
+import ru.skypro.homework.entity.Password;
 import ru.skypro.homework.service.AuthService;
 
 @Slf4j //  добавляет логгер в класс

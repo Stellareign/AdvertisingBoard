@@ -1,4 +1,4 @@
-package ru.skypro.homework.models;
+package ru.skypro.homework.entity;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
