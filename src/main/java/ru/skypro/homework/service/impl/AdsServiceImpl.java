@@ -1,22 +1,23 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 
-import ru.skypro.homework.models.Ad;
+import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 
 public class AdsServiceImpl implements AdsService {
-    private AdsRepository adsRepository;
+    private final AdsRepository adsRepository;
+
     public AdsServiceImpl(AdsRepository adsRepository) {
         this.adsRepository = adsRepository;
     }
@@ -28,16 +29,10 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ad getAdsById(int adsId) {
+    public Ad getAdById(int adsId) {
 
         return adsRepository.findById(adsId).orElseThrow();
     }
-
-    //    Получение информации об объявлении
-    Optional<Ad> getAds(int id) {
-        return adsRepository.findById(id);
-    }
-
     //+++++++++++++++++++++++++++++++++++++++++
     @Override
     public boolean deleteAdsById(int adsId) {
@@ -53,34 +48,57 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ad addAd(Ad ad) {
+    public Ad addAd(String title,   // 'заголовок объявления'
+                    int price,               // 'цена объявления'
+                    String image,            //'ссылка на картинку объявления'
+                    int author)  {
+        Ad ad = new Ad(title, price, image, author);
         return adsRepository.save(ad);
     }
 
     @Override
-    public Ad editAdById(int id, String title, int price, String description)
+    public Ad editAdById(int id, CreateOrUpdateAdDTO updateAd)
             throws EntityNotFoundException {
-
-        Optional optionalAd = adsRepository.findById(id);
-        if (!optionalAd.isPresent()) {
+        Optional<Ad> optionalAd = adsRepository.findById(id);
+        if (optionalAd.isEmpty()) {
             throwException(String.valueOf(id));
-
         }
-        Ad existingAd = (Ad) optionalAd.get();
+        Ad existingAd = optionalAd.get();
 
-        existingAd.setTitle(title);
-        existingAd.setPrice(price);
-        existingAd.setAdsDescription(description);
+        existingAd.setTitle(updateAd.getTitle());
+        existingAd.setPrice(updateAd.getPrice());
+        existingAd.setDescription(updateAd.getDescription());
 
         return adsRepository.save(existingAd);
     }
+    @Override
+    public Ad editImageAdById(int id, String imagePath)
+            throws EntityNotFoundException {
 
+        Optional<Ad> optionalAd = adsRepository.findById(id);
+        if (optionalAd.isEmpty())        throwException(String.valueOf(id));
+        Ad existingAd = optionalAd.get();
+        existingAd.setImage(imagePath);
+        return adsRepository.save(existingAd);
+    }
+    @Override
+    public List<Ad> getAllAdsByUser(int userId) {
+        return adsRepository.findAll()
+                .stream()
+                .filter(e -> e.getAuthor() == userId)
+                .collect(Collectors.toList());
+    }
+
+    /*
+    из разбора с Волковым
+    .stream()
+                .filter(e -> e.getValue().getIngredients.stream()
+                .anyMatch(i -> i.getTitle()/equals(ingrediente.getTitle())))
+                .map(e -> RecipeDTO.from(e.getKey(), e.getValue())))
+                .collect(Collectors.toList());
+     */
     private void throwException(String valueOf) {
     }
 
-    //****************** репозиторий
-    public void save(Ad ad) {
-        adsRepository.save(ad);
-    }
 }
 

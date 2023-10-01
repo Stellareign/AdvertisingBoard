@@ -2,10 +2,10 @@ package ru.skypro.homework.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import ru.skypro.homework.entity.Comments;
+import org.springframework.stereotype.Service;
+import ru.skypro.homework.entity.User;
 
 @EnableJpaRepositories
-
-public interface CommentRepository extends JpaRepository<Comments, Integer> {
-
+@Service
+public interface UserRepository extends JpaRepository<User, Integer> {
 }

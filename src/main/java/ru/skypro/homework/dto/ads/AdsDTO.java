@@ -1,8 +1,9 @@
 package ru.skypro.homework.dto.ads;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import ru.skypro.homework.dto.user.AddUserDTO;
+import ru.skypro.homework.entity.Ad;
+
+import java.util.List;
 
 /*
 За Алексеем
@@ -11,13 +12,6 @@ import ru.skypro.homework.dto.user.AddUserDTO;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdsDTO {
-    int pk;
-    String imageAd;
-    int price;
-    String title;
-    String adsDescription;
-    private int authorId;
-//    @JsonProperty("user")
-//    AddUserDTO author;
-
+    private int pk;
+    private List<Ad> adList;
 }

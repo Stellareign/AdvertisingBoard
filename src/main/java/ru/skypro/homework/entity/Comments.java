@@ -1,4 +1,4 @@
-package ru.skypro.homework.models;
+package ru.skypro.homework.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,6 @@ import javax.persistence.*;
 комменты за Тимуром
 проработать связь сущностей автор-комментарий и/или комментарий-объявление
  */
-@Component
 @Table(name = "comments")
 public class Comments {
 

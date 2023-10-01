@@ -1,15 +1,11 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.models.Comments;
+import ru.skypro.homework.entity.Comments;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.CommentsService;
 
-import java.lang.module.ResolutionException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service

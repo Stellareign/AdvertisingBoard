@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.NewCommentsDTO;
 import ru.skypro.homework.dto.comments.UpdateCommentsDTO;
-import ru.skypro.homework.models.Comments;
+import ru.skypro.homework.entity.Comments;
 import ru.skypro.homework.service.CommentsService;
 
 import java.util.List;
