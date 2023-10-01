@@ -38,12 +38,4 @@ public class Ad {
         this.image = image;
         this.author = author;
     }
-//    public Ad(String title, int price, String image, int authorId, UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//        this.title = title;
-//        this.price = price;
-//        this.image = image;
-//        Optional<User> user = userRepository.findById(authorId);
-//        user.ifPresent(value -> this.author = value);
-//    }
 }
