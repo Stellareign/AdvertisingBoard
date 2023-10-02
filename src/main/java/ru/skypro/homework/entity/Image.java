@@ -1,11 +1,19 @@
 package ru.skypro.homework.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Component
+@Table(name = "Images")
 public class Image {
     @Id
     @Column(name = "image_id")
@@ -21,4 +29,8 @@ public class Image {
 
     @Column(name = "image_size")
     private Long imageSize;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

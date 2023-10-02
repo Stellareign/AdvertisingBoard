@@ -13,13 +13,21 @@ import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 @Configuration
 public class MapperUtil {
+    @Bean
+    public ModelMapper modelMapper() {
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration() // задаём настройки маппера
+                .setMatchingStrategy(MatchingStrategies.STANDARD) // стратегия соответствия (??? нужна)
+                .setFieldMatchingEnabled(true) // сопоставление соответствия полей
+                .setSkipNullEnabled(true) // пропуск пустых полей
+                .setFieldAccessLevel(PRIVATE); // приватный уровень доступа
+        return mapper;
+    }
+    public ModelMapper getMapper() {
+        return new ModelMapper();
+    }
 
-
-//    public ModelMapper getMapper() {
-//        return new ModelMapper();
-//    }
-
-    public static <R, E> List<R> convertList(List<E> list, Function<E, R> converter) {
+    public  <R, E> List<R> convertList(List<E> list, Function<E, R> converter) {
         return list.stream().map(e -> converter.apply(e)).collect(Collectors.toList());
     }
 }

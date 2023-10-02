@@ -1,32 +1,27 @@
 package ru.skypro.homework.dto.user;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Role;
 
 @Data
 @Getter
 @Setter
-public class AddUserDTO {
+@Component
+public class UserDTO {
 
     private int id;
     private String firstName;
     private String lastName;
-    private String eMail;
     private String phone;
+
+    private String email;
     private String image;
     private Role role;
 
 //******************* геттеры и сеттеры ***********
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -44,20 +39,20 @@ public class AddUserDTO {
         this.lastName = lastName;
     }
 
-    public String geteMail() {
-        return eMail;
-    }
-
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
-    }
-
     public String getPhone() {
         return phone;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getImage() {
@@ -74,5 +69,9 @@ public class AddUserDTO {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public int getId() {
+        return id;
     }
 }

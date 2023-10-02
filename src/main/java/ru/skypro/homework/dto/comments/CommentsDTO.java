@@ -3,7 +3,7 @@ package ru.skypro.homework.dto.comments;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.skypro.homework.entity.Comments;
+import ru.skypro.homework.entity.Comment;
 
 import java.util.List;
 /*
@@ -18,7 +18,7 @@ public class CommentsDTO {
 
     private int count; // общее количество комментариев
 
-    private List<Comments> allComm;
+    private List<Comment> allComm;
 
 //    private int author; // id автора комментария
 //    private String authorImage; // ссылка на аватар автора комментария

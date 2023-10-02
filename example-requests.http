@@ -1,6 +1,6 @@
 GET http://localhost:8080/ads/1/comment
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user@gmail.com currentPassword
 
 ###
 POST http://localhost:8080/login
@@ -8,7 +8,7 @@ Content-Type: application/json
 
 {
   "username": "user@gmail.com",
-  "password": "password"
+  "currentPassword": "currentPassword"
 }
 
 ###
@@ -17,7 +17,7 @@ Content-Type: application/json
 
 {
   "username": "user@gmail.com",
-  "password": "password",
+  "currentPassword": "currentPassword",
   "firstName": " asdad",
   "lastName": " asdad",
   "phone": " asdad",
@@ -27,17 +27,17 @@ Content-Type: application/json
 ###
 GET http://localhost:8080/ads/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user@gmail.com currentPassword
 
 ###
 GET http://localhost:8080/users/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user@gmail.com currentPassword
 
 ###
 PATCH http://localhost:8080/users/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user@gmail.com currentPassword
 
 {
   "phone": "33333",
@@ -48,22 +48,22 @@ Authorization: Basic user@gmail.com password
 ###
 GET http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user@gmail.com currentPassword
 
 ###
 POST http://localhost:8080/users/set_password
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user@gmail.com currentPassword
 
 {
-  "newPassword": "password",
+  "newPassword": "currentPassword",
   "currentPassword": "password1"
 }
 
 ###
 POST http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user@gmail.com currentPassword
 
 {
   "price": 123,

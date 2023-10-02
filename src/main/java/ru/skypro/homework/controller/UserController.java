@@ -4,15 +4,24 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.spi.MappingContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.authorization.PasswordDTO;
+import org.springframework.web.multipart.MultipartFile;
+
+import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
-import ru.skypro.homework.dto.user.UpdateUserImageDTO;
-import ru.skypro.homework.dto.user.AddUserDTO;
-import ru.skypro.homework.entity.Password;
+import ru.skypro.homework.dto.user.UserDTO;
+import ru.skypro.homework.entity.User;
+import ru.skypro.homework.mappers.PasswordMapper;
+import ru.skypro.homework.mappers.UserMapper;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.AuthService;
+import ru.skypro.homework.service.interfaces.ImageService;
+
+import java.util.Optional;
 
 @Slf4j //  добавляет логгер в класс
 @CrossOrigin(value = "http://localhost:3000") // позволяет настроить CORS (Cross-Origin Resource Sharing)
@@ -20,37 +29,47 @@ import ru.skypro.homework.service.interfaces.AuthService;
 // (http://localhost:3000), даже если он отличается от домена, на котором запущено приложение.
 @RequiredArgsConstructor // генерирует конструктор с аргументами для всех полей, помеченных аннотацией @NonNull
 @RestController
-@RequestMapping("/user")
-@Tag(name = "Пользователь")
+@RequestMapping("/users")
+@Tag(name = "Пользователи")
 
 public class UserController {
 
     private final AuthService authService;
-    AddUserDTO userDTO = new AddUserDTO();
+    private final UserMapper userMapper;
 
-    @Operation(summary = "Обновление пароля")
-    @PostMapping("/set_password/")
-    public ResponseEntity<PasswordDTO> setPassword(@RequestParam String currentPassword,
-                                                   @RequestParam String newPassword,
-                                                   Password password) {
-        PasswordDTO passwordDTO = new PasswordDTO();
-        if (!newPassword.equals(password.getPassword()) && newPassword.length() >= 8 && !newPassword.isBlank()) {
-            passwordDTO.setCurrentPassword(password.getPassword());
-            passwordDTO.setNewPassword(newPassword);
 
-            password.setPassword(newPassword);
+    private final PasswordMapper passwordMapper;
+    private final UserRepository userRepository;
+    private final ImageService imageService;
 
-            return ResponseEntity.ok().body(passwordDTO);
-        } else if (!currentPassword.equals(password.getPassword())) {
+
+    @Operation(summary = "Обновление пароля пользователя")
+    @PostMapping("/set_password")
+    public ResponseEntity<UpdatePasswordDTO> setPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO, User user) {
+        String newPassword = updatePasswordDTO.getNewPassword();
+        String currentPassword = updatePasswordDTO.getCurrentPassword();
+
+        if (!newPassword.equals(currentPassword) && newPassword.length() >= 8 && !newPassword.isBlank()
+                && currentPassword.equals(user.getCurrentPassword())) {
+            passwordMapper.passToEntityConverter(updatePasswordDTO);
+            return ResponseEntity.ok().body(updatePasswordDTO);
+
+        } else if (!currentPassword.equals(user.getCurrentPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
         } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @Operation(summary = "Получение информации об авторизованном пользователе")
-    @GetMapping("/me/{email}")
-    public ResponseEntity<?> getUser(@RequestParam String eMail) {
-        // UserDTO userDTO = userService.getUserByEmail(email);
-        if (userDTO != null) {
+    @GetMapping("/me")
+    public ResponseEntity<?> getUser(@RequestParam String phone) {
+        String number = phone.replaceAll("\\D", "");
+        int id = Integer.parseInt(number);
+        Optional<User> optiUser = userRepository.findById(id);
+        User user = (User) optiUser.get();
+        userMapper.userToDtoConverter().convert((MappingContext<User, UserDTO>) user);
+        if (user != null) {
+            UserDTO userDTO = new UserDTO();
             return ResponseEntity.ok().body(userDTO);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -59,24 +78,22 @@ public class UserController {
 
     @Operation(summary = "Обновление информации об авторизованном пользователе")
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUser(String firstName, String lastName, String phone) {
-        UpdateUserDTO updateUserDTO = new UpdateUserDTO();
-        updateUserDTO.setFirstName(firstName);
-        updateUserDTO.setLastName(lastName);
-        updateUserDTO.setPhone(phone);
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+
         return ResponseEntity.ok().body(updateUserDTO);
     }
 
     @Operation(summary = "Обновление аватара авторизованного пользователя")
-    @PatchMapping("/me/image")
-    public ResponseEntity<?> updateUserImage(String image) {
-        UpdateUserImageDTO updateUserImage = new UpdateUserImageDTO();
-        AddUserDTO newUserDTO = new AddUserDTO();
-        if (image != null) {
-            updateUserImage.setImage(image);
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image) {
+
+        UserDTO newUserDTO = new UserDTO();
+        if (!image.isEmpty() && image.getContentType().startsWith("image/")) {
+
             return ResponseEntity.ok().body(newUserDTO);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
 }

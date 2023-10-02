@@ -1,8 +1,7 @@
 package ru.skypro.homework.dto.ads;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import ru.skypro.homework.dto.user.AddUserDTO;
+import org.springframework.stereotype.Component;
 
 /*
 За Алексеем
@@ -10,6 +9,7 @@ import ru.skypro.homework.dto.user.AddUserDTO;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Component
 public class AdsDTO {
     int pk;
     String imageAd;

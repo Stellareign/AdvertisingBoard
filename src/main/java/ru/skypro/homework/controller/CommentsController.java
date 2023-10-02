@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.NewCommentsDTO;
 import ru.skypro.homework.dto.comments.UpdateCommentsDTO;
-import ru.skypro.homework.entity.Comments;
+import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.service.interfaces.CommentsService;
 
 import java.util.List;
@@ -21,16 +21,16 @@ import java.util.List;
 // (http://localhost:3000), даже если он отличается от домена, на котором запущено приложение.
 @RequiredArgsConstructor // генерирует конструктор с аргументами для всех полей, помеченных аннотацией @NonNull
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/ads/comments")
 @Tag(name = "Комментарии")
 public class CommentsController {
 
     private CommentsService commentsService;
 
     @Operation(summary = "Получение списка всех комментариев")
-    @GetMapping
+    @GetMapping("/{id}/comments")
     public ResponseEntity<CommentsDTO> getComment(int adsId) {
-        List<Comments> allComments = commentsService.allComm(adsId);
+        List<Comment> allComments = commentsService.allComm(adsId);
         CommentsDTO commentsDTO = new CommentsDTO(allComments.size(), allComments);
         if (!allComments.isEmpty()) {
             return ResponseEntity.ok().body(commentsDTO);
@@ -39,7 +39,7 @@ public class CommentsController {
 
     // добавление комментариев
     @Operation(summary = "Добавление нового комментария")
-    @PostMapping
+    @PostMapping("/{id}/comments")
     public ResponseEntity<?> addComment(@RequestBody NewCommentsDTO comments) {
         if (comments != null) {
             return ResponseEntity.ok(comments);
@@ -48,13 +48,13 @@ public class CommentsController {
 
     // удаление комментария по id
     @Operation(summary = "Удаление комментария")
-    @DeleteMapping("/ads/{adId}/comments/{commentId}")
+    @DeleteMapping("/{id}/comments/{commentId}")
     public void deleteComment(@RequestParam int id) {
     }
 
     // обновление комментария
     @Operation(summary = "Обновление комментария")
-    @PatchMapping
+    @PatchMapping("/{id}/comments")
     public ResponseEntity<?> updateComment(@RequestParam int adId, int commentId, String text) {
         UpdateCommentsDTO updateCommentsDTO = new UpdateCommentsDTO();
         return ResponseEntity.ok(updateCommentsDTO);

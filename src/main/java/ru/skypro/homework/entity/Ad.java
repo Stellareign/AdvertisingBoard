@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Data
 @Component
 @Entity
+
 @Table(name = "advertisement")
 /*
 проработать связь сущностей автор-объявление
@@ -17,17 +18,22 @@ import javax.persistence.*;
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ads_id",  nullable = false)
+    @Column(name = "ads_id", nullable = false)
     private int pk;                 //'id объявления'
 
+    @Column(name = "image_reference")
     private String imageAd;         //'ссылка на картинку объявления'
+    @Column(name = "price")
     private int price;              // 'цена объявления'
+
+    @Column(name = "title")
     private String title;           // 'заголовок объявления'
+
+    @Column(name = "description")
     private String adsDescription;  // 'описание объявления'
 
-    private int authorId;              // id автора объявления
 
-//    @ManyToOne
-//    @JoinColumn(name ="user_id")/
-//    private User user;           //' автор объявления'
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;           //' автор объявления'
 }

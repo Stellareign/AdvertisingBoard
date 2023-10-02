@@ -13,16 +13,5 @@ import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 public class DiplomaWorkApplication {
   public static void main(String[] args) {
     SpringApplication.run(DiplomaWorkApplication.class, args);
-
-  }
-  @Bean
-  public ModelMapper modelMapper() {
-    ModelMapper mapper = new ModelMapper();
-    mapper.getConfiguration() // задаём настройки маппера
-            .setMatchingStrategy(MatchingStrategies.STANDARD) // стратегия соответствия (??? нужна)
-            .setFieldMatchingEnabled(true) // сопоставление соответствия полей
-            .setSkipNullEnabled(true) // пропуск пустых полей
-            .setFieldAccessLevel(PRIVATE); // приватный уровнь доступа
-    return mapper;
   }
 }

@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-
 public class AdsServiceImpl implements AdsService {
     private AdsRepository adsRepository;
     public AdsServiceImpl(AdsRepository adsRepository) {

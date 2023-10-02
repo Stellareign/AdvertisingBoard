@@ -12,7 +12,7 @@ import ru.skypro.homework.dto.ads.AdsDTO;
 
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
-import ru.skypro.homework.dto.user.AddUserDTO;
+import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.service.interfaces.AdsService;
@@ -29,9 +29,10 @@ import java.util.List;
 @RequestMapping("/ads")
 public class AdsController {
 
-    public AdsController(AdsService adsService, ModelMapper modelMapper) {
+    public AdsController(AdsService adsService, ModelMapper modelMapper, MapperUtil mapperUtil) {
         this.adsService = adsService;
         this.modelMapper = modelMapper;
+        this.mapperUtil = mapperUtil;
     }
 
     private AdsService adsService;
@@ -39,13 +40,16 @@ public class AdsController {
     private ModelMapper modelMapper;
 
 
+    private final MapperUtil mapperUtil;
+
+
     //****************************************************
     // получение всех объявлений
-    @GetMapping
+    @GetMapping("/ads/comments/ads/{id}/comments")
 //        @Operation(summary = "Получение всех объявлений")
     public List<AdsDTO> getAllAds() {
         List<Ad> adList = adsService.getAllAds();
-        return MapperUtil.convertList(adList, this::convertToAdsDto);
+        return mapperUtil.convertList(adList, this::convertToAdsDto);
     }
 
     // получение всех объявлений
@@ -63,8 +67,8 @@ public class AdsController {
         return adsDTO;
     }
 
-    private AddUserDTO convertToAddUserDto(User user) {
-        return modelMapper.map(user, AddUserDTO.class);
+    private UserDTO convertToAddUserDto(User user) {
+        return modelMapper.map(user, UserDTO.class);
     }
 
     // добавление объявления

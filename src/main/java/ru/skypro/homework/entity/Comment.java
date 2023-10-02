@@ -1,6 +1,7 @@
 package ru.skypro.homework.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,12 +12,13 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+
 /*
 проработать связь сущностей автор-комментарий и/или комментарий-объявление
  */
 @Component
 @Table(name = "comments")
-public class Comments {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,4 +34,7 @@ public class Comments {
     @Column(name = "ads_id",  nullable = false)
     private int adId;  // id объявления
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
