@@ -51,7 +51,7 @@ public class AdsController {
     public ResponseEntity<Ad> createAd(@RequestBody String title,   // 'заголовок объявления'
                                        int price,               // 'цена объявления'
                                        String image,            //'ссылка на картинку объявления'
-                                       int author) {            //'id автора объявления'
+                                       User author) {            //'id автора объявления'
         Ad newAd = adsService.addAd(title, price, image, author);
         if (newAd != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(newAd);
@@ -64,7 +64,7 @@ public class AdsController {
     public ResponseEntity<ExtendedAdDTO> getAdById(@PathVariable int adId) {
         Ad adById = adsService.getAdById(adId);
         if (adById == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        User authorAd = userRepository.findById(adById.getAuthor()).orElseThrow();
+        User authorAd = userRepository.findById(adById.getAuthor().getId()).orElseThrow();
 //      if (authorAd == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok().body(mapperUtil.createExtendedAdDTO(adById, authorAd));
     }
