@@ -29,16 +29,9 @@ import java.util.List;
 @RequestMapping("/ads")
 public class AdsController {
 
-    public AdsController(AdsService adsService, ModelMapper modelMapper, MapperUtil mapperUtil) {
-        this.adsService = adsService;
-        this.modelMapper = modelMapper;
-        this.mapperUtil = mapperUtil;
-    }
+    private final AdsService adsService;
 
-    private AdsService adsService;
-
-    private ModelMapper modelMapper;
-
+    private final ModelMapper modelMapper;
 
     private final MapperUtil mapperUtil;
 

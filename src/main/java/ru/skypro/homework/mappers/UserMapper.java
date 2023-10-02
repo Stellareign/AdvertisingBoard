@@ -3,6 +3,7 @@ package ru.skypro.homework.mappers;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
@@ -13,6 +14,7 @@ import javax.annotation.PostConstruct;
 public class UserMapper {
 
     private final ModelMapper mapper;
+
     public UserMapper(ModelMapper mapper) {
         this.mapper = mapper;
     }
@@ -20,13 +22,18 @@ public class UserMapper {
 
     @PostConstruct
     public void setupMapper() {
-        // регистрация юзера
+        // получение инфы о пользователе
         mapper.createTypeMap(User.class, UserDTO.class) // создание маппинга между классами
                 .setPostConverter(userToDtoConverter()); // если надо пропустить поле, то перед сет добавить поле типа addMappings(m -> m.skip(AddUserDTO::setId))
         mapper.createTypeMap(UserDTO.class, User.class)
                 .setPostConverter(userToEntityConverter())
                 .addMappings(m -> m.skip(User::setCurrentPassword));
-        // смена пароля
+        // регистрация пользователя
+        mapper.createTypeMap(User.class, Register.class) // создание маппинга между классами
+                .setPostConverter(userToRegisterConverter()); // если надо пропустить поле, то перед сет добавить поле типа addMappings(m -> m.skip(AddUserDTO::setId))
+        mapper.createTypeMap(Register.class, User.class)
+                .setPostConverter(registerToUserConverter())
+                .addMappings(m -> m.skip(User::setCurrentPassword));
 
         // обновление юзера
         mapper.createTypeMap(User.class, UpdateUserDTO.class) // создание маппинга между классами
@@ -43,6 +50,8 @@ public class UserMapper {
       и сохранение в переменную;
       return context.getDestination(); - возвращаем целевой объект из контекста преобразования.
      */
+
+    // ПОЛУЧЕНИЕ ИНФЫ О ПОЛЬЗОВАТЕЛЕ
     public Converter<User, UserDTO> userToDtoConverter() {
         return context -> {
             User source = context.getSource(); // источник
@@ -59,6 +68,7 @@ public class UserMapper {
         };
     }
 
+    // ОБНОВЛЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ
     public Converter<User, UpdateUserDTO> UpdUserToDtoConverter() {
         return context -> {
             User source = context.getSource(); // источник
@@ -74,5 +84,20 @@ public class UserMapper {
             return context.getDestination();
         };
     }
+//РЕГИСТРАЦИЯ ПОЛЬЗОВАТЕЛЯ
+public Converter<User, Register> userToRegisterConverter() {
+    return context -> {
+        User source = context.getSource(); // источник
+        Register result = context.getDestination();
+        return context.getDestination();
+    };
+}
 
+    public Converter<Register, User> registerToUserConverter() {
+        return context -> {
+            Register source = context.getSource();
+            User result = context.getDestination();
+            return context.getDestination();
+        };
+    }
 }

@@ -1,12 +1,10 @@
 package ru.skypro.homework.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.dto.user.UserDTO;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -19,7 +17,7 @@ import java.util.Objects;
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
+@Table(name = "author")
 public class User {
 
     @Id
@@ -37,6 +35,7 @@ public class User {
     @Pattern(regexp = "\\+7\\s?\\(\\d{3}\\)\\s?\\d{3}-\\d{2}-\\d{2}")
     @Column(name = "phone", nullable = false)
     private String phone;
+
     //**********************************
     @Column(name = "e_mail")
     private String email; // логин пользователя
@@ -47,10 +46,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
+
     // **********************************
     @Column(name = "user_password")
     @Size(min = 8, max = 16)
     private String currentPassword;
+
     // ************************************
     @OneToMany
     List<Comment> comment;

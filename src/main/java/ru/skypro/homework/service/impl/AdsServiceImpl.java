@@ -1,5 +1,7 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 
@@ -10,6 +12,7 @@ import ru.skypro.homework.service.interfaces.AdsService;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class AdsServiceImpl implements AdsService {
