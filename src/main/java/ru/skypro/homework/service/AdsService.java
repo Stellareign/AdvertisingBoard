@@ -3,6 +3,7 @@ package ru.skypro.homework.service;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.User;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -19,8 +20,7 @@ public interface AdsService {
     Ad addAd(String title,   // 'заголовок объявления'
              int price,               // 'цена объявления'
              String image,            //'ссылка на картинку объявления'
-             int author);
-
+             User author);
 
     Ad editAdById(int id, CreateOrUpdateAdDTO updateAd)
             throws EntityNotFoundException;

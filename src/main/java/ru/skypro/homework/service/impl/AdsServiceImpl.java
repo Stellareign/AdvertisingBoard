@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 
 import ru.skypro.homework.entity.Ad;
@@ -51,7 +52,7 @@ public class AdsServiceImpl implements AdsService {
     public Ad addAd(String title,   // 'заголовок объявления'
                     int price,               // 'цена объявления'
                     String image,            //'ссылка на картинку объявления'
-                    int author)  {
+                    User author)  {
         Ad ad = new Ad(title, price, image, author);
         return adsRepository.save(ad);
     }
@@ -84,7 +85,7 @@ public class AdsServiceImpl implements AdsService {
     public List<Ad> getAllAdsByUser(int userId) {
         return adsRepository.findAll()
                 .stream()
-                .filter(e -> e.getAuthor() == userId)
+                .filter(e -> e.getAuthor().getId() == userId)
                 .collect(Collectors.toList());
     }
 
