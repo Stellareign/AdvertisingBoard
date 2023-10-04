@@ -1,6 +1,7 @@
 package ru.skypro.homework.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Role;
@@ -9,7 +10,6 @@ import ru.skypro.homework.dto.Role;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.List;
 import java.util.Objects;
 
 
@@ -17,18 +17,24 @@ import java.util.Objects;
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "author")
+@Builder
+@Table(name = "authors")
+
 public class User {
 
     @Id
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "author_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "first_name")
+    @Column(name = "e-mail", nullable = false)
+    private String username; // логин при регистрации - e-mail
+
+    @Column(name = "first_name", nullable = false)
     @Size(min = 3, max = 10)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     @Size(min = 3, max = 10)
     private String lastName;
 
@@ -37,32 +43,34 @@ public class User {
     private String phone;
 
     //**********************************
-    @Column(name = "e_mail")
-    private String email; // логин пользователя
+
 
     @Column(name = "avatar")
     private String image; // ссылка на аватар
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private Role role;
 
     // **********************************
-    @Column(name = "user_password")
+    @Column(name = "user_password", nullable = false)
     @Size(min = 8, max = 16)
     private String currentPassword;
 
-    // ************************************
-    @OneToMany
-    List<Comment> comment;
 
-    @OneToMany
-    List<Ad> ads;
+//*********************** контсрукторы **************************
 
-    @OneToOne
-    @JoinColumn(name = "image_id")
-    Image avatar;
+    public User(String username) {
+        this.username = username;
+    }
 
+    public User(String username, String firstName, String lastName, Role role, String currentPassword) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+        this.currentPassword = currentPassword;
+    }
     //*************************** преобразование телефонного номера в id ***********
 //    private Integer phoneToId (String phone) {
 //        String phoneToNum = phone.replaceAll("\\D", ""); // удаление всех нецифровых символов
@@ -71,6 +79,22 @@ public class User {
 //    }
 
     //******************* геттеры и сеттеры ***********
+
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -104,14 +128,6 @@ public class User {
         this.image = image;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public Role getRole() {
         return role;
     }
@@ -128,20 +144,25 @@ public class User {
         this.currentPassword = currentPassword;
     }
 
-    public int getId() {
-        return id;
-    }
+
+
+
+    //*******************************************************
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(phone, user.phone) && Objects.equals(image, user.image) && Objects.equals(email, user.email) && role == user.role && Objects.equals(currentPassword, user.currentPassword);
+        return id == user.id && Objects.equals(username, user.username)
+                && Objects.equals(firstName, user.firstName)
+                && Objects.equals(lastName, user.lastName) && Objects.equals(phone, user.phone)
+                && Objects.equals(image, user.image) && role == user.role
+                && Objects.equals(currentPassword, user.currentPassword);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, phone, image, email, role, currentPassword);
+        return Objects.hash(id, username, firstName, lastName, phone, image, role, currentPassword);
     }
 }

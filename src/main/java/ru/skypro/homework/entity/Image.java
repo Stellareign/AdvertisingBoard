@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Table(name = "Images")
 public class Image {
     @Id
-    @Column(name = "image_id")
+    @Column(name = "image_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -31,6 +31,6 @@ public class Image {
     private Long imageSize;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "author_id")
     private User user;
 }

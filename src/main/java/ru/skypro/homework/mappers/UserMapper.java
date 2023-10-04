@@ -28,30 +28,37 @@ public class UserMapper {
         mapper.createTypeMap(UserDTO.class, User.class)
                 .setPostConverter(userToEntityConverter())
                 .addMappings(m -> m.skip(User::setCurrentPassword));
+
         // регистрация пользователя
-        mapper.createTypeMap(User.class, Register.class) // создание маппинга между классами
-                .setPostConverter(userToRegisterConverter()); // если надо пропустить поле, то перед сет добавить поле типа addMappings(m -> m.skip(AddUserDTO::setId))
+        mapper.createTypeMap(User.class, Register.class)
+                .setPostConverter(userToRegisterConverter());
         mapper.createTypeMap(Register.class, User.class)
                 .setPostConverter(registerToUserConverter())
-                .addMappings(m -> m.skip(User::setCurrentPassword));
+                .addMappings(m -> m.skip(User::setImage))
+                .addMappings(m -> m.skip(User::setId));
+
 
         // обновление юзера
-        mapper.createTypeMap(User.class, UpdateUserDTO.class) // создание маппинга между классами
+        mapper.createTypeMap(User.class, UpdateUserDTO.class)
                 .setPostConverter(UpdUserToDtoConverter());
         mapper.createTypeMap(UpdateUserDTO.class, User.class)
-                .setPostConverter(UpdUserToEntityConverter());
+                .setPostConverter(UpdUserToEntityConverter())
+                .addMappings(m -> m.skip(User::setImage))
+                .addMappings(m -> m.skip(User::setRole))
+                .addMappings(m -> m.skip(User::setImage))
+                .addMappings(m -> m.skip(User::setId));
     }
 
     /*
       public Converter<User, AddUserDTO> passToDtoConverter() , пояснения:
-      Converter<User, AddUserDTO - анонимный класс для определения логики преобразованя;
+      Converter<User, AddUserDTO - анонимный класс для определения логики преобразования;
       User source = context.getSource(); - получение юзера из контекста преобразования и сохранение в переменную;
       AddUserDTO destination = context.getDestination(); - получение дто из контекста преобразования
       и сохранение в переменную;
       return context.getDestination(); - возвращаем целевой объект из контекста преобразования.
      */
 
-    // ПОЛУЧЕНИЕ ИНФЫ О ПОЛЬЗОВАТЕЛЕ
+    // ***********ПОЛУЧЕНИЕ ИНФЫ О ПОЛЬЗОВАТЕЛЕ*******************************
     public Converter<User, UserDTO> userToDtoConverter() {
         return context -> {
             User source = context.getSource(); // источник
@@ -68,7 +75,7 @@ public class UserMapper {
         };
     }
 
-    // ОБНОВЛЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ
+    // *************ОБНОВЛЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ*******************************
     public Converter<User, UpdateUserDTO> UpdUserToDtoConverter() {
         return context -> {
             User source = context.getSource(); // источник
@@ -84,7 +91,7 @@ public class UserMapper {
             return context.getDestination();
         };
     }
-//РЕГИСТРАЦИЯ ПОЛЬЗОВАТЕЛЯ
+//********************РЕГИСТРАЦИЯ ПОЛЬЗОВАТЕЛЯ************************************
 public Converter<User, Register> userToRegisterConverter() {
     return context -> {
         User source = context.getSource(); // источник

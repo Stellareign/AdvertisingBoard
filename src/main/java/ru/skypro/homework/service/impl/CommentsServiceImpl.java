@@ -21,7 +21,7 @@ public class CommentsServiceImpl implements CommentsService {
         return
       commentRepository.findAll()
                 .stream()
-                .filter(e -> e.getAdId() == adsId)
+                .filter(e -> e.getAd().getPk() == adsId)
                 .collect(Collectors.toList());
     }
 }

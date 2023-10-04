@@ -1,14 +1,32 @@
 
-- 24.09.23
- 1) "currentPassword": "stringst",
+
+ *) "currentPassword": "stringst",
   "newPassword": "stringst
   - что за тип stringst????
 
- 2) как добавить описание типа @Tag (name = "Пользователи")
+ *) как добавить описание типа @Tag (name = "Пользователи")
 
- 3) Запуск докера из терминала: docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.19
+ *) Запуск докера из терминала: docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.19
 
- 4) in changelog-master написать:
+ *) in changelog-master написать:
  databaseChangeLog:
    - include:
        file: liquibase/init.sql::raw::includeAll
+
+*) Регистрация в сваггер
+{
+  "username": "pupkin@poy.ru",
+  "password": "qwerty123",
+  "firstName": "Ваня",
+  "lastName": "Пупкин",
+  "phone": "+7(123)-456-78-90",
+  "role": "USER"
+}
+
+*) логин:
+{
+  "username": "pupkin@poy.ru",
+  "password": "qwerty123"
+}
+
+*) https://editor.swagger.io/

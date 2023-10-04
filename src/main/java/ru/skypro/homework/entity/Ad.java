@@ -12,9 +12,7 @@ import javax.persistence.*;
 @Entity
 
 @Table(name = "advertisement")
-/*
-проработать связь сущностей автор-объявление
- */
+
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,6 +21,7 @@ public class Ad {
 
     @Column(name = "image_reference")
     private String imageAd;         //'ссылка на картинку объявления'
+
     @Column(name = "price")
     private int price;              // 'цена объявления'
 
@@ -34,6 +33,6 @@ public class Ad {
 
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;           //' автор объявления'
+    @JoinColumn(name = "author_id")
+    private User user;           // автор объявления
 }

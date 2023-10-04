@@ -5,9 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.spi.MappingContext;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +22,7 @@ import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.AuthService;
 import ru.skypro.homework.service.interfaces.ImageService;
-
-import java.util.Optional;
+import ru.skypro.homework.service.interfaces.UserService;
 
 @Slf4j //  добавляет логгер в класс
 @CrossOrigin(value = "http://localhost:3000") // позволяет настроить CORS (Cross-Origin Resource Sharing)
@@ -41,20 +42,19 @@ public class UserController {
     private final PasswordMapper passwordMapper;
     private final UserRepository userRepository;
     private final ImageService imageService;
+    private final UserService userService;
+
 
 
     @Operation(summary = "Обновление пароля пользователя")
     @PostMapping("/set_password")
-    public ResponseEntity<UpdatePasswordDTO> setPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO, User user) {
-        String newPassword = updatePasswordDTO.getNewPassword();
-        String currentPassword = updatePasswordDTO.getCurrentPassword();
-
-        if (!newPassword.equals(currentPassword) && newPassword.length() >= 8 && !newPassword.isBlank()
-                && currentPassword.equals(user.getCurrentPassword())) {
+    public ResponseEntity<UpdatePasswordDTO> setPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO) {
+        boolean checkPassword = userService.checkPassword(updatePasswordDTO);
+       if(checkPassword){
             passwordMapper.passToEntityConverter(updatePasswordDTO);
             return ResponseEntity.ok().body(updatePasswordDTO);
 
-        } else if (!currentPassword.equals(user.getCurrentPassword())) {
+        } else if (!checkPassword) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -62,14 +62,10 @@ public class UserController {
 
     @Operation(summary = "Получение информации об авторизованном пользователе")
     @GetMapping("/me")
-    public ResponseEntity<?> getUser(@RequestParam String phone) {
-        String number = phone.replaceAll("\\D", "");
-        int id = Integer.parseInt(number);
-        Optional<User> optiUser = userRepository.findById(id);
-        User user = (User) optiUser.get();
-        userMapper.userToDtoConverter().convert((MappingContext<User, UserDTO>) user);
+    public ResponseEntity<UserDTO> getUser(@RequestParam String email) {
+        User user =userService.gerUserByEmail(email);
         if (user != null) {
-            UserDTO userDTO = new UserDTO();
+            UserDTO userDTO = userMapper.userToDtoConverter().convert((MappingContext<User, UserDTO>) user);
             return ResponseEntity.ok().body(userDTO);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

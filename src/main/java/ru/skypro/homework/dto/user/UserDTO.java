@@ -13,13 +13,15 @@ import ru.skypro.homework.dto.Role;
 public class UserDTO {
 
     private int id;
+    private String email; // логин
     private String firstName;
     private String lastName;
     private String phone;
 
-    private String email;
     private String image;
     private Role role;
+
+    private String currentPassword;
 
 //******************* геттеры и сеттеры ***********
 
@@ -71,7 +73,19 @@ public class UserDTO {
         this.role = role;
     }
 
+    public String getCurrentPassword() {
+        return currentPassword;
+    }
+
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
+    }
+
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
