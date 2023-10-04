@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 
 @Table(name = "comment")
-public class CommenT {
+public class NewComments {
     @Id
     private Long id;
 

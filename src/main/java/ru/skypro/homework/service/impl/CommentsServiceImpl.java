@@ -2,7 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.entity.Comments;
-import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.NewCommentsRepository;
 import ru.skypro.homework.service.CommentsService;
 
 import java.util.List;
@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class CommentsServiceImpl implements CommentsService {
-    private final CommentRepository commentRepository;
-    public CommentsServiceImpl(CommentRepository commentRepository) {
+    private final NewCommentsRepository commentRepository;
+    public CommentsServiceImpl(NewCommentsRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
 
