@@ -8,4 +8,5 @@ import ru.skypro.homework.entity.User;
 @EnableJpaRepositories
 @Service
 public interface UserRepository extends JpaRepository<User, Integer> {
+    User getById(int id);
 }

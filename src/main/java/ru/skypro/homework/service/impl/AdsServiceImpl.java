@@ -2,7 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
-import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 
 import ru.skypro.homework.entity.Ad;
@@ -30,10 +29,10 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ad getAdById(int adsId) {
-
-        return adsRepository.findById(adsId).orElseThrow();
+    public Optional<Ad> getAdById(int adsId) {
+        return adsRepository.findById(adsId);
     }
+
     //+++++++++++++++++++++++++++++++++++++++++
     @Override
     public boolean deleteAdsById(int adsId) {
@@ -49,43 +48,42 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ad addAd(String title,   // 'заголовок объявления'
-                    int price,               // 'цена объявления'
-                    String image,            //'ссылка на картинку объявления'
-                    User author)  {
-        Ad ad = new Ad(title, price, image, author);
-        return adsRepository.save(ad);
+    public Ad addAd(Ad ad) {
+        adsRepository.save(ad);
+        return ad;
     }
 
     @Override
-    public Ad editAdById(int id, CreateOrUpdateAdDTO updateAd)
-            throws EntityNotFoundException {
+    public Ad editAdById(int id, CreateOrUpdateAdDTO updateAd){
         Optional<Ad> optionalAd = adsRepository.findById(id);
         if (optionalAd.isEmpty()) {
-            throwException(String.valueOf(id));
+            new RecordNotFoundException(String.valueOf(id));
         }
         Ad existingAd = optionalAd.get();
-
         existingAd.setTitle(updateAd.getTitle());
         existingAd.setPrice(updateAd.getPrice());
         existingAd.setDescription(updateAd.getDescription());
-
-        return adsRepository.save(existingAd);
+        adsRepository.save(existingAd);
+        return existingAd;
     }
+
     @Override
-    public Ad editImageAdById(int id, String imagePath)
-            throws EntityNotFoundException {
+    public Ad editImageAdById(int id, String imagePath) {
         Optional<Ad> optionalAd = adsRepository.findById(id);
-        if (optionalAd.isEmpty())        throwException(String.valueOf(id));
+        if (optionalAd.isEmpty()) {
+            new RecordNotFoundException(String.valueOf(id));
+        }
         Ad existingAd = optionalAd.get();
         existingAd.setImage(imagePath);
-        return adsRepository.save(existingAd);
+        adsRepository.save(existingAd);
+        return existingAd;
     }
+
     @Override
-    public List<Ad> getAllAdsByUser(int userId) {
+    public List<Ad> getAllAdsByUser(String userLogin) {
         return adsRepository.findAll()
                 .stream()
-                .filter(e -> e.getAuthor().getId() == userId)
+                .filter(e -> e.getAuthor().getEMail().equals(userLogin))
                 .collect(Collectors.toList());
     }
 
@@ -97,8 +95,6 @@ public class AdsServiceImpl implements AdsService {
                 .map(e -> RecipeDTO.from(e.getKey(), e.getValue())))
                 .collect(Collectors.toList());
      */
-    private void throwException(String valueOf) {
-    }
 
 }
 

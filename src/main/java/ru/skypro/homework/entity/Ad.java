@@ -2,6 +2,7 @@ package ru.skypro.homework.entity;
 
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.repository.UserRepository;
 
 import javax.persistence.*;
@@ -18,32 +19,34 @@ import java.util.Optional;
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+//    @GeneratedValue(generator = "sequence")
+//    @Column(name = "id", nullable = false)
     private int pk;                         //'id объявления'
-    @Column(name = "image")
+//    @Column(name = "image")
     private String image;                   //'ссылка на картинку объявления'
-    @Column(name = "price", nullable = false)
+//    @Column(name = "price", nullable = false)
     private int price;                      // 'цена объявления'
-    @Column(name = "title", nullable = false)
+//    @Column(name = "title", nullable = false)
     private String title;                   // 'заголовок объявления'
-    @Column(name = "description")
+//    @Column(name = "description")
     private String description;             // 'описание объявления'
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+//    @Column(name = "user_id")
     private User author;          // автор объявления
 
-    public Ad(String title, int price, String image, User author) {
+
+    public Ad(String title, int price, String description, String image, User author) {
         this.title = title;
         this.price = price;
+        this.description = description;
         this.image = image;
         this.author = author;
     }
-//    public Ad(String title, int price, String image, int authorId, UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//        this.title = title;
-//        this.price = price;
-//        this.image = image;
-//        Optional<User> user = userRepository.findById(authorId);
-//        user.ifPresent(value -> this.author = value);
-//    }
+    public Ad(String title, int price, String description, User author) {
+        this.title = title;
+        this.price = price;
+        this.description = description;
+this.author = author;
+    }
 }

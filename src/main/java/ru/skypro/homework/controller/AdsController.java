@@ -1,10 +1,11 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.config.MapperUtil;
 
@@ -16,6 +17,7 @@ import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j //  добавляет logger в класс
 @CrossOrigin(value = "http://localhost:3000") // Позволяет настроить CORS (Cross-Origin Resource Sharing)
@@ -50,23 +52,36 @@ public class AdsController {
     @Operation(summary = "Добавление нового объявления")
     public ResponseEntity<Ad> createAd(@RequestBody String title,   // 'заголовок объявления'
                                        int price,               // 'цена объявления'
-                                       String image,            //'ссылка на картинку объявления'
-                                       User author) {            //'id автора объявления'
-        Ad newAd = adsService.addAd(title, price, image, author);
-        if (newAd != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(newAd);
-        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                                       String description,            //'описание объявления'
+                                       String imagePath)             //'адрес картинки объявления'
+        //                                      User author) {            //'id автора объявления'
+         {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName(); // имя того, кто давит на клавиши
+        User currentUser = mapperUtil.getMapper().map(authentication, User.class);
+        if (currentUser == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        currentUser = userRepository.getById(1); // временно, пока не разберусь с авторизованным юзером
+            CreateOrUpdateAdDTO createAdDTO = new CreateOrUpdateAdDTO(title, price, description);
+            Ad newAd = adsService.addAd(mapperUtil.createAdfromDTO(createAdDTO,imagePath, currentUser));
+            if (newAd != null) {
+//                return ResponseEntity.status(HttpStatus.CREATED).body(newAd);
+                return ResponseEntity.ok().body(newAd);
+            }
+          else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
     }
 
     // получение информации об объявлении
     @GetMapping("/{adId}")
     @Operation(summary = "Получение информации об объявлении по id")
     public ResponseEntity<ExtendedAdDTO> getAdById(@PathVariable int adId) {
-        Ad adById = adsService.getAdById(adId);
-        if (adById == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        User authorAd = userRepository.findById(adById.getAuthor().getId()).orElseThrow();
+        Optional<Ad> adById = adsService.getAdById(adId);
+        if (adById.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        User authorAd = userRepository.findById(adId);
 //      if (authorAd == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        return ResponseEntity.ok().body(mapperUtil.createExtendedAdDTO(adById, authorAd));
+        ExtendedAdDTO extendedAdDTO = mapperUtil.createExtendedAdDTO(adById.get());
+        return ResponseEntity.ok().body(extendedAdDTO);
     }
 
 
@@ -90,7 +105,8 @@ public class AdsController {
 //              "description": "string"
     public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestParam String title, int price, String description) {
         CreateOrUpdateAdDTO updateAd = new CreateOrUpdateAdDTO(title, price, description);
-        return ResponseEntity.ok(adsService.editAdById(adId, updateAd));
+
+        return ResponseEntity.ok().body(adsService.editAdById(adId, updateAd));
     }
 
     /*
@@ -108,11 +124,17 @@ public class AdsController {
         }
       ]
      */
-    @GetMapping("/{userId}")
+    @GetMapping("/me")
     @Operation(summary = "Получение всех объявлений авторизованного пользователя")
 
-    public ResponseEntity<AdsDTO> getAdsByUserId(@PathVariable int userId) {
-        List<Ad> adList = adsService.getAllAdsByUser(userId);
+//    @RequestMapping(value = "/ads/me", method = RequestMethod.GET)
+//    @ResponseBody
+
+
+    public ResponseEntity<AdsDTO> getCurrentUserAds(Authentication authentication) {
+        String currentUserName = authentication.getName();
+User user = mapperUtil.getMapper().map(authentication, User.class);
+        List<Ad> adList = adsService.getAllAdsByUser(user.getEMail());
         if (adList.isEmpty()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok().body(new AdsDTO(adList.size(), adList));
     }
@@ -120,9 +142,11 @@ public class AdsController {
     @PatchMapping("/{adId}/image")
     @Operation(summary = "Обновление картинки объявления")
     public ResponseEntity<Ad> editImageAdById(@PathVariable int adId, @RequestParam String imagePath) {
-        if (adsService.getAdById(adId) == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Optional<Ad> ad = adsService.getAdById(adId);
+        if (ad.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         if (imagePath.isEmpty()) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        return ResponseEntity.ok().body(adsService.editImageAdById(adId, imagePath));
+        Ad editedAd = adsService.editImageAdById(adId, imagePath);
+        return ResponseEntity.ok().body(editedAd);
     }
 }
 

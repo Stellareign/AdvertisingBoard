@@ -7,20 +7,19 @@ import ru.skypro.homework.entity.User;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface AdsService {
     List<Ad> getAllAds();
 
-    Ad getAdById(int adsId);
+    Optional<Ad> getAdById(int adsId);
 
     //+++++++++++++++++++++++++++++++++++++++++
     boolean deleteAdsById(int adsId);
 
-    Ad addAd(String title,   // 'заголовок объявления'
-             int price,               // 'цена объявления'
-             String image,            //'ссылка на картинку объявления'
-             User author);
+
+    Ad addAd(Ad ad);
 
     Ad editAdById(int id, CreateOrUpdateAdDTO updateAd)
             throws EntityNotFoundException;
@@ -28,6 +27,7 @@ public interface AdsService {
     Ad editImageAdById(int id, String imagePath)
             throws EntityNotFoundException;
 
-    List<Ad> getAllAdsByUser(int userId);
+//    List<Ad> getAllAdsByUser(int userId);
 
+    List<Ad> getAllAdsByUser(String userLogin);
 }
