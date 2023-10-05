@@ -10,7 +10,7 @@ paths:
       tags:
         - Пользователи
       summary: 'Обновление пароля'
-      operationId: setPassword
+      operationId: setCurrentPassword
       requestBody:
         content:
           application/json:
