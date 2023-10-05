@@ -2,6 +2,7 @@ package ru.skypro.homework.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Getter
 /*
 комменты за Тимуром
 проработать связь сущностей автор-комментарий и/или комментарий-объявление
@@ -23,13 +25,35 @@ public class Comments {
     @Column(name = "comment_id",  nullable = false)
     private int pk;    // id комментания
 
-    @Column(name = "author_id",  nullable = false)
-    private int author; // id автора комментария
+    @OneToOne
+    @JoinColumn (name = "user_id",  nullable = false)
+    private User authorId; // id автора комментария
+
+    @ManyToOne
+    @JoinColumn (name = "first_name",  nullable = false)
+    private User authorFirstName;
+
+    @ManyToOne
+    @JoinColumn (name = "avatar",  nullable = false)
+    private User authorImage;
 
     @Column(name = "date_time",  nullable = false)
     private long createdAt; // дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
 
-    @Column(name = "ads_id",  nullable = false)
-    private int adId;  // id объявления
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn (name = "ads_id",  nullable = false)
+    private Ad adId;  // id объявления
 
+    @Column (name = "comment_text")
+    private String text;
+
+    public Comments(User authorFirstName, String text) {
+        this.authorFirstName = authorFirstName;
+        this.text = text;
+    }
+
+    public Comments(String text, Ad adId) {
+        this.text = text;
+        this.adId = adId;
+    }
 }

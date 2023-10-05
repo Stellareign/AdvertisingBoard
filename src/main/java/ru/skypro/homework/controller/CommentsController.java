@@ -7,11 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.config.MapperUtil;
 import ru.skypro.homework.dto.comments.CommentsDTO;
-import ru.skypro.homework.dto.comments.NewCommentsDTO;
-import ru.skypro.homework.dto.comments.UpdateCommentsDTO;
+import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comments;
 import ru.skypro.homework.service.CommentsService;
+import ru.skypro.homework.service.impl.AdsServiceImpl;
 
 import java.util.List;
 
@@ -27,10 +29,22 @@ public class CommentsController {
 
     private CommentsService commentsService;
 
+//    private AdsService adsService;
+    private AdsServiceImpl adsService;
+
+    private MapperUtil mapperUtil;
+
+    public CommentsController(CommentsService commentsService, AdsServiceImpl adsService, MapperUtil mapperUtil) {
+        this.commentsService = commentsService;
+        this.adsService = adsService;
+        this.mapperUtil = mapperUtil;
+    }
+
+
     @Operation(summary = "Получение списка всех комментариев")
-    @GetMapping
-    public ResponseEntity<CommentsDTO> getComment(int adsId) {
-        List<Comments> allComments = commentsService.allComm(adsId);
+    @GetMapping("/ads/{adId}/comments/all")
+    public ResponseEntity<CommentsDTO> getComment(Ad adsId) {
+        List<Comments> allComments = commentsService.result(adsId);
         CommentsDTO commentsDTO = new CommentsDTO(allComments.size(), allComments);
         if (!allComments.isEmpty()) {
             return ResponseEntity.ok().body(commentsDTO);
@@ -40,7 +54,7 @@ public class CommentsController {
     // добавление комментариев
     @Operation(summary = "Добавление нового комментария")
     @PostMapping
-    public ResponseEntity<?> addComment(@RequestBody NewCommentsDTO comments) {
+    public ResponseEntity<Comments> addComment(@RequestBody Comments comments) {
         if (comments != null) {
             return ResponseEntity.ok(comments);
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -48,15 +62,25 @@ public class CommentsController {
 
     // удаление комментария по id
     @Operation(summary = "Удаление комментария")
-    @DeleteMapping("/ads/{adId}/comments/{commentId}")
-    public void deleteComment(@RequestParam int id) {
+    @DeleteMapping("/ads/{adId}/comments/comment/{commentId}")
+//    public void deleteComment(@PathVariable int adId , @RequestParam int commentId ) {
+    public ResponseEntity<?> deleteComment(@PathVariable int adId , @RequestParam int pk ){
+        adsService.getAdById(adId);
+        boolean deleteIsOk = commentsService.deleteComment(pk);
+        if (deleteIsOk) {
+            return new ResponseEntity<>(("Комментарий с id = " + pk + "успешно удалён"), HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(("Ошибка при попытке удалить комментарий с id = " + pk), HttpStatus.NOT_FOUND);
+        }
     }
 
     // обновление комментария
     @Operation(summary = "Обновление комментария")
-    @PatchMapping
-    public ResponseEntity<?> updateComment(@RequestParam int adId, int commentId, String text) {
-        UpdateCommentsDTO updateCommentsDTO = new UpdateCommentsDTO();
-        return ResponseEntity.ok(updateCommentsDTO);
+    @PutMapping("/ads/{adId}/comments/comment/{commentId}")
+    public ResponseEntity<?> updateComment(@PathVariable int adId,@PathVariable int pk, String text) {
+        adsService.getAdById(adId);
+        commentsService.getComment(pk);
+        CreateOrUpdateCommentDTO updateComment = new CreateOrUpdateCommentDTO(text);
+        return ResponseEntity.ok(commentsService.updateComment(pk, updateComment));
     }
 }

@@ -18,13 +18,8 @@ public class CommentsDTO {
 
     private int count; // общее количество комментариев
 
-    private List<Comments> allComm;
+    private List<Comments> results; //результат вывода всех найденных комментов
 
-//    private int author; // id автора комментария
-//    private String authorImage; // ссылка на аватар автора комментария
-//    private String authorFirstName;//    имя создателя комментария
-//    private long createdAt; // дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
-//    private int pk;    // id комментания (или объявления????)
 
 
 
