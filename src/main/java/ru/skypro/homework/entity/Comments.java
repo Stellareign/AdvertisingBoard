@@ -2,6 +2,7 @@ package ru.skypro.homework.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Getter
 /*
 комменты за Тимуром
 проработать связь сущностей автор-комментарий и/или комментарий-объявление
@@ -48,5 +50,10 @@ public class Comments {
     public Comments(User authorFirstName, String text) {
         this.authorFirstName = authorFirstName;
         this.text = text;
+    }
+
+    public Comments(String text, Ad adId) {
+        this.text = text;
+        this.adId = adId;
     }
 }

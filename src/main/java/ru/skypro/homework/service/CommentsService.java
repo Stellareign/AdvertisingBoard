@@ -1,6 +1,7 @@
 package ru.skypro.homework.service;
 
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comments;
 import ru.skypro.homework.entity.User;
@@ -12,12 +13,14 @@ public interface CommentsService {
 
     List<Comments> result(Ad adsId);
 
-    Comments addComment(String text);
+    Comments getComment(int pk);
 
-    Comments deleteComment(int pk);
+    Comments addComment(String text, Ad adId);
 
-    Comments updateComment(int pk);
+    boolean deleteComment(int pk);
 
+
+    Comments updateComment(int pk, CreateOrUpdateCommentDTO updateComment);
 
 
 //    User getUserId(int id);
