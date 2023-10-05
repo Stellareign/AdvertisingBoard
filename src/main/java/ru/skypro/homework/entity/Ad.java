@@ -1,11 +1,10 @@
 package ru.skypro.homework.entity;
 
-import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.skypro.homework.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor

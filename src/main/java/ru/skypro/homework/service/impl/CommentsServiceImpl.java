@@ -6,13 +6,11 @@ import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comments;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.CommentsRepository;
-import ru.skypro.homework.service.CommentsService;
+import ru.skypro.homework.service.interfaces.CommentsService;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static jdk.internal.misc.StructureViolationExceptions.throwException;
 
 @Service
 public class CommentsServiceImpl implements CommentsService {
@@ -60,7 +58,7 @@ public class CommentsServiceImpl implements CommentsService {
     public Comments updateComment(int pk, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
         Optional<Comments> commentsOptional = commentsRepository.findById(pk);
         if (commentsOptional.isEmpty()){
-            throwException(String.valueOf(pk));
+            new RecordNotFoundException(String.valueOf(pk));
         }
         Comments existingComm = commentsOptional.get();
         existingComm.setText(createOrUpdateCommentDTO.getText());

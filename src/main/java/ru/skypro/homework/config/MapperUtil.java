@@ -29,7 +29,7 @@ public class MapperUtil {
                 ad.getImage(), // фото товара
                 user.getFirstName(),
         user.getLastName(),
-                user.getEMail(),
+                user.getUsername(),
                 user.getPhone());
     }
 }
