@@ -5,14 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.spi.MappingContext;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
@@ -20,7 +17,6 @@ import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mappers.PasswordMapper;
 import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.interfaces.AuthService;
 import ru.skypro.homework.service.interfaces.ImageService;
 import ru.skypro.homework.service.interfaces.UserService;
 
@@ -35,7 +31,7 @@ import ru.skypro.homework.service.interfaces.UserService;
 
 public class UserController {
 
-    private final AuthService authService;
+
     private final UserMapper userMapper;
 
 

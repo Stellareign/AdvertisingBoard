@@ -12,8 +12,8 @@ import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comments;
-import ru.skypro.homework.service.interfaces.CommentsService;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
+import ru.skypro.homework.service.interfaces.CommentsService;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import java.util.List;
 // (http://localhost:3000), даже если он отличается от домена, на котором запущено приложение.
 @RequiredArgsConstructor // генерирует конструктор с аргументами для всех полей, помеченных аннотацией @NonNull
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/ads/{adId}/comments")
 @Tag(name = "Комментарии")
 public class CommentsController {
 
@@ -42,7 +42,7 @@ public class CommentsController {
 
 
     @Operation(summary = "Получение списка всех комментариев")
-    @GetMapping("/ads/{adId}/comments/all")
+    @GetMapping("/all")
     public ResponseEntity<CommentsDTO> getComment(Ad adsId) {
         List<Comments> allComments = commentsService.result(adsId);
         CommentsDTO commentsDTO = new CommentsDTO(allComments.size(), allComments);
@@ -62,7 +62,7 @@ public class CommentsController {
 
     // удаление комментария по id
     @Operation(summary = "Удаление комментария")
-    @DeleteMapping("/ads/{adId}/comments/comment/{commentId}")
+    @DeleteMapping("/{commentId}")
 //    public void deleteComment(@PathVariable int adId , @RequestParam int commentId ) {
     public ResponseEntity<?> deleteComment(@PathVariable int adId , @RequestParam int pk ){
         adsService.getAdById(adId);
@@ -76,7 +76,7 @@ public class CommentsController {
 
     // обновление комментария
     @Operation(summary = "Обновление комментария")
-    @PutMapping("/ads/{adId}/comments/comment/{commentId}")
+    @PutMapping("/comment/{commentId}")
     public ResponseEntity<?> updateComment(@PathVariable int adId,@PathVariable int pk, String text) {
         adsService.getAdById(adId);
         commentsService.getComment(pk);
