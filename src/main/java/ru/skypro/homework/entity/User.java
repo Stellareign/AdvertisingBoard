@@ -1,10 +1,12 @@
 package ru.skypro.homework.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import java.util.List;
 /*
 Юзер за Настей
  */
@@ -36,5 +38,8 @@ public class User {
 
     @Column(name = "role")
     private Role role;
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private List<Ad> adList;
 
 }

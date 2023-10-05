@@ -105,8 +105,8 @@ public class AdsController {
 //              "description": "string"
     public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestParam String title, int price, String description) {
         CreateOrUpdateAdDTO updateAd = new CreateOrUpdateAdDTO(title, price, description);
-
-        return ResponseEntity.ok().body(adsService.editAdById(adId, updateAd));
+        Ad ad = adsService.editAdById(adId, updateAd);
+        return ResponseEntity.ok().body(ad);
     }
 
     /*

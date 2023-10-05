@@ -1,5 +1,7 @@
 package ru.skypro.homework.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +15,8 @@ import java.util.Optional;
 @Data
 @Entity
 @Table(name = "ad")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
+
 /*
 проработать связь сущностей автор-объявление
  */
@@ -30,6 +34,7 @@ public class Ad {
     private String title;                   // 'заголовок объявления'
 //    @Column(name = "description")
     private String description;             // 'описание объявления'
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
 //    @Column(name = "user_id")
@@ -48,5 +53,17 @@ public class Ad {
         this.price = price;
         this.description = description;
 this.author = author;
+    }
+
+    @Override
+    public String toString() {
+        return "Ad{" +
+                "pk=" + pk +
+                ", image='" + image + '\'' +
+                ", price=" + price +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", author_id=" + author.getId() +
+                '}';
     }
 }
