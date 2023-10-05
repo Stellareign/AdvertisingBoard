@@ -6,8 +6,8 @@ import lombok.Data;
 //
 @Data
 @AllArgsConstructor
-public class NewCommentsDTO {
-    private final int count; // общее количество комментариев
+public class CommentDTO {
+    private  int count; // общее количество комментариев
 
     private int author; // id автора комментария
 

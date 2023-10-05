@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comments.CommentsDTO;
-import ru.skypro.homework.dto.comments.NewCommentsDTO;
-import ru.skypro.homework.dto.comments.UpdateCommentsDTO;
+import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comments;
 import ru.skypro.homework.service.CommentsService;
 
@@ -28,9 +28,9 @@ public class CommentsController {
     private CommentsService commentsService;
 
     @Operation(summary = "Получение списка всех комментариев")
-    @GetMapping
-    public ResponseEntity<CommentsDTO> getComment(int adsId) {
-        List<Comments> allComments = commentsService.allComm(adsId);
+    @GetMapping("/ads/{adId}/comments/all")
+    public ResponseEntity<CommentsDTO> getComment(Ad adsId) {
+        List<Comments> allComments = commentsService.result(adsId);
         CommentsDTO commentsDTO = new CommentsDTO(allComments.size(), allComments);
         if (!allComments.isEmpty()) {
             return ResponseEntity.ok().body(commentsDTO);
@@ -40,7 +40,7 @@ public class CommentsController {
     // добавление комментариев
     @Operation(summary = "Добавление нового комментария")
     @PostMapping
-    public ResponseEntity<?> addComment(@RequestBody NewCommentsDTO comments) {
+    public ResponseEntity<Comments> addComment(@RequestBody Comments comments) {
         if (comments != null) {
             return ResponseEntity.ok(comments);
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -48,15 +48,15 @@ public class CommentsController {
 
     // удаление комментария по id
     @Operation(summary = "Удаление комментария")
-    @DeleteMapping("/ads/{adId}/comments/{commentId}")
-    public void deleteComment(@RequestParam int id) {
+    @DeleteMapping("/ads/{adId}/comments/comment/{commentId}")
+    public void deleteComment(@RequestParam int adId , @RequestParam int commentId ) {
     }
 
     // обновление комментария
     @Operation(summary = "Обновление комментария")
-    @PatchMapping
-    public ResponseEntity<?> updateComment(@RequestParam int adId, int commentId, String text) {
-        UpdateCommentsDTO updateCommentsDTO = new UpdateCommentsDTO();
-        return ResponseEntity.ok(updateCommentsDTO);
+    @PutMapping("/ads/{adId}/comments/comment/{commentId}")
+    public ResponseEntity<?> updateComment(@PathVariable int adId,@PathVariable int commentId, String text) {
+        CreateOrUpdateCommentDTO createOrUpdateCommentDTO = new CreateOrUpdateCommentDTO();
+        return ResponseEntity.ok(createOrUpdateCommentDTO);
     }
 }

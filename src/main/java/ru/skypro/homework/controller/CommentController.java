@@ -15,5 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/comment")
 @Tag(name = "Комментарий")
-public class NewCommentsController {
+public class CommentController {
+
+
 }
