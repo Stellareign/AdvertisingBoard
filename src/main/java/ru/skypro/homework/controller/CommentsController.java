@@ -12,7 +12,7 @@ import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comments;
-import ru.skypro.homework.service.CommentsService;
+import ru.skypro.homework.service.intrfaces.CommentsService;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
 
 import java.util.List;

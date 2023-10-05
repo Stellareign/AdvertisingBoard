@@ -6,9 +6,8 @@ import ru.skypro.homework.exceptions.RecordNotFoundException;
 
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.repository.AdsRepository;
-import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.intrfaces.AdsService;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

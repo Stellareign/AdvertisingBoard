@@ -15,7 +15,7 @@ import ru.skypro.homework.dto.ads.ExtendedAdDTO;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.intrfaces.AdsService;
 import java.util.List;
 import java.util.Optional;
 

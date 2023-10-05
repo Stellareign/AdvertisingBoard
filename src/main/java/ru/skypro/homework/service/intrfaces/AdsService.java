@@ -1,4 +1,4 @@
-package ru.skypro.homework.service;
+package ru.skypro.homework.service.intrfaces;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
