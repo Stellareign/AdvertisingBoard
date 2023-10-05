@@ -31,7 +31,7 @@ public class MapperUtil {
                 ad.getImage(), // фото товара
                 user.getFirstName(),
         user.getLastName(),
-                user.getEMail(),
+                user.getUsername(),
                 user.getPhone());
     }
     public Ad createAdfromDTO (CreateOrUpdateAdDTO inputAd, String imagePath, User user){

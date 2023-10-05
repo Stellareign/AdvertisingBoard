@@ -1,18 +1,18 @@
-package ru.skypro.homework.dto.authorization;
+package ru.skypro.homework.dto.user;
 
 import lombok.*;
+import org.springframework.stereotype.Component;
 
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-public class PasswordDTO {
+@Component
+@Data
+public class UpdatePasswordDTO {
     /*
 в сваггере тип stringst - это что?
      */
-
     private String currentPassword;
 
     private String newPassword;
+
+
 }
