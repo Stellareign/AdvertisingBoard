@@ -58,7 +58,7 @@ public class UserMapper {
       return context.getDestination(); - возвращаем целевой объект из контекста преобразования.
      */
 
-    // ***********ПОЛУЧЕНИЕ ИНФЫ О ПОЛЬЗОВАТЕЛЕ*******************************
+    // *********** ПОЛУЧЕНИЕ ИНФЫ О ПОЛЬЗОВАТЕЛЕ *******************************
     public Converter<User, UserDTO> userToDtoConverter() {
         return context -> {
             User source = context.getSource(); // источник
@@ -75,7 +75,7 @@ public class UserMapper {
         };
     }
 
-    // *************ОБНОВЛЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ*******************************
+    // ************* ОБНОВЛЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ *******************************
     public Converter<User, UpdateUserDTO> UpdUserToDtoConverter() {
         return context -> {
             User source = context.getSource(); // источник
@@ -91,14 +91,15 @@ public class UserMapper {
             return context.getDestination();
         };
     }
-//********************РЕГИСТРАЦИЯ ПОЛЬЗОВАТЕЛЯ************************************
-public Converter<User, Register> userToRegisterConverter() {
-    return context -> {
-        User source = context.getSource(); // источник
-        Register result = context.getDestination();
-        return context.getDestination();
-    };
-}
+
+    //******************** РЕГИСТРАЦИЯ ПОЛЬЗОВАТЕЛЯ ************************************
+    public Converter<User, Register> userToRegisterConverter() {
+        return context -> {
+            User source = context.getSource(); // источник
+            Register result = context.getDestination();
+            return context.getDestination();
+        };
+    }
 
     public Converter<Register, User> registerToUserConverter() {
         return context -> {

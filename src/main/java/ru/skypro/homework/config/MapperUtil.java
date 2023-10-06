@@ -17,18 +17,20 @@ public class MapperUtil {
     public ModelMapper getMapper() {
         return new ModelMapper();
     }
+
     public <R, E> List<R> convertList(List<E> list, Function<E, R> converter) {
         return list.stream().map(converter::apply).collect(Collectors.toList());
     }
-    public ExtendedAdDTO createExtendedAdDTO (Ad ad, User user){
+
+    public ExtendedAdDTO createExtendedAdDTO(Ad ad, User user) {
         return new ExtendedAdDTO(
                 ad.getPk(), //id объявления
                 ad.getDescription(),
-        ad.getPrice(),
-        ad.getTitle(),
+                ad.getPrice(),
+                ad.getTitle(),
                 ad.getImage(), // фото товара
                 user.getFirstName(),
-        user.getLastName(),
+                user.getLastName(),
                 user.getUsername(),
                 user.getPhone());
     }

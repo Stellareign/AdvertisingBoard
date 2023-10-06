@@ -13,7 +13,7 @@ import ru.skypro.homework.dto.Role;
 public class UserDTO {
 
     private int id;
-    private String email; // логин
+    private String username; // логин
     private String firstName;
     private String lastName;
     private String phone;
@@ -21,7 +21,7 @@ public class UserDTO {
     private String image;
     private Role role;
 
-    private String currentPassword;
+//    private String currentPassword;
 
 //******************* геттеры и сеттеры ***********
 

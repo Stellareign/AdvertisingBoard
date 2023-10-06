@@ -28,17 +28,18 @@ public class User {
     private int id;
 
     @Column(name = "e-mail", nullable = false)
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "Неверный формат email")
     private String username; // логин при регистрации - e-mail
 
     @Column(name = "first_name", nullable = false)
-    @Size(min = 3, max = 10)
+    @Size(min = 3, max = 10, message = "Введите не менее 3 и не более 10 символов")
     private String firstName;
 
     @Column(name = "last_name", nullable = false)
-    @Size(min = 3, max = 10)
+    @Size(min = 3, max = 10, message = "Введите не менее 3 и не более 10 символов")
     private String lastName;
 
-    @Pattern(regexp = "\\+7\\s?\\(\\d{3}\\)\\s?\\d{3}-\\d{2}-\\d{2}")
+    @Pattern(regexp = "\\+7\\s?\\(\\d{3}\\)\\s?\\d{3}-\\d{2}-\\d{2}", message = "Неверный формат номера телефона")
     @Column(name = "phone", nullable = false)
     private String phone;
 
@@ -58,18 +59,18 @@ public class User {
     private String currentPassword;
 
 
-//*********************** контсрукторы **************************
+//*********************** конструкторы **************************
 
     public User(String username) {
         this.username = username;
     }
 
-    public User(String username, String firstName, String lastName, Role role, String currentPassword) {
+    public User(String username, String firstName, String lastName, Role role) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
-        this.currentPassword = currentPassword;
+
     }
     //*************************** преобразование телефонного номера в id ***********
 //    private Integer phoneToId (String phone) {
@@ -84,6 +85,7 @@ public class User {
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -145,8 +147,6 @@ public class User {
     }
 
 
-
-
     //*******************************************************
 
     @Override
@@ -157,12 +157,11 @@ public class User {
         return id == user.id && Objects.equals(username, user.username)
                 && Objects.equals(firstName, user.firstName)
                 && Objects.equals(lastName, user.lastName) && Objects.equals(phone, user.phone)
-                && Objects.equals(image, user.image) && role == user.role
-                && Objects.equals(currentPassword, user.currentPassword);
+                && Objects.equals(image, user.image) && role == user.role;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, firstName, lastName, phone, image, role, currentPassword);
+        return Objects.hash(id, username, firstName, lastName, phone, image, role);
     }
 }
