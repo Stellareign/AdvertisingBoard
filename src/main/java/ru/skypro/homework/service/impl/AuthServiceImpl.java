@@ -15,6 +15,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
+    public static boolean AUTHORISE = false;
 
 
 
@@ -33,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
             return false;
         }
         UserDetails userDetails = manager.loadUserByUsername(userName);
+        AUTHORISE = true;
         return encoder.matches(password, userDetails.getPassword());
     }
 

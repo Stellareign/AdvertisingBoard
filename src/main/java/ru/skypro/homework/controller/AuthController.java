@@ -1,5 +1,9 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +27,17 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
+    @ApiResponses(value = {                                                     // нужно понимание!
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Пользователь зарегистрирован",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Login.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "401", description = "Неверный логин или пароль"
+            ),
+    })
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
@@ -32,9 +47,22 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @ApiResponses(value = {                                                     // нужно понимание!
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Пользователь зарегистрирован",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Register.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "400", description = "Неверный запрос, пользователь с таким именем уже есть в базе данных"
+            ),
+    })
     public ResponseEntity<?> register(@RequestBody Register register) {
         if (authService.register(register)) {
+
             userService.saveRegisterUser(register);
+
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

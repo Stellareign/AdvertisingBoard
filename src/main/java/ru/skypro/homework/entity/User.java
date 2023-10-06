@@ -27,7 +27,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "e-mail", nullable = false)
+    @Column(name = "login/e-mail", nullable = false)
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "Неверный формат email")
     private String username; // логин при регистрации - e-mail
 
@@ -65,11 +65,14 @@ public class User {
         this.username = username;
     }
 
-    public User(String username, String firstName, String lastName, Role role) {
+// контсруктор при регистрации:
+    public User(String username, String firstName, String lastName, Role role, String phone, String currentPassword) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
+        this.phone = phone;
+        this.currentPassword = getCurrentPassword();
 
     }
     //*************************** преобразование телефонного номера в id ***********

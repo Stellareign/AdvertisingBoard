@@ -1,8 +1,8 @@
 package ru.skypro.homework.service.impl;
 
-import org.modelmapper.spi.MappingContext;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
@@ -14,22 +14,13 @@ import ru.skypro.homework.service.interfaces.UserService;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AuthService authService;
     private final UserMapper userMapper;
+    private final PasswordEncoder encoder;
 
-
-
-
-    public UserServiceImpl(UserRepository userRepository,
-                           AuthService authService,
-                           UserMapper userMapper) {
-        this.userRepository = userRepository;
-        this.authService = authService;
-        this.userMapper = userMapper;
-
-    }
 
     @Override
     public boolean checkPassword(UpdatePasswordDTO updatePasswordDTO) {
@@ -41,17 +32,28 @@ public class UserServiceImpl implements UserService {
 //                && currentPassword.equals(password);
         return true;
     }
+
     @Override
     public User gerUserByEmail(String email) {
         Example<User> example = Example.of(new User(email));
         return userRepository.findBy(example, query -> query.oneValue());
     }
+
+
     @Override
-    public void saveRegisterUser(Register register){
-        if( authService.register(register)){
-          User user  =  userMapper.registerToUserConverter()
-                  .convert((MappingContext<Register, User>) register);
-                    userRepository.save(user);
-        }
+    public void saveRegisterUser(Register register) {
+
+//          User user  =  userMapper.registerToUserConverter()
+//                  .convert((MappingContext<Register, User>) register);
+        String pass = encoder.encode(register.getPassword());
+
+        User user = new User();
+        user.setUsername(register.getUsername());
+        user.setFirstName(register.getFirstName());
+        user.setLastName(register.getLastName());
+        user.setRole(register.getRole());
+        user.setPhone(register.getPhone());
+        user.setCurrentPassword(pass);
+        userRepository.save(user);
     }
 }

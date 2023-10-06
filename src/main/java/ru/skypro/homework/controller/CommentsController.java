@@ -30,7 +30,6 @@ public class CommentsController {
 
     private CommentsService commentsService;
 
-//    private AdsService adsService;
     private AdsServiceImpl adsService;
 
     private MapperUtil mapperUtil;
@@ -40,7 +39,6 @@ public class CommentsController {
         this.adsService = adsService;
         this.mapperUtil = mapperUtil;
     }
-
 
     @Operation(summary = "Получение списка всех комментариев")
     @GetMapping("")
