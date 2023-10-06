@@ -1,13 +1,11 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.config.MapperUtil;
-
 import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
@@ -15,6 +13,7 @@ import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
+
 import java.util.List;
 
 @Slf4j //  добавляет logger в класс
@@ -48,7 +47,8 @@ public class AdsController {
 
     @PostMapping
     @Operation(summary = "Добавление нового объявления")
-    public ResponseEntity<Ad> createAd(@RequestBody String title,   // 'заголовок объявления'
+    public ResponseEntity<Ad> createAd(@RequestBody
+                                       String title,   // 'заголовок объявления'
                                        int price,               // 'цена объявления'
                                        String image,            //'ссылка на картинку объявления'
                                        User author) {            //'id автора объявления'

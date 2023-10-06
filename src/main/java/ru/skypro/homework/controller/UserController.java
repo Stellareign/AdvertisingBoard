@@ -1,6 +1,10 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,12 +45,18 @@ public class UserController {
     private final UserService userService;
 
 
-
     @Operation(summary = "Обновление пароля пользователя")
     @PostMapping("/set_password")
+    @ApiResponses(value = {                                                     // нужно понимание!
+            @ApiResponse(responseCode = "200",
+                    description = "Пароль обновлён",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UpdatePasswordDTO.class))})
+    })
+
     public ResponseEntity<UpdatePasswordDTO> setPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO) {
         boolean checkPassword = userService.checkPassword(updatePasswordDTO);
-       if(checkPassword){
+        if (checkPassword) {
             passwordMapper.passToEntityConverter(updatePasswordDTO);
             return ResponseEntity.ok().body(updatePasswordDTO);
 
@@ -59,7 +69,7 @@ public class UserController {
     @Operation(summary = "Получение информации об авторизованном пользователе")
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser(@RequestParam String email) {
-        User user =userService.gerUserByEmail(email);
+        User user = userService.gerUserByEmail(email);
         if (user != null) {
             UserDTO userDTO = userMapper.userToDtoConverter().convert((MappingContext<User, UserDTO>) user);
             return ResponseEntity.ok().body(userDTO);
