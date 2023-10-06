@@ -43,7 +43,7 @@ public class CommentsController {
 
 
     @Operation(summary = "Получение списка всех комментариев")
-    @GetMapping("/all")
+    @GetMapping("")
     public ResponseEntity<CommentsDTO> getComment(Ad adsId) {
         List<Comments> allComments = commentsService.result(adsId);
         CommentsDTO commentsDTO = new CommentsDTO(allComments.size(), allComments);
