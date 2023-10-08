@@ -2,10 +2,13 @@ package ru.skypro.homework.dto.user;
 
 import lombok.*;
 import org.springframework.stereotype.Component;
+import ru.skypro.homework.entity.User;
 
 
 @Component
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdatePasswordDTO {
     /*
 в сваггере тип stringst - это что?
@@ -14,5 +17,9 @@ public class UpdatePasswordDTO {
 
     private String newPassword;
 
+    //************************************************************
+    public static UpdatePasswordDTO fromUserToUpdatePasswordDTO (String newPassword, User user){
+        return new UpdatePasswordDTO (user.getPassword(), newPassword);
+    }
 
 }

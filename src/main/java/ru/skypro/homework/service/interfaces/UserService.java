@@ -19,5 +19,7 @@ public interface UserService {
 
     User getUserByUsernameFromDB(String username);
 
+    User updateUser(User user, UpdateUserDTO updateUserDTO);
+
     void saveRegisterUser(Register register);
 }

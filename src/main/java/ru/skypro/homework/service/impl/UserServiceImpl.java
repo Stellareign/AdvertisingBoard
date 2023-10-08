@@ -60,7 +60,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO convertUserToUserDTO(User user) {
-        return userMapper.userToDtoConverter().convert((MappingContext<User, UserDTO>) user);
+        userMapper.setupMapper();
+        return (UserDTO) userMapper.userToDtoConverter();
     }
 
     @Override
@@ -68,7 +69,14 @@ public class UserServiceImpl implements UserService {
         return userMapper.updUserToEntityConverter().convert((MappingContext<UpdateUserDTO, User>) updateUserDTO);
     }
 
-
+    @Override
+    public User updateUser(User user, UpdateUserDTO updateUserDTO) {
+        user.setFirstName(updateUserDTO.getFirstName());
+        user.setLastName(updateUserDTO.getLastName());
+        user.setPhone(updateUserDTO.getPhone());
+        userRepository.save(user);
+        return user;
+    }
 
     @Override
     public void saveRegisterUser(Register register) {

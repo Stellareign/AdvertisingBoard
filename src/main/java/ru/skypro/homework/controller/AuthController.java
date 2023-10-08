@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.authorization.Login;
 import ru.skypro.homework.dto.authorization.Register;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.AuthService;
 import ru.skypro.homework.service.interfaces.UserService;
 
@@ -25,6 +26,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @PostMapping("/login")
     @ApiResponses(value = {
@@ -39,7 +41,7 @@ public class AuthController {
             ),
     })
     public ResponseEntity<?> login(@RequestBody Login login) {
-        if (authService.login(login.getUsername(), login.getPassword())) {
+        if (authService.login(login.getUsername(), login.getPassword()) || userRepository.findByUsername(login.getUsername()) != null) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

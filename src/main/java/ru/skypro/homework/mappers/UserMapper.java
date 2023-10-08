@@ -11,8 +11,8 @@ import ru.skypro.homework.entity.User;
 import javax.annotation.PostConstruct;
 
 @Component
-public class UserMapper {
 
+public class UserMapper {
     private final ModelMapper mapper;
 
     public UserMapper(ModelMapper mapper) {

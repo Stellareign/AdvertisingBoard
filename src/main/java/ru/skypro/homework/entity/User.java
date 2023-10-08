@@ -20,6 +20,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 @Data
+
 @Table(name = "users")
 
 public class User {
@@ -60,7 +61,6 @@ public class User {
     private Role role;
 
 
-
     // ******************************************
     @Column(name = "register_date", nullable = false)
     private LocalDate registerDate;
@@ -82,9 +82,7 @@ public class User {
         this.phone = phone;
         this.password = getPassword();
         this.registerDate = registerDate;
-
     }
-    //*************************** преобразование телефонного номера в id ***********
 
     @Override
     public boolean equals(Object o) {
