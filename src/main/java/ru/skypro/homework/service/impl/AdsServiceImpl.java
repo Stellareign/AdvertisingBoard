@@ -77,7 +77,7 @@ public class AdsServiceImpl implements AdsService {
     public List<Ad> getAllAdsByUser(String userLogin) {
         return adsRepository.findAll()
                 .stream()
-                .filter(e -> e.getAuthor().getEMail().equals(userLogin))
+                .filter(e -> e.getAuthor().getUsername().equals(userLogin))
                 .collect(Collectors.toList());
     }
 

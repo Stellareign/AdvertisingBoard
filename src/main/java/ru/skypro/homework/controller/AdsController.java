@@ -10,12 +10,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.config.MapperUtil;
-
 import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
-import ru.skypro.homework.dto.user.AddUserDTO;
-import ru.skypro.homework.dto.user.UpdateUserImageDTO;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
@@ -135,7 +132,7 @@ public class AdsController {
     public ResponseEntity<AdsDTO> getCurrentUserAds(Authentication authentication) {
         String currentUserName = authentication.getName();
 User user = mapperUtil.getMapper().map(authentication, User.class);
-        List<Ad> adList = adsService.getAllAdsByUser(user.getEMail());
+        List<Ad> adList = adsService.getAllAdsByUser(user.getUsername());
         if (adList.isEmpty()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok().body(new AdsDTO(adList.size(), adList));
     }
