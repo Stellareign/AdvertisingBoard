@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 
@@ -8,7 +9,6 @@ import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,16 +35,11 @@ public class AdsServiceImpl implements AdsService {
 
     //+++++++++++++++++++++++++++++++++++++++++
     @Override
-    public boolean deleteAdsById(int adsId) {
+    public void deleteAdsById(int adsId) {
 
         Optional<Ad> optionalAds = adsRepository.findById(adsId);
-        if (optionalAds.isPresent()) {
+        if (optionalAds.isPresent())
             adsRepository.deleteById(adsId);
-            return true;
-        } else {
-            new RecordNotFoundException(String.valueOf(adsId));
-            return false;
-        }
     }
 
     @Override
@@ -68,13 +63,13 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ad editImageAdById(int id, String imagePath) {
+    public Ad editImageAdById(int id, MultipartFile image) {
         Optional<Ad> optionalAd = adsRepository.findById(id);
         if (optionalAd.isEmpty()) {
             new RecordNotFoundException(String.valueOf(id));
         }
         Ad existingAd = optionalAd.get();
-        existingAd.setImage(imagePath);
+        existingAd.setImage(image);
         adsRepository.save(existingAd);
         return existingAd;
     }

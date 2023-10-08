@@ -1,6 +1,7 @@
 package ru.skypro.homework.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
@@ -16,7 +17,7 @@ public interface AdsService {
     Optional<Ad> getAdById(int adsId);
 
     //+++++++++++++++++++++++++++++++++++++++++
-    boolean deleteAdsById(int adsId);
+    void deleteAdsById(int adsId);
 
 
     Ad addAd(Ad ad);
@@ -24,10 +25,12 @@ public interface AdsService {
     Ad editAdById(int id, CreateOrUpdateAdDTO updateAd)
             throws EntityNotFoundException;
 
-    Ad editImageAdById(int id, String imagePath)
-            throws EntityNotFoundException;
+//    Ad editImageAdById(int id, String imagePath)
+//            throws EntityNotFoundException;
 
 //    List<Ad> getAllAdsByUser(int userId);
+
+    Ad editImageAdById(int id, MultipartFile image);
 
     List<Ad> getAllAdsByUser(String userLogin);
 }
