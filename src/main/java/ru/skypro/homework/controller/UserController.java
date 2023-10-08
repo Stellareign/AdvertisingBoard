@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.spi.MappingContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +18,8 @@ import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.mappers.PasswordMapper;
-import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.interfaces.AuthService;
 import ru.skypro.homework.service.interfaces.UserService;
 
 import java.io.IOException;
@@ -41,19 +37,17 @@ import static ru.skypro.homework.service.impl.AuthServiceImpl.AUTHORISE;
 
 public class UserController {
 
-
-    private final UserMapper userMapper;
-
-    private final PasswordMapper passwordMapper;
-    private final UserRepository userRepository;
     private final ImageRepository imageRepository;
     private final UserService userService;
-    private final AuthService authService;
+    private final UserRepository userRepository;
 
+//    private final User user = new User("pupkin@poy.ru", "Ваня", "Пупкин", Role.USER,
+//            "+7(123)456-78-90", "qwerty123", LocalDate.from(LocalDate.now()));
 
+    // *************************** ОНОВЛЕНИЕ ПАРОЛЯ ********************
     @Operation(summary = "Обновление пароля пользователя")
     @PostMapping("/set_password")
-    @ApiResponses(value = {                                                     // нужно понимание!
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Пароль обновлён",
                     content = {@Content(mediaType = "application/json",
@@ -68,7 +62,6 @@ public class UserController {
     public ResponseEntity<UpdatePasswordDTO> setPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO) {
         boolean checkPassword = userService.checkPassword(updatePasswordDTO);
         if (checkPassword) {
-            passwordMapper.passToEntityConverter(updatePasswordDTO);
             return ResponseEntity.ok().body(updatePasswordDTO);
 
         } else if (!checkPassword) {
@@ -77,9 +70,11 @@ public class UserController {
         } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
+    //****************************** ИНФО О ПОЛЬЗОВАТЕЛЕ ************************************
     @Operation(summary = "Получение информации об авторизованном пользователе")
     @GetMapping("/me")
-    @ApiResponses(value = {                                                     // нужно понимание!
+    @ResponseBody
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Данные пользователя получены",
                     content = {@Content(mediaType = "application/json",
@@ -88,19 +83,23 @@ public class UserController {
                     responseCode = "401", description = "Ошибка при авторизации"
             )
     })
-    public ResponseEntity<UserDTO> getUser(@RequestParam String email) {
-        User user = userService.gerUserByEmail(email);
-        if (user != null) {
-            UserDTO userDTO = userMapper.userToDtoConverter().convert((MappingContext<User, UserDTO>) user);
+    public ResponseEntity<UserDTO> getUser() {
+        String username = "pupkin@poy.ru";
+
+        User user = userService
+                .getUserByUsernameFromDB(username);
+            UserDTO userDTO =userService.convertUserToUserDTO(user);
+            if(user != null){
             return ResponseEntity.ok().body(userDTO);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
+    //****************************** ОБНОВЛЕНИЕ ИНФО О ПОЛЬЗОВАТЕЛЕ **************************
     @Operation(summary = "Обновление информации об авторизованном пользователе")
     @PatchMapping("/me")
-    @ApiResponses(value = {                                                     // нужно понимание!
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Данные пользователя обновлены",
                     content = {@Content(mediaType = "application/json",
@@ -110,16 +109,20 @@ public class UserController {
             )
     })
     public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
-        if (AUTHORISE) {
+        String username = "pupkin@poy.ru";
+            User user = userService.getUserByUsernameFromDB(username);
+            userService.convertUpdateUserDTOtoUser(updateUserDTO);
+        if (user != null) {
             return ResponseEntity.ok().body(updateUserDTO);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
+    //****************************** ОБНОВЛЕНИЕ АВАТАРА ПОЛЬЗОВАТЕЛЯ **************************
     @Operation(summary = "Обновление аватара авторизованного пользователя")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ApiResponses(value = {                                                     // нужно понимание!
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Аватар пользователя обновлён",
                     content = {@Content(mediaType = "multipart/form-data",
@@ -132,12 +135,11 @@ public class UserController {
 
         UserDTO newUserDTO = new UserDTO();
         if (AUTHORISE && !image.isEmpty() && image.getContentType().startsWith("image/")) {
-            byte[]  imageData = image.getBytes();
+            byte[] imageData = image.getBytes();
 
             // для проверки. Логику доработать и перенести в сервис
             Image newAvatar = new Image();
             newAvatar.setImageData(imageData);
-            newAvatar.setImageSize(image.getSize());
             imageRepository.save(newAvatar);
 
             return ResponseEntity.ok().body(newUserDTO);

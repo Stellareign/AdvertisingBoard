@@ -38,7 +38,7 @@ public class PasswordMapper {
 //        return context -> {
 //            User source = context.getSource(); // источник
 //            UpdatePasswordDTO result = context.getDestination();
-//            result.setCurrentPassword(source.getCurrentPassword()); // присваиваем полю currentPassword поле password
+//            result.setPassword(source.getPassword()); // присваиваем полю password поле password
 //            return result;
 //        };
 //    }
@@ -50,7 +50,7 @@ public class PasswordMapper {
 //        return context -> {
 //            UpdatePasswordDTO source = context.getSource();
 //            User result = context.getDestination();
-//            result.setCurrentPassword(source.getNewPassword()); // присваиваем полю password поле newPassword (??? - возможно надо будет изменить политику)
+//            result.setPassword(source.getNewPassword()); // присваиваем полю password поле newPassword (??? - возможно надо будет изменить политику)
 //            return result;
 //        };
 //    }

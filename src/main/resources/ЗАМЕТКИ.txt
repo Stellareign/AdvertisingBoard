@@ -1,4 +1,4 @@
-
+*) исходный код: https://github.com/skypro-backend/example-for-graduate-work
 
  *) "currentPassword": "stringst",
   "newPassword": "stringst

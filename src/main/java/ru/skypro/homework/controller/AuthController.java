@@ -27,10 +27,10 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    @ApiResponses(value = {                                                     // нужно понимание!
+    @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Пользователь зарегистрирован",
+                    description = "Вы вошли в свою учётную запись",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Login.class))}
             ),
@@ -47,7 +47,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @ApiResponses(value = {                                                     // нужно понимание!
+    @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
                     description = "Пользователь зарегистрирован",
@@ -59,7 +59,7 @@ public class AuthController {
             ),
     })
     public ResponseEntity<?> register(@RequestBody Register register) {
-        if (authService.register(register)) {
+        if (authService.register(register) ) {
 
             userService.saveRegisterUser(register);
 

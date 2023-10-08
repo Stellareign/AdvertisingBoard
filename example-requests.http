@@ -8,7 +8,7 @@ Content-Type: application/json
 
 {
   "username": "user@gmail.com",
-  "currentPassword": "currentPassword"
+  "currentPassword": "password"
 }
 
 ###
@@ -17,7 +17,7 @@ Content-Type: application/json
 
 {
   "username": "user@gmail.com",
-  "currentPassword": "currentPassword",
+  "currentPassword": "password",
   "firstName": " asdad",
   "lastName": " asdad",
   "phone": " asdad",
@@ -56,7 +56,7 @@ Content-Type: application/json
 Authorization: Basic user@gmail.com currentPassword
 
 {
-  "newPassword": "currentPassword",
+  "newPassword": "password",
   "currentPassword": "password1"
 }
 

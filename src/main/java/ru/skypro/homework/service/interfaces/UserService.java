@@ -3,14 +3,21 @@ package ru.skypro.homework.service.interfaces;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
+import ru.skypro.homework.dto.user.UpdateUserDTO;
+import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
+
 @Service
 public interface UserService {
 
 
-    User gerUserByEmail(String email);
-
-    void saveRegisterUser (Register register);
-
     boolean checkPassword(UpdatePasswordDTO updatePasswordDTO);
+
+    UserDTO convertUserToUserDTO(User user);
+
+    User convertUpdateUserDTOtoUser(UpdateUserDTO updateUserDTO);
+
+    User getUserByUsernameFromDB(String username);
+
+    void saveRegisterUser(Register register);
 }
