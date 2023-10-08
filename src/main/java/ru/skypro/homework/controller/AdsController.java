@@ -3,19 +3,26 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.config.MapperUtil;
 
 import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
+import ru.skypro.homework.dto.user.AddUserDTO;
+import ru.skypro.homework.dto.user.UpdateUserImageDTO;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
+
+import java.io.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,13 +94,8 @@ public class AdsController {
 
     // удаление объявления по id
     @DeleteMapping("/{adId}")
-    public ResponseEntity<?> removeAdById(@PathVariable int adId) {
-        boolean removeIsOk = adsService.deleteAdsById(adId);
-        if (removeIsOk) {
-            return new ResponseEntity<>(("Объявление с id = " + adId + "успешно удалено из базы"), HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(("Ошибка при попытке удалить Объявление с id = " + adId), HttpStatus.NOT_FOUND);
-        }
+    public void removeAdById(@PathVariable int adId) {
+        adsService.deleteAdsById(adId);
     }
 
 
@@ -103,8 +105,7 @@ public class AdsController {
 //      "title": "string",
 //              "price": 10000000,
 //              "description": "string"
-    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestParam String title, int price, String description) {
-        CreateOrUpdateAdDTO updateAd = new CreateOrUpdateAdDTO(title, price, description);
+    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestBody CreateOrUpdateAdDTO updateAd) {
         Ad ad = adsService.editAdById(adId, updateAd);
         return ResponseEntity.ok().body(ad);
     }
@@ -139,14 +140,20 @@ User user = mapperUtil.getMapper().map(authentication, User.class);
         return ResponseEntity.ok().body(new AdsDTO(adList.size(), adList));
     }
 
-    @PatchMapping("/{adId}/image")
+    @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Обновление картинки объявления")
-    public ResponseEntity<Ad> editImageAdById(@PathVariable int adId, @RequestParam String imagePath) {
-        Optional<Ad> ad = adsService.getAdById(adId);
-        if (ad.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        if (imagePath.isEmpty()) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        Ad editedAd = adsService.editImageAdById(adId, imagePath);
-        return ResponseEntity.ok().body(editedAd);
+    public ResponseEntity<Ad> editImageAdById(@PathVariable int adId, @RequestParam ("image") MultipartFile image) throws RecordNotFoundException {
+        File tempFile = new File("/ads/{adId}/image/",adId+".jpg");
+        try (OutputStream os = new FileOutputStream(tempFile)){
+            os.write(image.getBytes());
+        }catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String imagePath = tempFile.getPath();
+        return ResponseEntity.ok().body(adsService.editImageAdById(adId, imagePath));
     }
+
 }
 

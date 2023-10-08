@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdsDTO {
-    private int pk;
-    private List<Ad> adList;
+    private int count;
+    private List<Ad> results;
 }
