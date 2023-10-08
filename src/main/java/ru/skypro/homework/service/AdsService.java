@@ -30,7 +30,7 @@ public interface AdsService {
 
 //    List<Ad> getAllAdsByUser(int userId);
 
-    Ad editImageAdById(int id, MultipartFile image);
+    Ad editImageAdById(int id, String image);
 
     List<Ad> getAllAdsByUser(String userLogin);
 }

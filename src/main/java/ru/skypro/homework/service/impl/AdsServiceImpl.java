@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 
@@ -63,7 +62,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ad editImageAdById(int id, MultipartFile image) {
+    public Ad editImageAdById(int id, String image) {
         Optional<Ad> optionalAd = adsRepository.findById(id);
         if (optionalAd.isEmpty()) {
             new RecordNotFoundException(String.valueOf(id));

@@ -14,10 +14,15 @@ import ru.skypro.homework.config.MapperUtil;
 import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
+import ru.skypro.homework.dto.user.AddUserDTO;
+import ru.skypro.homework.dto.user.UpdateUserImageDTO;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
+
+import java.io.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -137,10 +142,18 @@ User user = mapperUtil.getMapper().map(authentication, User.class);
 
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Обновление картинки объявления")
-    public ResponseEntity<Ad> editImageAdById(@PathVariable int adId, @RequestParam ("image") MultipartFile image) {
-        Optional<Ad> ad = adsService.getAdById(adId);
-        Ad editedAd = adsService.editImageAdById(adId, image);
-        return ResponseEntity.ok().body(editedAd);
+    public ResponseEntity<Ad> editImageAdById(@PathVariable int adId, @RequestParam ("image") MultipartFile image) throws RecordNotFoundException {
+        File tempFile = new File("/ads/{adId}/image/",adId+".jpg");
+        try (OutputStream os = new FileOutputStream(tempFile)){
+            os.write(image.getBytes());
+        }catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String imagePath = tempFile.getPath();
+        return ResponseEntity.ok().body(adsService.editImageAdById(adId, imagePath));
     }
+
 }
 
