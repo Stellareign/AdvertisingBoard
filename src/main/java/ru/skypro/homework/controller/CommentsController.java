@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.config.MapperUtil;
+import ru.skypro.homework.dto.comments.CommentDTO;
 import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.Ad;
@@ -29,7 +30,6 @@ public class CommentsController {
 
     private CommentsService commentsService;
 
-//    private AdsService adsService;
     private AdsServiceImpl adsService;
 
     private MapperUtil mapperUtil;
@@ -40,9 +40,8 @@ public class CommentsController {
         this.mapperUtil = mapperUtil;
     }
 
-
     @Operation(summary = "Получение списка всех комментариев")
-    @GetMapping("/all")
+    @GetMapping("")
     public ResponseEntity<CommentsDTO> getComment(Ad adsId) {
         List<Comments> allComments = commentsService.result(adsId);
         CommentsDTO commentsDTO = new CommentsDTO(allComments.size(), allComments);
@@ -54,7 +53,7 @@ public class CommentsController {
     // добавление комментариев
     @Operation(summary = "Добавление нового комментария")
     @PostMapping
-    public ResponseEntity<Comments> addComment(@RequestBody Comments comments) {
+    public ResponseEntity<CommentDTO> addComment(@RequestBody CommentDTO comments) {
         if (comments != null) {
             return ResponseEntity.ok(comments);
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

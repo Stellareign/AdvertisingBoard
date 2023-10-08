@@ -11,8 +11,8 @@ import ru.skypro.homework.entity.User;
 import javax.annotation.PostConstruct;
 
 @Component
-public class UserMapper {
 
+public class UserMapper {
     private final ModelMapper mapper;
 
     public UserMapper(ModelMapper mapper) {
@@ -27,7 +27,8 @@ public class UserMapper {
                 .setPostConverter(userToDtoConverter()); // если надо пропустить поле, то перед сет добавить поле типа addMappings(m -> m.skip(AddUserDTO::setId))
         mapper.createTypeMap(UserDTO.class, User.class)
                 .setPostConverter(userToEntityConverter())
-                .addMappings(m -> m.skip(User::setCurrentPassword));
+                .addMappings(m -> m.skip(User::setPassword))
+                .addMappings(m -> m.skip(User::setRegisterDate));
 
         // регистрация пользователя
         mapper.createTypeMap(User.class, Register.class)
@@ -40,9 +41,9 @@ public class UserMapper {
 
         // обновление юзера
         mapper.createTypeMap(User.class, UpdateUserDTO.class)
-                .setPostConverter(UpdUserToDtoConverter());
+                .setPostConverter(updUserToDtoConverter());
         mapper.createTypeMap(UpdateUserDTO.class, User.class)
-                .setPostConverter(UpdUserToEntityConverter())
+                .setPostConverter(updUserToEntityConverter())
                 .addMappings(m -> m.skip(User::setImage))
                 .addMappings(m -> m.skip(User::setRole))
                 .addMappings(m -> m.skip(User::setImage))
@@ -58,7 +59,7 @@ public class UserMapper {
       return context.getDestination(); - возвращаем целевой объект из контекста преобразования.
      */
 
-    // ***********ПОЛУЧЕНИЕ ИНФЫ О ПОЛЬЗОВАТЕЛЕ*******************************
+    // *********** ПОЛУЧЕНИЕ ИНФЫ О ПОЛЬЗОВАТЕЛЕ *******************************
     public Converter<User, UserDTO> userToDtoConverter() {
         return context -> {
             User source = context.getSource(); // источник
@@ -75,8 +76,8 @@ public class UserMapper {
         };
     }
 
-    // *************ОБНОВЛЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ*******************************
-    public Converter<User, UpdateUserDTO> UpdUserToDtoConverter() {
+    // ************* ОБНОВЛЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ *******************************
+    public Converter<User, UpdateUserDTO> updUserToDtoConverter() {
         return context -> {
             User source = context.getSource(); // источник
             UpdateUserDTO result = context.getDestination();
@@ -84,21 +85,22 @@ public class UserMapper {
         };
     }
 
-    public Converter<UpdateUserDTO, User> UpdUserToEntityConverter() {
+    public Converter<UpdateUserDTO, User> updUserToEntityConverter() {
         return context -> {
             UpdateUserDTO source = context.getSource();
             User result = context.getDestination();
             return context.getDestination();
         };
     }
-//********************РЕГИСТРАЦИЯ ПОЛЬЗОВАТЕЛЯ************************************
-public Converter<User, Register> userToRegisterConverter() {
-    return context -> {
-        User source = context.getSource(); // источник
-        Register result = context.getDestination();
-        return context.getDestination();
-    };
-}
+
+    //******************** РЕГИСТРАЦИЯ ПОЛЬЗОВАТЕЛЯ ************************************
+    public Converter<User, Register> userToRegisterConverter() {
+        return context -> {
+            User source = context.getSource(); // источник
+            Register result = context.getDestination();
+            return context.getDestination();
+        };
+    }
 
     public Converter<Register, User> registerToUserConverter() {
         return context -> {

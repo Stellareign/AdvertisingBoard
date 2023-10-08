@@ -1,10 +1,9 @@
-
+*) исходный код: https://github.com/skypro-backend/example-for-graduate-work
 
  *) "currentPassword": "stringst",
   "newPassword": "stringst
   - что за тип stringst????
 
- *) как добавить описание типа @Tag (name = "Пользователи")
 
  *) Запуск докера из терминала: docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.19
 

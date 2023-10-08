@@ -1,7 +1,6 @@
 package ru.skypro.homework.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -27,8 +26,6 @@ public class Image {
 //    @Column(name = "image_path")
 //    private String imagePath;
 
-    @Column(name = "image_size")
-    private Long imageSize;
 
     @OneToOne
     @JoinColumn(name = "author_id")

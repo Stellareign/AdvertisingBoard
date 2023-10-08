@@ -20,7 +20,4 @@ public class CommentsDTO {
 
     private List<Comments> results; //результат вывода всех найденных комментов
 
-
-
-
 }
