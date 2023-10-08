@@ -21,7 +21,7 @@ import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.AuthService;
-import ru.skypro.homework.service.interfaces.UserStaticFabrics;
+import ru.skypro.homework.service.interfaces.UserDTOFactory;
 import ru.skypro.homework.service.interfaces.UserService;
 
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final AuthService authService;
-    private final UserStaticFabrics userStaticFabrics;
+    private final UserDTOFactory userDTOFactory;
 
     // *************************** ОНОВЛЕНИЕ ПАРОЛЯ ********************
     @Operation(summary = "Обновление пароля пользователя")
@@ -91,7 +91,7 @@ public class UserController {
         int id = user.getId();
         if (user != null) {
 //                 UserDTO userDTO =userService.convertUserToUserDTO(user);
-            UserDTO userDTO = userStaticFabrics.fromUserToUserDTO(id, user);
+            UserDTO userDTO = userDTOFactory.fromUserToUserDTO(id, user);
             return ResponseEntity.ok().body(userDTO);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

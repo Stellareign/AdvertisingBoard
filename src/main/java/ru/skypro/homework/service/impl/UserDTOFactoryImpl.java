@@ -5,10 +5,10 @@ import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.service.interfaces.UserStaticFabrics;
+import ru.skypro.homework.service.interfaces.UserDTOFactory;
 
 @Service
-public class UserUserStaticFabricsImpl implements UserStaticFabrics {
+public class UserDTOFactoryImpl implements UserDTOFactory {
 
     //******************************** пароли  *********************
     @Override

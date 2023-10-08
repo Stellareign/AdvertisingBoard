@@ -7,7 +7,7 @@ import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
 
 @Service
-public interface UserStaticFabrics {
+public interface UserDTOFactory {
     //******************************** пароли  *********************
     UpdateUserDTO fromUserToUpdatePassworDTO(User user);
 
