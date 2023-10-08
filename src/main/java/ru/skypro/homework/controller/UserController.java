@@ -20,6 +20,7 @@ import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.MyUserDetailes;
 import ru.skypro.homework.service.interfaces.AuthService;
 import ru.skypro.homework.service.interfaces.UserDTOFactory;
 import ru.skypro.homework.service.interfaces.UserService;
@@ -44,6 +45,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final AuthService authService;
     private final UserDTOFactory userDTOFactory;
+    private final MyUserDetailes myUserDetailes;
 
     // *************************** ОНОВЛЕНИЕ ПАРОЛЯ ********************
     @Operation(summary = "Обновление пароля пользователя")
@@ -88,10 +90,8 @@ public class UserController {
     public ResponseEntity<UserDTO> getUser() {
         String username = "pupkin@poy.ru";
         User user = userRepository.findByUsername(username);
-        int id = user.getId();
-        if (user != null) {
-//                 UserDTO userDTO =userService.convertUserToUserDTO(user);
-            UserDTO userDTO = userDTOFactory.fromUserToUserDTO(id, user);
+             if (user != null) {
+            UserDTO userDTO = userDTOFactory.fromUserToUserDTO(user);
             return ResponseEntity.ok().body(userDTO);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -105,7 +105,7 @@ public class UserController {
             @ApiResponse(responseCode = "200",
                     description = "Данные пользователя обновлены",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = User.class))}),
+                            schema = @Schema(implementation =User.class))}),
             @ApiResponse(
                     responseCode = "401", description = "Ошибка при авторизации"
             )
@@ -113,12 +113,13 @@ public class UserController {
     public ResponseEntity<User> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
 
         String username = "pupkin@poy.ru"; // ЗАМЕНИТЬ НА ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ
+//        String username = myUserDetailes.getUsername();
 
         User user = userService.getUserByUsernameFromDB(username);
 //        userService.convertUpdateUserDTOtoUser(updateUserDTO);
         if (user != null) {
-            user = userService.updateUser(user, updateUserDTO);
-            return ResponseEntity.ok().body(user);
+           User user1 = userService.updateUser(user, updateUserDTO);
+            return ResponseEntity.ok().body(user1);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

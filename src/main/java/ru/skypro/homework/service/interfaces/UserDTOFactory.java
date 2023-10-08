@@ -14,7 +14,7 @@ public interface UserDTOFactory {
     User fromUpdatePasswordDTOtoUser(User user, UpdatePasswordDTO updatePasswordDTO);
 
     // **************************** User to UserDTO // UserDTO to User ***************************
-    UserDTO fromUserToUserDTO(int id, User user);
+    UserDTO fromUserToUserDTO(User user);
 
     User fromUserDTOtoUser(UserDTO userDTO, User user);
 

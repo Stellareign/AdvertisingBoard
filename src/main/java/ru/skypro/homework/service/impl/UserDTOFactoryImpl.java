@@ -24,8 +24,8 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
 
     // **************************** User to UserDTO // UserDTO to User ***************************
     @Override
-    public UserDTO fromUserToUserDTO(int id, User user) {
-        return new UserDTO(id, user.getUsername(), user.getFirstName(), user.getLastName(),
+    public UserDTO fromUserToUserDTO(User user) {
+        return new UserDTO(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(),
                 user.getPhone(), user.getImage(), user.getRole());
     }
 

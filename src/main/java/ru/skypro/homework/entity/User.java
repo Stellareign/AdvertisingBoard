@@ -30,7 +30,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username",  nullable = false, unique = true)
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "Неверный формат email")
     private String username; // логин при регистрации - e-mail
 
@@ -47,7 +47,7 @@ public class User {
     private String lastName;
 
     @Pattern(regexp = "\\+7\\s?\\(\\d{3}\\)\\s?\\d{3}-\\d{2}-\\d{2}", message = "Неверный формат номера телефона")
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
     //**********************************
@@ -55,9 +55,9 @@ public class User {
 
     @Column(name = "avatar")
     private String image; // ссылка на аватар
-
+//
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column (nullable = false)
     private Role role;
 
 
