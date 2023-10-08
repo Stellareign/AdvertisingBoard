@@ -18,30 +18,33 @@ public class MapperUtil {
     public ModelMapper getMapper() {
         return new ModelMapper();
     }
+
     public <R, E> List<R> convertList(List<E> list, Function<E, R> converter) {
         return list.stream().map(converter::apply).collect(Collectors.toList());
     }
-    public ExtendedAdDTO createExtendedAdDTO (Ad ad){
+
+    public ExtendedAdDTO createExtendedAdDTO(Ad ad) {
         User user = ad.getAuthor();
         return new ExtendedAdDTO(
                 ad.getPk(), //id объявления
                 ad.getDescription(),
-        ad.getPrice(),
-        ad.getTitle(),
+                ad.getPrice(),
+                ad.getTitle(),
                 ad.getImage(), // фото товара
                 user.getFirstName(),
-        user.getLastName(),
+                user.getLastName(),
                 user.getUsername(),
                 user.getPhone());
     }
-    public Ad createAdfromDTO (CreateOrUpdateAdDTO inputAd, String imagePath, User user){
+
+    public Ad createAdfromDTO(CreateOrUpdateAdDTO inputAd, String imagePath, User user) {
         return new Ad(
                 inputAd.getTitle(),
                 inputAd.getPrice(),
                 inputAd.getDescription(),
                 imagePath,
                 user
-                );
+        );
     }
 
 }
