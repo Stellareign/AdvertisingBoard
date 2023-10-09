@@ -14,7 +14,7 @@ import java.util.Optional;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "ad")
+@Table(name = "ads")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 
 /*
