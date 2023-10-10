@@ -24,7 +24,7 @@ import java.util.Optional;
 // (http://localhost:3000), даже если он отличается от домена, на котором запущено приложение.
 @RequiredArgsConstructor // генерирует конструктор с аргументами для всех полей, помеченных аннотацией @NonNull
 @RestController
-@RequestMapping("/ads/{adId}/comments")
+@RequestMapping("/ads")
 @Tag(name = "Комментарии")
 public class CommentsController {
 
@@ -41,7 +41,7 @@ public class CommentsController {
     }
 
     @Operation(summary = "Получение списка всех комментариев")
-    @GetMapping("/ads/{adId}/comments")
+    @GetMapping("/{id}/comments\n")
     public ResponseEntity<CommentsDTO> getComment(@PathVariable int adId) {
         Optional<Ad> ad = adsService.getAdById(adId);
         Map<Integer, Comments> allComments = commentsService.getAllComments();
@@ -53,7 +53,7 @@ public class CommentsController {
 
     // добавление комментариев
     @Operation(summary = "Добавление нового комментария")
-    @PostMapping("/ads/{adId}/comments")
+    @PostMapping("/{id}/comments")
     public ResponseEntity<?> addComment(@PathVariable Comments pk, @RequestBody String text) {
         if (pk != null) {
             return ResponseEntity.ok(pk);
@@ -62,7 +62,7 @@ public class CommentsController {
 
     // удаление комментария по id
     @Operation(summary = "Удаление комментария")
-    @DeleteMapping("/ads/{adId}/comments/{commentId}")
+    @DeleteMapping("/{adId}/comments/{commentId}")
 //    public void deleteComment(@PathVariable int adId , @RequestParam int commentId ) {
     public ResponseEntity<?> deleteComment(@PathVariable int adId , @PathVariable int pk ){
         adsService.getAdById(adId);
@@ -76,7 +76,7 @@ public class CommentsController {
 
     // обновление комментария
     @Operation(summary = "Обновление комментария")
-    @PatchMapping("/ads/{adId}/comments/{commentId}")
+    @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> updateComment(@PathVariable int adId,@PathVariable int pk, @RequestBody String text) {
         adsService.getAdById(adId);
         commentsService.getComment(pk);

@@ -77,12 +77,12 @@ public class AdsController {
     }
 
     // получение информации об объявлении
-    @GetMapping("/{adId}")
+    @GetMapping("/{id}")
     @Operation(summary = "Получение информации об объявлении по id")
-    public ResponseEntity<ExtendedAdDTO> getAdById(@PathVariable int adId) {
-        Optional<Ad> adById = adsService.getAdById(adId);
+    public ResponseEntity<ExtendedAdDTO> getAdById(@PathVariable int id) {
+        Optional<Ad> adById = adsService.getAdById(id);
         if (adById.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        User authorAd = userRepository.findById(adId);
+//        User authorAd = userRepository.findById(id);
 //      if (authorAd == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         ExtendedAdDTO extendedAdDTO = mapperUtil.createExtendedAdDTO(adById.get());
         return ResponseEntity.ok().body(extendedAdDTO);
@@ -90,20 +90,20 @@ public class AdsController {
 
 
     // удаление объявления по id
-    @DeleteMapping("/{adId}")
-    public void removeAdById(@PathVariable int adId) {
-        adsService.deleteAdsById(adId);
+    @DeleteMapping("/{id}")
+    public void removeAdById(@PathVariable int id) {
+        adsService.deleteAdsById(id);
     }
 
 
-    @PatchMapping("/{adId}")
+    @PatchMapping("//{id}")
 ///ads/{id}
 //Обновление информации об объявлении
 //      "title": "string",
 //              "price": 10000000,
 //              "description": "string"
-    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestBody CreateOrUpdateAdDTO updateAd) {
-        Ad ad = adsService.editAdById(adId, updateAd);
+    public ResponseEntity<Ad> updateAd(@PathVariable int id, @RequestBody CreateOrUpdateAdDTO updateAd) {
+        Ad ad = adsService.editAdById(id, updateAd);
         return ResponseEntity.ok().body(ad);
     }
 
@@ -137,10 +137,10 @@ User user = mapperUtil.getMapper().map(authentication, User.class);
         return ResponseEntity.ok().body(new AdsDTO(adList.size(), adList));
     }
 
-    @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Обновление картинки объявления")
-    public ResponseEntity<Ad> editImageAdById(@PathVariable int adId, @RequestParam ("image") MultipartFile image) throws RecordNotFoundException {
-        File tempFile = new File("/ads/{adId}/image/",adId+".jpg");
+    public ResponseEntity<Ad> editImageAdById(@PathVariable int id, @RequestParam ("image") MultipartFile image) throws RecordNotFoundException {
+        File tempFile = new File("/ads/{id}/image/", id +".jpg");
         try (OutputStream os = new FileOutputStream(tempFile)){
             os.write(image.getBytes());
         }catch (FileNotFoundException e) {
@@ -149,7 +149,7 @@ User user = mapperUtil.getMapper().map(authentication, User.class);
             throw new RuntimeException(e);
         }
         String imagePath = tempFile.getPath();
-        return ResponseEntity.ok().body(adsService.editImageAdById(adId, imagePath));
+        return ResponseEntity.ok().body(adsService.editImageAdById(id, imagePath));
     }
 
 }

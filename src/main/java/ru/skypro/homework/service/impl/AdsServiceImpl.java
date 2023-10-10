@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-
 public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
 

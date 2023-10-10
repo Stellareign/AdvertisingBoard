@@ -1,17 +1,13 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.spi.MappingContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
-import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.mappers.PasswordMapper;
-import ru.skypro.homework.mappers.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.MyUserDetailes;
 import ru.skypro.homework.service.interfaces.AuthService;
@@ -25,10 +21,7 @@ import java.time.LocalDate;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AuthService authService;
-    private final UserMapper userMapper;
     private final PasswordEncoder encoder;
-
-    private final PasswordMapper passwordMapper;
 
 
     //    private final SecurityUserPrincipal securityUserPrincipal; // проверить
@@ -48,7 +41,7 @@ public class UserServiceImpl implements UserService {
         String currentPassword = updatePasswordDTO.getCurrentPassword();
         String password = user1.getPassword();
 
-        passwordMapper.passToEntityConverter(updatePasswordDTO);
+//        passwordMapper.passToEntityConverter(updatePasswordDTO);
         return !newPassword.equals(currentPassword) && newPassword.length() >= 8 && !newPassword.isBlank()
                 && currentPassword.equals(password);
     }
@@ -58,16 +51,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
-    @Override
-    public UserDTO convertUserToUserDTO(User user) {
-        userMapper.setupMapper();
-        return (UserDTO) userMapper.userToDtoConverter();
-    }
-
-    @Override
-    public User convertUpdateUserDTOtoUser(UpdateUserDTO updateUserDTO) {
-        return userMapper.updUserToEntityConverter().convert((MappingContext<UpdateUserDTO, User>) updateUserDTO);
-    }
 
     @Override
     public User updateUser(User user, UpdateUserDTO updateUserDTO) {
