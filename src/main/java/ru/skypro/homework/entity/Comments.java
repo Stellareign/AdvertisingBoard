@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -27,18 +28,18 @@ public class Comments {
 
     @OneToOne
     @JoinColumn (name = "user_id",  nullable = false)
-    private User authorId; // id автора комментария
+    private User authorId = getAuthorId();  // id автора комментария
 
     @ManyToOne
     @JoinColumn (name = "first_name",  nullable = false)
-    private User authorFirstName;
+    private User authorFirstName = getAuthorFirstName();
 
     @ManyToOne
     @JoinColumn (name = "avatar",  nullable = false)
-    private User authorImage;
+    private User authorImage = getAuthorImage();
 
     @Column(name = "date_time",  nullable = false)
-    private long createdAt; // дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
+    private LocalDateTime createdAt; // дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "ads_id",  nullable = false)
@@ -56,4 +57,5 @@ public class Comments {
         this.text = text;
         this.adId = adId;
     }
+
 }
