@@ -26,7 +26,7 @@ public class Comments {
     @Column(name = "comment_id",  nullable = false)
     private int pk;    // id комментания
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn (name = "user_id",  nullable = false)
     private User authorId = getAuthorId();  // id автора комментария
 
