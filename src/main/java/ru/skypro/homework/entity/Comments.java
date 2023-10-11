@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Data
 @AllArgsConstructor
@@ -49,5 +50,18 @@ public class Comments {
     public Comments(String text, Ad adId) {
         this.text = text;
         this.adId = adId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comments comments = (Comments) o;
+        return pk == comments.pk && createdAt == comments.createdAt && Objects.equals(authorFirstName, comments.authorFirstName) && Objects.equals(authorImage, comments.authorImage) && Objects.equals(text, comments.text) && Objects.equals(adId, comments.adId) && Objects.equals(authorId, comments.authorId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pk, authorFirstName, authorImage, text, createdAt, adId, authorId);
     }
 }
