@@ -6,17 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Getter
-/*
-комменты за Тимуром
-проработать связь сущностей автор-комментарий и/или комментарий-объявление
- */
 @Table(name = "comments")
 public class Comments {
 
@@ -25,17 +21,17 @@ public class Comments {
     @Column(name = "comment_id", nullable = false)
     private int pk;    // id комментания
 
-    @Column(name = "first_name", nullable = false)
-    private String authorFirstName = getAuthorFirstName();
+    @Column(name = "author_first_name", nullable = false)
+    private String authorFirstName;
 
-    @Column(name = "avatar", nullable = false)
-    private String authorImage = getAuthorImage(); // ссылка на аватар автора коммента
+    @Column(name = "author_avatar", nullable = false)
+    private String authorImage; // ссылка н аватар автора
 
     @Column(name = "comment_text")
-    private String text; // содержание комментария
+    private String text;
 
     @Column(name = "date_time", nullable = false)
-    private LocalDateTime createdAt; // дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
+    private long createdAt; // дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ads_id", nullable = false)
@@ -43,7 +39,7 @@ public class Comments {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User authorId = getAuthorId();  // id автора комментария
+    private User authorId; // id автора комментария
 
 
     public Comments(String authorFirstName, String text) {
@@ -54,5 +50,18 @@ public class Comments {
     public Comments(String text, Ad adId) {
         this.text = text;
         this.adId = adId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comments comments = (Comments) o;
+        return pk == comments.pk && createdAt == comments.createdAt && Objects.equals(authorFirstName, comments.authorFirstName) && Objects.equals(authorImage, comments.authorImage) && Objects.equals(text, comments.text) && Objects.equals(adId, comments.adId) && Objects.equals(authorId, comments.authorId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pk, authorFirstName, authorImage, text, createdAt, adId, authorId);
     }
 }
