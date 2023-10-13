@@ -2,6 +2,8 @@ package ru.skypro.homework.dto.ads;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import ru.skypro.homework.entity.AdsImage;
+
 @AllArgsConstructor
 @Data
 public class ExtendedAdDTO {
@@ -10,7 +12,7 @@ public class ExtendedAdDTO {
     private String description;
     private int price;
     private  String title;
-    private String image; // фото товара
+    private AdsImage image; // фото товара
 
     private String authorFirstName;
     private String authorLastName;
