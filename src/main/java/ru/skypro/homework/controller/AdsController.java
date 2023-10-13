@@ -96,7 +96,7 @@ public class AdsController {
     }
 
 
-    @PatchMapping("//{id}")
+    @PatchMapping("/{id}")
 ///ads/{id}
 //Обновление информации об объявлении
 //      "title": "string",

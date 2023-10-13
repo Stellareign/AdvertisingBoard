@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
@@ -20,14 +21,12 @@ import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.MyUserDetailes;
 import ru.skypro.homework.service.interfaces.AuthService;
 import ru.skypro.homework.service.interfaces.UserDTOFactory;
 import ru.skypro.homework.service.interfaces.UserService;
 
 import java.io.IOException;
 
-import static ru.skypro.homework.service.impl.AuthServiceImpl.AUTHORISE;
 
 @Slf4j //  добавляет логгер в класс
 @CrossOrigin(value = "http://localhost:3000") // позволяет настроить CORS (Cross-Origin Resource Sharing)
@@ -45,7 +44,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final AuthService authService;
     private final UserDTOFactory userDTOFactory;
-    private final MyUserDetailes myUserDetailes;
+
 
     // *************************** ОНОВЛЕНИЕ ПАРОЛЯ ********************
     @Operation(summary = "Обновление пароля пользователя")
@@ -62,9 +61,10 @@ public class UserController {
                     responseCode = "400", description = "Недостаточно прав для выполнения операции"
             ),
     })
-    public ResponseEntity<UpdatePasswordDTO> setPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO) {
-        // как получить текущего юзера...
-        boolean checkPassword = userService.checkPassword(updatePasswordDTO);
+    public ResponseEntity<UpdatePasswordDTO> setPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO,
+                                                         Authentication authentication) {
+        log.info("Изменить пароль: " + updatePasswordDTO);
+        boolean checkPassword = userService.checkPassword(updatePasswordDTO,authentication.getName());
         if (checkPassword) {
             return ResponseEntity.ok().body(updatePasswordDTO);
 
@@ -110,16 +110,13 @@ public class UserController {
                     responseCode = "401", description = "Ошибка при авторизации"
             )
     })
-    public ResponseEntity<User> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
 
         String username = "pupkin@poy.ru"; // ЗАМЕНИТЬ НА ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ
-//        String username = myUserDetailes.getUsername();
-
         User user = userService.getUserByUsernameFromDB(username);
-//        userService.convertUpdateUserDTOtoUser(updateUserDTO);
-        if (user != null) {
-            User user1 = userService.updateUser(user, updateUserDTO);
-            return ResponseEntity.ok().body(user1);
+//
+        if (userService.checkUser(username)) {
+            return ResponseEntity.ok().body( userService.updateUser(user, updateUserDTO));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -140,7 +137,7 @@ public class UserController {
     public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image) throws IOException {
 
         UserDTO newUserDTO = new UserDTO();
-        if (AUTHORISE && !image.isEmpty() && image.getContentType().startsWith("image/")) {
+        if (!image.isEmpty() && image.getContentType().startsWith("image/")) {
             byte[] imageData = image.getBytes();
 
             // для проверки. Логику доработать и перенести в сервис

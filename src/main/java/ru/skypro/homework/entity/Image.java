@@ -29,8 +29,9 @@ public class Image {
 //    private String imagePath;
 
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    //    @OneToOne
+//    @JoinColumn(name = "user_id")
+    @OneToOne(optional = true)
     private User user;
 
     @Override

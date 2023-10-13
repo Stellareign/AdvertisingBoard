@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,7 @@ public class AuthController {
     private final UserService userService;
     private final UserRepository userRepository;
 
+
     @PostMapping("/login")
     @ApiResponses(value = {
             @ApiResponse(
@@ -40,8 +42,8 @@ public class AuthController {
                     responseCode = "401", description = "Неверный логин или пароль"
             ),
     })
-    public ResponseEntity<?> login(@RequestBody Login login) {
-        if (authService.login(login.getUsername(), login.getPassword()) || userRepository.findByUsername(login.getUsername()) != null) {
+    public ResponseEntity<?> login(@RequestBody Login login, Authentication authentication) {
+        if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -60,10 +62,8 @@ public class AuthController {
                     responseCode = "400", description = "Неверный запрос, пользователь с таким именем уже есть в базе данных"
             ),
     })
-    public ResponseEntity<?> register(@RequestBody Register register) {
+    public ResponseEntity<Register> register(@RequestBody Register register) {
         if (authService.register(register) ) {
-
-            userService.saveRegisterUser(register);
 
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {

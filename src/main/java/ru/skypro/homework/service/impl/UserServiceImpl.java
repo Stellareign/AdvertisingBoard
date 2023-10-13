@@ -1,49 +1,49 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
+import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.MyUserDetailes;
-import ru.skypro.homework.service.interfaces.AuthService;
+import ru.skypro.homework.service.interfaces.UserDTOFactory;
 import ru.skypro.homework.service.interfaces.UserService;
 
 import java.time.LocalDate;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final AuthService authService;
     private final PasswordEncoder encoder;
+    private final UserDTOFactory userDTOFactory;
 
 
-    //    private final SecurityUserPrincipal securityUserPrincipal; // проверить
-    private final MyUserDetailes myUserDetailes;
-
-    private final User user = new User("pupkin@poy.ru", "Ваня", "Пупкин", Role.USER,
-            "+7(123)456-78-90", "qwerty123", LocalDate.from(LocalDate.now()));
+    //    private final MyUserDetails securityUserPrincipal; // проверить
 
     @Override
-    public boolean checkPassword(UpdatePasswordDTO updatePasswordDTO) {
-        //***********************
-//        User userTest = new User("pupkin@poy.ru");
-        User user1 = getUserByUsernameFromDB(user.getUsername());
+    public boolean checkPassword(UpdatePasswordDTO updatePasswordDTO, String username) throws UsernameNotFoundException {
 
-        //********************************
         String newPassword = updatePasswordDTO.getNewPassword();
         String currentPassword = updatePasswordDTO.getCurrentPassword();
-        String password = user1.getPassword();
 
-//        passwordMapper.passToEntityConverter(updatePasswordDTO);
-        return !newPassword.equals(currentPassword) && newPassword.length() >= 8 && !newPassword.isBlank()
-                && currentPassword.equals(password);
+        User user = userRepository.findByUsername(username);
+        String password = encoder.encode(user.getPassword()); // я бы добавила ввод текущего пароля при смене пароля
+
+        if (!newPassword.equals(currentPassword) && newPassword.length() >= 8 && !newPassword.isBlank()) {
+          user.setPassword(newPassword);
+          userRepository.save(user);
+
+            return true;
+        }  log.info("Пароль не соответствует требованиям, или неверно указан текущий пароль");
+            return false;
+
     }
 
     @Override
@@ -53,12 +53,16 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User updateUser(User user, UpdateUserDTO updateUserDTO) {
+    public UserDTO updateUser(User user, UpdateUserDTO updateUserDTO) {
         user.setFirstName(updateUserDTO.getFirstName());
         user.setLastName(updateUserDTO.getLastName());
         user.setPhone(updateUserDTO.getPhone());
         userRepository.save(user);
-        return user;
+        return userDTOFactory.fromUserToUserDTO(user);
+    }
+    @Override
+    public boolean checkUser(String username){
+        return getUserByUsernameFromDB(username) != null;
     }
 
     @Override

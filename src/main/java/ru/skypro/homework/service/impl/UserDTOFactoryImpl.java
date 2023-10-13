@@ -46,4 +46,5 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
         return new User(user.getUsername(), updateUserDTO.getFirstName(), updateUserDTO.getLastName(), user.getRole(),
                 updateUserDTO.getPhone(), user.getImage(), user.getRegisterDate());
     }
+
 }
