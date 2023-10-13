@@ -20,9 +20,6 @@ import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.ImageRepository;
-import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.interfaces.AuthService;
-import ru.skypro.homework.service.interfaces.UserDTOFactory;
 import ru.skypro.homework.service.interfaces.UserService;
 
 import java.io.IOException;
@@ -41,12 +38,9 @@ public class UserController {
 
     private final ImageRepository imageRepository;
     private final UserService userService;
-    private final UserRepository userRepository;
-    private final AuthService authService;
-    private final UserDTOFactory userDTOFactory;
 
 
-    // *************************** ОНОВЛЕНИЕ ПАРОЛЯ ********************
+    // *************************** ОБНОВЛЕНИЕ ПАРОЛЯ ********************
     @Operation(summary = "Обновление пароля пользователя")
     @PostMapping("/set_password")
     @ApiResponses(value = {
@@ -64,7 +58,7 @@ public class UserController {
     public ResponseEntity<UpdatePasswordDTO> setPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO,
                                                          Authentication authentication) {
         log.info("Изменить пароль: " + updatePasswordDTO);
-        boolean checkPassword = userService.checkPassword(updatePasswordDTO,authentication.getName());
+        boolean checkPassword = userService.checkPassword(updatePasswordDTO, authentication.getName());
         if (checkPassword) {
             return ResponseEntity.ok().body(updatePasswordDTO);
 
@@ -74,7 +68,7 @@ public class UserController {
         } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    //****************************** ИНФО О ПОЛЬЗОВАТЕЛЕ ************************************
+    //****************************** ПОЛУЧЕНИЕ ИНФО О ПОЛЬЗОВАТЕЛЕ ************************************
     @Operation(summary = "Получение информации об авторизованном пользователе")
     @GetMapping("/me")
     @ResponseBody
@@ -87,12 +81,11 @@ public class UserController {
                     responseCode = "401", description = "Ошибка при авторизации"
             )
     })
-    public ResponseEntity<UserDTO> getUser() {
-        String username = "pupkin@poy.ru";
-        User user = userRepository.findByUsername(username);
-        if (user != null) {
-            UserDTO userDTO = userDTOFactory.fromUserToUserDTO(user);
-            return ResponseEntity.ok().body(userDTO);
+    public ResponseEntity<UserDTO> getUser(Authentication authentication) {
+
+        if (userService.checkUser(authentication.getName())) {
+
+            return ResponseEntity.ok().body(userService.getUserForGetController(authentication.getName()));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -110,13 +103,10 @@ public class UserController {
                     responseCode = "401", description = "Ошибка при авторизации"
             )
     })
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO, Authentication authentication) {
 
-        String username = "pupkin@poy.ru"; // ЗАМЕНИТЬ НА ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ
-        User user = userService.getUserByUsernameFromDB(username);
-//
-        if (userService.checkUser(username)) {
-            return ResponseEntity.ok().body( userService.updateUser(user, updateUserDTO));
+        if (userService.checkUser(authentication.getName())) {
+            return ResponseEntity.ok().body(userService.updateUser(authentication.getName(), updateUserDTO));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -150,5 +140,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-
 }

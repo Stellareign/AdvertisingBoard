@@ -37,31 +37,40 @@ public class UserServiceImpl implements UserService {
         String password = encoder.encode(user.getPassword()); // я бы добавила ввод текущего пароля при смене пароля
 
         if (!newPassword.equals(currentPassword) && newPassword.length() >= 8 && !newPassword.isBlank()) {
-          user.setPassword(newPassword);
-          userRepository.save(user);
+            user.setPassword(newPassword);
+            userRepository.save(user);
 
             return true;
-        }  log.info("Пароль не соответствует требованиям, или неверно указан текущий пароль");
-            return false;
+        }
+        log.info("Пароль не соответствует требованиям, или неверно указан текущий пароль");
+        return false;
 
     }
 
-    @Override
-    public User getUserByUsernameFromDB(String username) {
+
+   private User getUserByUsernameFromDB(String username) {
         return userRepository.findByUsername(username);
     }
 
+    @Override
+    public UserDTO getUserForGetController(String username) {
+        User user = getUserByUsernameFromDB(username);
+        return userDTOFactory.fromUserToUserDTO(user);
+    }
+
 
     @Override
-    public UserDTO updateUser(User user, UpdateUserDTO updateUserDTO) {
+    public UserDTO updateUser(String username, UpdateUserDTO updateUserDTO) {
+        User user = userRepository.findByUsername(username);
         user.setFirstName(updateUserDTO.getFirstName());
         user.setLastName(updateUserDTO.getLastName());
         user.setPhone(updateUserDTO.getPhone());
         userRepository.save(user);
         return userDTOFactory.fromUserToUserDTO(user);
     }
+
     @Override
-    public boolean checkUser(String username){
+    public boolean checkUser(String username) {
         return getUserByUsernameFromDB(username) != null;
     }
 
