@@ -19,7 +19,7 @@ import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.Avatar;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.repository.ImageRepository;
+import ru.skypro.homework.service.interfaces.ImageService;
 import ru.skypro.homework.service.interfaces.UserService;
 
 import java.io.IOException;
@@ -36,7 +36,7 @@ import java.io.IOException;
 
 public class UserController {
 
-    private final ImageRepository imageRepository;
+    private final ImageService imageService;
     private final UserService userService;
 
 
@@ -127,13 +127,14 @@ public class UserController {
                     responseCode = "401", description = "Ошибка при авторизации"
             )
     })
-    public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image) throws IOException {
+    public ResponseEntity<?> updateUserImage(@RequestParam("avatar") MultipartFile image, Authentication authentication)
+            throws IOException {
 
         UserDTO newUserDTO = new UserDTO();
         if (!image.isEmpty() && image.getContentType().startsWith("image/")) {
             byte[] imageData = image.getBytes();
-
-
+            imageService.updateUsersAvatar(image, authentication);
+            
             return ResponseEntity.ok().body(newUserDTO);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

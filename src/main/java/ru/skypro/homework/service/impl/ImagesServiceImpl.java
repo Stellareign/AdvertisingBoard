@@ -18,6 +18,7 @@ public class ImagesServiceImpl implements ImageService {
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
 
+    @Override
     public Avatar updateUsersAvatar (MultipartFile image, Authentication authentication) throws IOException {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
