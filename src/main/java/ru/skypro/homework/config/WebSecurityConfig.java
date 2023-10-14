@@ -20,9 +20,15 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/login",
-            "/register"
+            "/register",
+            "/ads/*/getImage",
+            "/users/*/getAvatar"
     };
+/*
 
+Кконфигурация для фильтра цепочки безопасности (SecurityFilterChain) в Spring Security.
+Он определяет правила доступа для различных URL-адресов и HTTP-методов.
+ */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()

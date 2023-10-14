@@ -3,16 +3,14 @@ package ru.skypro.homework.service.impl;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.Comments;
+import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.CommentsRepository;
 import ru.skypro.homework.service.interfaces.CommentsService;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CommentsServiceImpl implements CommentsService {
@@ -23,10 +21,10 @@ public class CommentsServiceImpl implements CommentsService {
         this.commentsRepository = commentsRepository;
     }
 
-    private final Map<Integer, Comments> commentsMap = new HashMap<>();
+    private final Map<Integer, Comment> commentsMap = new HashMap<>();
 
 //    @Override
-//    public List <Comments> result(Ad adsId){
+//    public List <Comment> result(Ad adsId){
 //        return
 //      commentsRepository.findAll()
 //                .stream()
@@ -35,24 +33,24 @@ public class CommentsServiceImpl implements CommentsService {
 //    }
 
     @Override
-    public Map<Integer, Comments> getAllComments() {
+    public Map<Integer, Comment> getAllComments() {
         return commentsMap;
     }
 
     @Override
-    public Comments getComment(int pk) {
+    public Comment getComment(int pk) {
         return commentsRepository.findById(pk).orElseThrow();
     }
 
     @Override
-    public Comments addComment(String text, Ad adId) {
-        Comments comments = new Comments(text, adId);
-        return commentsRepository.save(comments);
+    public Comment addComment(String text, Ad adId) {
+        Comment comment = new Comment(text, adId);
+        return commentsRepository.save(comment);
     }
 
     @Override
     public boolean deleteComment(int pk) {
-        Optional<Comments> optionalComments = commentsRepository.findById(pk);
+        Optional<Comment> optionalComments = commentsRepository.findById(pk);
         if (optionalComments.isPresent()) {
             commentsRepository.deleteById(pk);
             return true;
@@ -64,12 +62,12 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
-    public Comments updateComment(int pk, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
-        Optional<Comments> commentsOptional = commentsRepository.findById(pk);
+    public Comment updateComment(int pk, CreateOrUpdateCommentDTO createOrUpdateCommentDTO) {
+        Optional<Comment> commentsOptional = commentsRepository.findById(pk);
         if (commentsOptional.isEmpty()){
             new RecordNotFoundException(String.valueOf(pk));
         }
-        Comments existingComm = commentsOptional.get();
+        Comment existingComm = commentsOptional.get();
         existingComm.setText(createOrUpdateCommentDTO.getText());
         return commentsRepository.save(existingComm);
     }

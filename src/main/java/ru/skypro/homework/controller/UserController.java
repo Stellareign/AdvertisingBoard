@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
-import ru.skypro.homework.entity.Image;
+import ru.skypro.homework.entity.Avatar;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.interfaces.UserService;
@@ -119,7 +119,7 @@ public class UserController {
             @ApiResponse(responseCode = "200",
                     description = "Аватар пользователя обновлён",
                     content = {@Content(mediaType = "multipart/form-data",
-                            schema = @Schema(implementation = Image.class))}),
+                            schema = @Schema(implementation = Avatar.class))}),
             @ApiResponse(
                     responseCode = "401", description = "Ошибка при авторизации"
             )
@@ -131,7 +131,7 @@ public class UserController {
             byte[] imageData = image.getBytes();
 
             // для проверки. Логику доработать и перенести в сервис
-            Image newAvatar = new Image();
+            Avatar newAvatar = new Avatar();
             newAvatar.setImageData(imageData);
             imageRepository.save(newAvatar);
 

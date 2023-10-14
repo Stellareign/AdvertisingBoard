@@ -3,37 +3,36 @@ package ru.skypro.homework.service.interfaces;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.Comments;
+import ru.skypro.homework.entity.Comment;
 
-import java.util.List;
 import java.util.Map;
 
 @Service
 public interface CommentsService {
 
-    Map<Integer, Comments> getAllComments();
+    Map<Integer, Comment> getAllComments();
 
-    Comments getComment(int pk);
+    Comment getComment(int pk);
 
-    Comments addComment(String text, Ad adId);
+    Comment addComment(String text, Ad adId);
 
     boolean deleteComment(int pk);
 
 
-    Comments updateComment(int pk, CreateOrUpdateCommentDTO updateComment);
+    Comment updateComment(int pk, CreateOrUpdateCommentDTO updateComment);
 
 
 //    User getUserId(int id);
 //
 //    User getUserImage (String authorImage);
 //
-//    Comments getCreatedMoment (int createdAt);
+//    Comment getCreatedMoment (int createdAt);
 //
-//    Comments getPk (int pk);
+//    Comment getPk (int pk);
 //
 //    User getUserFirstName (String firstName );
 //
-//    Comments getText (String text)
+//    Comment getText (String text)
 
 
 
