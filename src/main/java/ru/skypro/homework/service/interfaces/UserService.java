@@ -11,8 +11,7 @@ import ru.skypro.homework.dto.user.UserDTO;
 public interface UserService {
 
 
-    boolean checkPassword(UpdatePasswordDTO updatePasswordDTO, String username) throws UsernameNotFoundException;
-
+    boolean checkUpdatePassword(UpdatePasswordDTO updatePasswordDTO, String username) throws UsernameNotFoundException;
 
     UserDTO getUserForGetController(String username);
 
@@ -20,5 +19,5 @@ public interface UserService {
 
     boolean checkUser(String username);
 
-    void saveRegisterUser(Register register);
+    void saveRegisterUser(Register register) ;
 }

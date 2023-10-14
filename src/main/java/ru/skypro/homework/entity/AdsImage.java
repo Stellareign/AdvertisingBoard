@@ -9,13 +9,14 @@ import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Objects;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Component
 @Table(name = "Images")
-public class Image {
+
+public class AdsImage {
     @Id
     @Column(name = "image_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,26 +26,23 @@ public class Image {
     @Column(name = "image")
     private byte[] imageData;
 
-//    @Column(name = "image_path")
-//    private String imagePath;
-
-
-    //    @OneToOne
-//    @JoinColumn(name = "user_id")
     @OneToOne(optional = true)
-    private User user;
+    Ad ad;
+
+    //******************************************************************
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Image image = (Image) o;
-        return Objects.equals(id, image.id) && Arrays.equals(imageData, image.imageData) && Objects.equals(user, image.user);
+        AdsImage adsImage = (AdsImage) o;
+        return Objects.equals(id, adsImage.id) && Arrays.equals(imageData, adsImage.imageData) && Objects.equals(ad, adsImage.ad);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, user);
+        int result = Objects.hash(id, ad);
         result = 31 * result + Arrays.hashCode(imageData);
         return result;
     }

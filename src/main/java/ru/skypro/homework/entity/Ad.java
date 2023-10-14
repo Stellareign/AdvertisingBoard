@@ -44,6 +44,10 @@ public class Ad {
 //    @Column(name = "user_id")
     private User author;          // автор объявления
 
+    @ManyToOne
+    @JoinColumn (name= "image_ig")
+    AdsImage adsImage;
+
 
     public Ad(String title, int price, String description, String image, User author) {
         this.title = title;

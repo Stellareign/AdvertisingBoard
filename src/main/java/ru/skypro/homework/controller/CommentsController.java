@@ -11,7 +11,7 @@ import ru.skypro.homework.config.MapperUtil;
 import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.Comments;
+import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
 import ru.skypro.homework.service.interfaces.CommentsService;
 
@@ -44,7 +44,7 @@ public class CommentsController {
     @GetMapping("/{id}/comments\n")
     public ResponseEntity<CommentsDTO> getComment(@PathVariable int adId) {
         Optional<Ad> ad = adsService.getAdById(adId);
-        Map<Integer, Comments> allComments = commentsService.getAllComments();
+        Map<Integer, Comment> allComments = commentsService.getAllComments();
         CommentsDTO commentsDTO = new CommentsDTO(allComments.size(), allComments);
         if (!allComments.isEmpty() & ad.isPresent()) {
             return ResponseEntity.ok().body(commentsDTO);
@@ -54,7 +54,7 @@ public class CommentsController {
     // добавление комментариев
     @Operation(summary = "Добавление нового комментария")
     @PostMapping("/{id}/comments")
-    public ResponseEntity<?> addComment(@PathVariable Comments pk, @RequestBody String text) {
+    public ResponseEntity<?> addComment(@PathVariable Comment pk, @RequestBody String text) {
         if (pk != null) {
             return ResponseEntity.ok(pk);
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

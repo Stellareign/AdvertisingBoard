@@ -56,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
 //        return true;
 //    }
     @Override
-    public boolean register(Register register) {
+    public boolean register(Register register)  {
         if (userRepository.findByUsername(register.getUsername())!= null) {
             return false;
         }

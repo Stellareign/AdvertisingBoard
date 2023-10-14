@@ -25,10 +25,12 @@ public  class MyUserDetails implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
-/*
-Метод возвращает коллекцию объектов, реализующих интерфейс GrantedAuthority,
+
+/**
+Метод {@link #getAuthorities()} возвращает коллекцию объектов, реализующих интерфейс
+ {@link GrantedAuthority} ,
 которые представляют собой разрешения пользователя.
-Конкретно здесь метод возвращает коллекцию из одного объекта - SimpleGrantedAuthority.
+Конкретно здесь метод возвращает коллекцию из одного объекта  {@link SimpleGrantedAuthority}.
 Метод позволяет получить список разрешений, которые имеет пользователь в системе.
  */
     @Override

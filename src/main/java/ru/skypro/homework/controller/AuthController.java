@@ -8,16 +8,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.authorization.Login;
 import ru.skypro.homework.dto.authorization.Register;
-import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.AuthService;
-import ru.skypro.homework.service.interfaces.UserService;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -26,9 +23,6 @@ import ru.skypro.homework.service.interfaces.UserService;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserService userService;
-    private final UserRepository userRepository;
-
 
     @PostMapping("/login")
     @ApiResponses(value = {
@@ -42,13 +36,21 @@ public class AuthController {
                     responseCode = "401", description = "Неверный логин или пароль"
             ),
     })
-    public ResponseEntity<?> login(@RequestBody Login login, Authentication authentication) {
+    public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
+            log.info("Вы вошли в свою учётную запись");
             return ResponseEntity.ok().build();
         } else {
+            log.info("Вход в учётную запись не выполнен!");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+    /**
+     * Регистрация пользователя на сервисе
+     *
+     * @param register - форма запроса для ввода данных в виде объекта {@link Register}
+     */
 
     @PostMapping("/register")
     @ApiResponses(value = {
@@ -62,12 +64,13 @@ public class AuthController {
                     responseCode = "400", description = "Неверный запрос, пользователь с таким именем уже есть в базе данных"
             ),
     })
-    public ResponseEntity<Register> register(@RequestBody Register register) {
-        if (authService.register(register) ) {
+    public ResponseEntity<Register> register(@RequestBody Register register){
 
+        if (authService.register(register)) {
+            log.info("Вы зарегистрированы!");
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+        log.info("Ошибка регистрации!");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }
