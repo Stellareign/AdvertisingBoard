@@ -25,10 +25,15 @@ public class Avatar {
     @Column(name = "image")
     private byte[] imageData;
 
+//    @Column(name = "image_path")
+//    private String avatarPath;
 
-    //    @OneToOne
-//    @JoinColumn(name = "user_id")
-    @OneToOne(optional = true)
+    @Column(name = "image_name")
+    private String avatarName;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+//    @OneToOne(optional = true)
     private User user;
 
     @Override

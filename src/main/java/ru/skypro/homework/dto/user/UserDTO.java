@@ -3,7 +3,6 @@ package ru.skypro.homework.dto.user;
 import lombok.*;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.entity.Avatar;
 
 @Data
 @Getter
@@ -19,7 +18,7 @@ public class UserDTO {
     private String lastName;
     private String phone;
 
-    private Avatar avatar;
+    private String avatar; // ссылка на аватар
     private Role role;
 
 }

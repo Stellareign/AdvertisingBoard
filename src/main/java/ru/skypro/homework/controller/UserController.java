@@ -118,6 +118,7 @@ public class UserController {
     //****************************** ОБНОВЛЕНИЕ АВАТАРА ПОЛЬЗОВАТЕЛЯ **************************
     @Operation(summary = "Обновление аватара авторизованного пользователя")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Аватар пользователя обновлён",
@@ -127,17 +128,16 @@ public class UserController {
                     responseCode = "401", description = "Ошибка при авторизации"
             )
     })
-    public ResponseEntity<?> updateUserImage(@RequestParam("avatar") MultipartFile image, Authentication authentication)
-            throws IOException {
+    public ResponseEntity<?> updateUserImage(@RequestPart("image") MultipartFile image, Authentication authentication)
+            {
+                try{
 
-        UserDTO newUserDTO = new UserDTO();
-        if (!image.isEmpty() && image.getContentType().startsWith("image/")) {
-            byte[] imageData = image.getBytes();
-            imageService.updateUsersAvatar(image, authentication);
-            
-            return ResponseEntity.ok().body(newUserDTO);
-        } else {
+            log.info("Аватар обновлён");
+            return ResponseEntity.ok().body( userService.updateUserAvatar(authentication, image));
+        } catch (IOException e){
+            log.info("Ошибка обновления аватара");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
 }

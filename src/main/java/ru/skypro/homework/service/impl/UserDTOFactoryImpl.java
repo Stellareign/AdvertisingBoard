@@ -26,7 +26,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     @Override
     public UserDTO fromUserToUserDTO(User user) {
         return new UserDTO(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(),
-                user.getPhone(), user.getUserAvatar(), user.getRole());
+                user.getPhone(), user.getAvatar(), user.getRole());
     }
 
     @Override
@@ -45,7 +45,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     @Override
     public User fromUpdateUserDTOtoUser(UpdateUserDTO updateUserDTO, User user) {
         return new User(user.getId(), user.getUsername(), user.getPassword(), updateUserDTO.getFirstName(),
-                updateUserDTO.getLastName(), updateUserDTO.getPhone(), user.getUserAvatar(), user.getRole(),
+                updateUserDTO.getLastName(), updateUserDTO.getPhone(), user.getAvatar(), user.getRole(),
                 user.getRegisterDate());
     }
 

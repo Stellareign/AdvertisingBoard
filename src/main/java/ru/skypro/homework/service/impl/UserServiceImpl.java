@@ -2,18 +2,22 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.interfaces.ImageService;
 import ru.skypro.homework.service.interfaces.UserDTOFactory;
 import ru.skypro.homework.service.interfaces.UserService;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 @Slf4j
@@ -21,9 +25,33 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    /**
+     * Класс содержит следующие методы:
+     * {@link #checkUpdatePassword(UpdatePasswordDTO, String)} - проверка пароля при обновлении
+     *
+     * {@link #getUserForGetController(String)} - загрузка юзера из БД сохранение в UserDTO
+     *
+     * {@link #updateUser(String, UpdateUserDTO)} - обновление данных пользователя из запроса UpdateUserDTO
+     *
+     * {@link #updateUserAvatar(Authentication, MultipartFile)} - обновление аватара пользователя
+     *
+     * Приватные методы проверок:
+     * {@link #checkUser(String)} - проверка наличия записи пользователя в БД
+     *
+     * {@link #checkPhoneFormat(String)} - проверка соответствия телефона паттерну
+     *
+     * {@link #checkPassword(String)} - проверка пароля на соблюдение условий
+     *
+     * {@link #checkUsername(String)} - проверка логика пользователя на соответствие паттерну
+     *
+     */
+
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final UserDTOFactory userDTOFactory;
+    private final ImageService imageService;
+
+//************************************************** МЕТОДЫ ************************************************************
 
     /**
      * Метод для изменения пароля.
@@ -57,9 +85,7 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-    private User getUserByUsernameFromDB(String username) {
-        return userRepository.findByUsername(username);
-    }
+    //****************************************************************************************************************
 
     /**
      * Получение данных пользователя (контроллер)
@@ -68,10 +94,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDTO getUserForGetController(String username) {
-        User user = getUserByUsernameFromDB(username);
+        User user = userRepository.findByUsername(username);
         return userDTOFactory.fromUserToUserDTO(user);
     }
 
+//************************************************ ОБНОВЛЕНИЕ ЮЗЕРА ***************************************************
 
     /**
      * Обновление данных пользователя из запроса UpdateUserDTO и сохранение
@@ -99,13 +126,17 @@ public class UserServiceImpl implements UserService {
         return userDTOFactory.fromUserToUserDTO(user);
     }
 
+//***********************************************ПРОВЕРКА ЮЗЕРА ********************************************************
+
     /**
      * Проверка наличия записи пользователя в базе данных
      */
     @Override
     public boolean checkUser(String username) {
-        return getUserByUsernameFromDB(username) != null;
+        return userRepository.findByUsername(username) != null;
     }
+
+//**************************************** СОХРАНЕНИЕ ЮЗЕРА  ПРИ РЕГИСТРАЦИИ********************************************
 
     /**
      * Сохранение пользователя в базу данных после ввода данных при регистрации
@@ -116,6 +147,8 @@ public class UserServiceImpl implements UserService {
     public void saveRegisterUser(Register register) {
         userRepository.save(createUserFromRegister(register));
     }
+
+//******************************************* ОБНОВЛЕНИЕ ЮЗЕРА В БД ****************************************************
 
     /**
      * Создание учётных данных пользователя при регистрации.
@@ -144,8 +177,18 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+//****************************************** ОБНОВЛЕНИЕ АВАТАРА ЮЗЕРА  *************************************************
 
-//***********************************ПРОВЕРКИ ВВОДИМЫХ ДАННЫХ*************************************************
+    @Override
+    public MultipartFile updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
+        String imagePath = imageService.createAvatarForUser(image);
+        User user = userRepository.findByUsername(authentication.getName());
+        user.setAvatar(imagePath);
+        userRepository.save(user);
+        return image;
+    }
+
+//****************************************** ПРОВЕРКА ВВОДИМЫХ ДАННЫХ *************************************************
 
     private boolean checkPassword(String password) {
         if (password.length() >= 8 && !password.isBlank()) {

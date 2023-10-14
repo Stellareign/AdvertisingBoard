@@ -52,13 +52,11 @@ public class User {
 
     //**********************************
 
-//
-//    @Column(name = "avatar")
-//    private String image; // ссылка на аватар
-
-    @OneToOne
-    @JoinColumn(name = "image_id")
-    private Avatar userAvatar;
+    //    @OneToOne
+//    @JoinColumn(name = "image_id")
+//    private Avatar userAvatar;
+    @Column(name = "avatar_path")
+    String avatar;  // имя аватарки
 
 
     @Enumerated(EnumType.STRING)
