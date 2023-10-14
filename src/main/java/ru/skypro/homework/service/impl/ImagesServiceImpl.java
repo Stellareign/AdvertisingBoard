@@ -8,12 +8,13 @@ import ru.skypro.homework.entity.Avatar;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.interfaces.ImageService;
 
 import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
-public class ImagesServiceImpl {
+public class ImagesServiceImpl implements ImageService {
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
 
