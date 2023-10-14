@@ -36,13 +36,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username);
         String password = encoder.encode(user.getPassword()); // я бы добавила ввод текущего пароля при смене пароля
 
-        if (!newPassword.equals(currentPassword) && newPassword.length() >= 8 && !newPassword.isBlank()) {
-            user.setPassword(newPassword);
+        if (!newPassword.equals(currentPassword) && newPassword.length() >= 8 && !newPassword.isBlank() &&
+        !newPassword.equals(user.getPassword())) {
+            user.setPassword(encoder.encode(newPassword));
             userRepository.save(user);
 
             return true;
         }
-        log.info("Пароль не соответствует требованиям, или неверно указан текущий пароль");
+        log.info("Пароль не соответствует требованиям.");
         return false;
 
     }
