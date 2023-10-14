@@ -90,7 +90,7 @@ public class UserController {
     public ResponseEntity<UserDTO> getUser() {
         String username = "pupkin@poy.ru";
         User user = userRepository.findByUsername(username);
-             if (user != null) {
+        if (user != null) {
             UserDTO userDTO = userDTOFactory.fromUserToUserDTO(user);
             return ResponseEntity.ok().body(userDTO);
         } else {
@@ -105,7 +105,7 @@ public class UserController {
             @ApiResponse(responseCode = "200",
                     description = "Данные пользователя обновлены",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation =User.class))}),
+                            schema = @Schema(implementation = User.class))}),
             @ApiResponse(
                     responseCode = "401", description = "Ошибка при авторизации"
             )
@@ -118,7 +118,7 @@ public class UserController {
         User user = userService.getUserByUsernameFromDB(username);
 //        userService.convertUpdateUserDTOtoUser(updateUserDTO);
         if (user != null) {
-           User user1 = userService.updateUser(user, updateUserDTO);
+            User user1 = userService.updateUser(user, updateUserDTO);
             return ResponseEntity.ok().body(user1);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

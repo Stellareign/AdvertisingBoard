@@ -8,7 +8,9 @@ import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.CommentsRepository;
 import ru.skypro.homework.service.interfaces.CommentsService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,13 +23,20 @@ public class CommentsServiceImpl implements CommentsService {
         this.commentsRepository = commentsRepository;
     }
 
+    private final Map<Integer, Comments> commentsMap = new HashMap<>();
+
+//    @Override
+//    public List <Comments> result(Ad adsId){
+//        return
+//      commentsRepository.findAll()
+//                .stream()
+//                .filter(e -> e.getAdId().equals( adsId))
+//                .collect(Collectors.toList());
+//    }
+
     @Override
-    public List <Comments> result(Ad adsId){
-        return
-      commentsRepository.findAll()
-                .stream()
-                .filter(e -> e.getAdId().equals( adsId))
-                .collect(Collectors.toList());
+    public Map<Integer, Comments> getAllComments() {
+        return commentsMap;
     }
 
     @Override

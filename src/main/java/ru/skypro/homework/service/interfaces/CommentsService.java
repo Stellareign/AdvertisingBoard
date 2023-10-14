@@ -6,11 +6,12 @@ import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comments;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface CommentsService {
 
-    List<Comments> result(Ad adsId);
+    Map<Integer, Comments> getAllComments();
 
     Comments getComment(int pk);
 
