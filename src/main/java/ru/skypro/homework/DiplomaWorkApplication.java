@@ -11,7 +11,7 @@ public class DiplomaWorkApplication {
   public static void main(String[] args) {
 
     Logger logger = LoggerFactory.getLogger(DiplomaWorkApplication.class);
-    logger.debug(" Start Diploma Work Application");
+    logger.debug(" \n  ********* Start DiplomaWorkApplication *********");
 
     SpringApplication.run(DiplomaWorkApplication.class, args);
 

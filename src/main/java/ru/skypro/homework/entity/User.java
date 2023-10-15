@@ -27,7 +27,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "username",  nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "Неверный формат email")
     private String username; // логин при регистрации - e-mail
 
@@ -49,12 +49,17 @@ public class User {
 
     //**********************************
 
+//    @OneToOne
+//    @JoinColumn(name = "image_id")
+//    @Column(columnDefinition = "VARCHAR(255)")
+//    private Avatar userAvatar;
 
-    @Column(name = "avatar")
-    private String image; // ссылка на аватар
-//
+    @Column(name = "avatar_path")
+    String avatarPath;  //
+
+
     @Enumerated(EnumType.STRING)
-    @Column (nullable = false)
+    @Column(nullable = false)
     private Role role;
 
 
@@ -80,6 +85,7 @@ public class User {
         this.password = getPassword();
         this.registerDate = registerDate;
     }
+
 
     @Override
     public boolean equals(Object o) {

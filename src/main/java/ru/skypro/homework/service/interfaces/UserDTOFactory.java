@@ -22,4 +22,5 @@ public interface UserDTOFactory {
     UpdateUserDTO fromUserToUpdateUserDTO(User user);
 
     User fromUpdateUserDTOtoUser(UpdateUserDTO updateUserDTO, User user);
+
 }

@@ -11,23 +11,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
-import ru.skypro.homework.entity.Image;
+import ru.skypro.homework.entity.Avatar;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.repository.ImageRepository;
-import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.MyUserDetailes;
-import ru.skypro.homework.service.interfaces.AuthService;
-import ru.skypro.homework.service.interfaces.UserDTOFactory;
+import ru.skypro.homework.service.interfaces.ImageService;
 import ru.skypro.homework.service.interfaces.UserService;
 
 import java.io.IOException;
 
-import static ru.skypro.homework.service.impl.AuthServiceImpl.AUTHORISE;
 
 @Slf4j //  добавляет логгер в класс
 @CrossOrigin(value = "http://localhost:3000") // позволяет настроить CORS (Cross-Origin Resource Sharing)
@@ -40,14 +36,11 @@ import static ru.skypro.homework.service.impl.AuthServiceImpl.AUTHORISE;
 
 public class UserController {
 
-    private final ImageRepository imageRepository;
+    private final ImageService imageService;
     private final UserService userService;
-    private final UserRepository userRepository;
-    private final AuthService authService;
-    private final UserDTOFactory userDTOFactory;
-    private final MyUserDetailes myUserDetailes;
 
-    // *************************** ОНОВЛЕНИЕ ПАРОЛЯ ********************
+
+    // *************************** ОБНОВЛЕНИЕ ПАРОЛЯ ********************
     @Operation(summary = "Обновление пароля пользователя")
     @PostMapping("/set_password")
     @ApiResponses(value = {
@@ -62,19 +55,23 @@ public class UserController {
                     responseCode = "400", description = "Недостаточно прав для выполнения операции"
             ),
     })
-    public ResponseEntity<UpdatePasswordDTO> setPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO) {
-        // как получить текущего юзера...
-        boolean checkPassword = userService.checkPassword(updatePasswordDTO);
+    public ResponseEntity<UpdatePasswordDTO> setPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO,
+                                                         Authentication authentication)  {
+        log.info("Изменить пароль: " + updatePasswordDTO);
+        boolean checkPassword = userService.checkUpdatePassword(updatePasswordDTO, authentication.getName());
         if (checkPassword) {
             return ResponseEntity.ok().body(updatePasswordDTO);
 
         } else if (!checkPassword) {
+            log.info("Пароль не соответствует требованиям!");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } else
+            log.info("Недостаточно прав!");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    //****************************** ИНФО О ПОЛЬЗОВАТЕЛЕ ************************************
+    //****************************** ПОЛУЧЕНИЕ ИНФО О ПОЛЬЗОВАТЕЛЕ ************************************
     @Operation(summary = "Получение информации об авторизованном пользователе")
     @GetMapping("/me")
     @ResponseBody
@@ -87,12 +84,11 @@ public class UserController {
                     responseCode = "401", description = "Ошибка при авторизации"
             )
     })
-    public ResponseEntity<UserDTO> getUser() {
-        String username = "pupkin@poy.ru";
-        User user = userRepository.findByUsername(username);
-        if (user != null) {
-            UserDTO userDTO = userDTOFactory.fromUserToUserDTO(user);
-            return ResponseEntity.ok().body(userDTO);
+    public ResponseEntity<UserDTO> getUser(Authentication authentication) {
+
+        if (userService.checkUser(authentication.getName())) {
+
+            return ResponseEntity.ok().body(userService.getUserForGetController(authentication.getName()));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -110,16 +106,10 @@ public class UserController {
                     responseCode = "401", description = "Ошибка при авторизации"
             )
     })
-    public ResponseEntity<User> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO, Authentication authentication) {
 
-        String username = "pupkin@poy.ru"; // ЗАМЕНИТЬ НА ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ
-//        String username = myUserDetailes.getUsername();
-
-        User user = userService.getUserByUsernameFromDB(username);
-//        userService.convertUpdateUserDTOtoUser(updateUserDTO);
-        if (user != null) {
-            User user1 = userService.updateUser(user, updateUserDTO);
-            return ResponseEntity.ok().body(user1);
+        if (userService.checkUser(authentication.getName())) {
+            return ResponseEntity.ok().body(userService.updateUser(authentication.getName(), updateUserDTO));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -128,28 +118,24 @@ public class UserController {
     //****************************** ОБНОВЛЕНИЕ АВАТАРА ПОЛЬЗОВАТЕЛЯ **************************
     @Operation(summary = "Обновление аватара авторизованного пользователя")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Аватар пользователя обновлён",
                     content = {@Content(mediaType = "multipart/form-data",
-                            schema = @Schema(implementation = Image.class))}),
+                            schema = @Schema(implementation = Avatar.class))}),
             @ApiResponse(
                     responseCode = "401", description = "Ошибка при авторизации"
             )
     })
-    public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image) throws IOException {
+    public ResponseEntity<?> updateUserImage(@RequestPart("image") MultipartFile image, Authentication authentication)
+            {
+                try{
 
-        UserDTO newUserDTO = new UserDTO();
-        if (AUTHORISE && !image.isEmpty() && image.getContentType().startsWith("image/")) {
-            byte[] imageData = image.getBytes();
-
-            // для проверки. Логику доработать и перенести в сервис
-            Image newAvatar = new Image();
-            newAvatar.setImageData(imageData);
-            imageRepository.save(newAvatar);
-
-            return ResponseEntity.ok().body(newUserDTO);
-        } else {
+            log.info("Аватар обновлён");
+            return ResponseEntity.ok().body( userService.updateUserAvatar(authentication, image));
+        } catch (IOException e){
+            log.info("Ошибка обновления аватара");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }

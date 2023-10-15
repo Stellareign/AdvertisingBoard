@@ -1,20 +1,30 @@
 package ru.skypro.homework.service.interfaces;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
-import ru.skypro.homework.entity.User;
+import ru.skypro.homework.dto.user.UserDTO;
+
+import java.io.IOException;
 
 @Service
 public interface UserService {
 
 
-    boolean checkPassword(UpdatePasswordDTO updatePasswordDTO);
+    boolean checkUpdatePassword(UpdatePasswordDTO updatePasswordDTO, String username) throws UsernameNotFoundException;
 
-    User getUserByUsernameFromDB(String username);
+    UserDTO getUserForGetController(String username);
 
-    User updateUser(User user, UpdateUserDTO updateUserDTO);
+    UserDTO updateUser(String username, UpdateUserDTO updateUserDTO);
 
-    void saveRegisterUser(Register register);
+    boolean checkUser(String username);
+
+    void saveRegisterUser(Register register) ;
+
+    //****************************************** ОБНОВЛЕНИЕ АВАТАРА ЮЗЕРА  *********************************************
+    UserDTO updateUserAvatar (Authentication authentication, MultipartFile image) throws IOException;
 }
