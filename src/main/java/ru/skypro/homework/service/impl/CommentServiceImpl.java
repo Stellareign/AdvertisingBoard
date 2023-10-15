@@ -1,6 +1,6 @@
 package ru.skypro.homework.service.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.comments.CommentDTO;
@@ -10,8 +10,9 @@ import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.exceptions.RecordNotFoundException;
+
 import ru.skypro.homework.repository.AdsRepository;
+
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.impl.MapperUtil.CommentMapping;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class CommentServiceImpl implements CommentsService {
 
@@ -30,8 +31,6 @@ public class CommentServiceImpl implements CommentsService {
     private final CommentMapping commentMapping;
     private final AdsRepository adsRepository;
     private final UserRepository userRepository;
-
-
 
 
     @Override
@@ -58,13 +57,13 @@ public class CommentServiceImpl implements CommentsService {
 
     @Override
     public void deleteComment(Integer adId, Integer pk) {
-        commentRepository.deleteByIdAndAdId(pk, adId);
+        commentRepository.deleteByPkAndAdId(pk, adId);
 
     }
 
     @Override
     public CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment) {
-        Comment comment = commentRepository.findByIdAndAdId(pk, adId);
+        Comment comment = commentRepository.findByPkAndAdId(pk, adId);
         comment.setText(updateComment.getText());
         commentRepository.save(comment);
 

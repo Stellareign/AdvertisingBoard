@@ -131,9 +131,9 @@ public class UserController {
     public ResponseEntity<?> updateUserImage(@RequestPart("image") MultipartFile image, Authentication authentication)
             {
                 try{
-
             log.info("Аватар обновлён");
             return ResponseEntity.ok().body( userService.updateUserAvatar(authentication, image));
+
         } catch (IOException e){
             log.info("Ошибка обновления аватара");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

@@ -13,7 +13,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    private Integer pk;    // id комментания
+    private Integer pk;    // id комментария
 
     @Column(name = "comment_text")
     private String text;

@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
      * @param username      - логин (email) пользователя
      *                      Принимаемый параметр и возвращаемый объект:
      * @param updateUserDTO класса {@link UpdateUserDTO}
-     *                      Перед сохранением обновлённых данный указанный телефон проверяется на соответствие
+     *                      Перед сохранением обновлённых данных указанный телефон проверяется на соответствие
      *                      требованиям в методе {@link #checkPhoneFormat(String)}
      *                      Обновлённая сущность сохраняется в методе
      *                      {@link ru.skypro.homework.repository.UserRepository#save(Object)}
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username) != null;
     }
 
-//**************************************** СОХРАНЕНИЕ ЮЗЕРА  ПРИ РЕГИСТРАЦИИ********************************************
+//**************************************** СОХРАНЕНИЕ ЮЗЕРА  ПРИ РЕГИСТРАЦИИ ********************************************
 
     /**
      * Сохранение пользователя в базу данных после ввода данных при регистрации
@@ -217,7 +217,7 @@ String path;
 
     private boolean checkPhoneFormat(String phone) {
         if (phone.matches("\\+7\\s?\\(\\d{3}\\)\\s?\\d{3}-\\d{2}-\\d{2}")) {
-            log.info("Телефон записан!");
+            log.info("Формат телефона верный.");
             return true;
         } else log.info("Укажите номер телефона в формате +7(ХХХ)ХХХ-ХХ-ХХ!");
         return false;

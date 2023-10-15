@@ -54,7 +54,9 @@ public class CommentsController {
     // добавление комментариев
     @Operation(summary = "Добавление нового комментария")
     @PostMapping("/{id}/comments")
-    public ResponseEntity<CommentDTO> addComment(@PathVariable Integer pk, @RequestBody CreateOrUpdateCommentDTO COUComment, String userInfo ) {
+    public ResponseEntity<CommentDTO> addComment(@PathVariable Integer pk,
+                                                 @RequestBody CreateOrUpdateCommentDTO COUComment,
+                                                 String userInfo ) {
         try {
             CommentDTO commentDTO = commentsService.addComment(COUComment, pk, userInfo);
             return ResponseEntity.ok(commentDTO);
@@ -81,10 +83,9 @@ public class CommentsController {
     // обновление комментария
         @Operation(summary = "Обновление комментария")
         @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId,@PathVariable int pk, @RequestBody CreateOrUpdateCommentDTO COUComment) {
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId,@PathVariable int pk,
+                                                    @RequestBody CreateOrUpdateCommentDTO COUComment) {
           try {
-
-
               commentsService.updateComment(adId, pk, COUComment);
               return ResponseEntity.ok().build();
           } catch (RuntimeException e) {
