@@ -58,13 +58,13 @@ public class CommentServiceImpl implements CommentsService {
 
     @Override
     public void deleteComment(Integer adId, Integer pk) {
-        commentRepository.deleteByIdAndAdId(pk, adId);
+        commentRepository.deleteByPkAndAdId(pk, adId);
 
     }
 
     @Override
     public CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment) {
-        Comment comment = commentRepository.findByIdAndAdId(pk, adId);
+        Comment comment = commentRepository.findByPkAndAdId(pk, adId);
         comment.setText(updateComment.getText());
         commentRepository.save(comment);
 

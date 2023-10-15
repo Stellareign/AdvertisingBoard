@@ -13,9 +13,6 @@ import javax.persistence.*;
 @Table(name = "ads")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 
-/*
-проработать связь сущностей автор-объявление
- */
 public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +25,6 @@ public class AdEntity {
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
-//    @Column(name = "user_id")
     private User author;          // автор объявления
 @OneToOne(fetch = FetchType.LAZY)
 @JoinColumn(name = "image_id")
