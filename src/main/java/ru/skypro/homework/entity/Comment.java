@@ -1,11 +1,9 @@
 package ru.skypro.homework.entity;
 
-import lombok.*;
-import org.hibernate.Hibernate;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Data
 @Entity
@@ -25,7 +23,7 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ads_id")
-    private Ad adId;  // id объявления
+    private AdEntity adId;  // id объявления
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
