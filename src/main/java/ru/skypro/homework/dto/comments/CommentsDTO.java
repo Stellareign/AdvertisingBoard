@@ -3,10 +3,10 @@ package ru.skypro.homework.dto.comments;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.skypro.homework.entity.Comments;
+import org.springframework.stereotype.Component;
+import ru.skypro.homework.entity.Comment;
 
 import java.util.List;
-import java.util.Map;
 /*
 ВСЕ КОММЕНТАРИИ
  */
@@ -15,10 +15,17 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class CommentsDTO {
 
-    private int count; // общее количество комментариев
+    private Integer count; // общее количество комментариев
 
-    private Map<Integer, Comments> results; //результат вывода всех найденных комментов
+    private List<CommentDTO> results; //результат вывода всех найденных комментов
+//
+//    // ============== СТАТИЧЕСКАЯ ФАБРИКА СБОРКА DTO: ==============
+//    public static CommentsDTO from(int count, Comment comments) { // "статическая фабрика - создание DTO из заданных "компонентов"
+//        return new CommentsDTO(count, comments.getText(), comments.getAuthorImage(),
+//                comments.getAuthorFirstName(), comments.getCreatedAt(), comments.getPk());
+//    }
 
 }
