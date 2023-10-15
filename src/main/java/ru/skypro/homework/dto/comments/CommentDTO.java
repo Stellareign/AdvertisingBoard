@@ -3,6 +3,11 @@ package ru.skypro.homework.dto.comments;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.Comment;
+
+import java.time.LocalDateTime;
 
 import java.time.LocalDateTime;
 
