@@ -52,10 +52,10 @@ public class User {
 
     //**********************************
 
-    @OneToOne
-    @JoinColumn(name = "image_id")
-    @Transient
-    private Avatar userAvatar;
+//    @OneToOne
+//    @JoinColumn(name = "image_id")
+//    @Column(columnDefinition = "VARCHAR(255)")
+//    private Avatar userAvatar;
 
     @Column(name = "avatar_path")
     String avatarPath;  //

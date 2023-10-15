@@ -16,6 +16,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
    private final UserRepository userRepository;
 
     //******************************** пароли  *********************
+
     @Override
     public UpdateUserDTO fromUserToUpdatePassworDTO(User user) {
         return new UpdateUserDTO(user.getFirstName(), user.getLastName(), user.getPhone());
@@ -37,7 +38,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     @Override
     public User fromUserDTOtoUser(UserDTO userDTO, User user) {
         return new User(user.getId(), userDTO.getUsername(), user.getPassword(), userDTO.getFirstName(),
-                userDTO.getLastName(), userDTO.getPhone(),  user.getUserAvatar(),userDTO.getAvatar(),  userDTO.getRole(),
+                userDTO.getLastName(), userDTO.getPhone(), userDTO.getAvatar(),  userDTO.getRole(),
                 user.getRegisterDate());
     }
 
@@ -49,17 +50,8 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
 
     public User fromUpdateUserDTOtoUser(UpdateUserDTO updateUserDTO, User user) {
         return new User(user.getId(), user.getUsername(), user.getPassword(), updateUserDTO.getFirstName(),
-                updateUserDTO.getLastName(), updateUserDTO.getPhone(), user.getUserAvatar(), user.getAvatarPath(), user.getRole(),
+                updateUserDTO.getLastName(), updateUserDTO.getPhone(),  user.getAvatarPath(), user.getRole(),
                 user.getRegisterDate());
-    }
-    // ***************************************** Avatar to UserDTO  *******************************************
-
-    @Override
-    public UserDTO updateAvatarUserDTO(String imagePath, String username){
-        User user = userRepository.findByUsername(username);
-        UserDTO userDTO = new UserDTO();
-        userDTO.setAvatar(imagePath);
-        return userDTO;
     }
 
 }

@@ -23,6 +23,4 @@ public interface UserDTOFactory {
 
     User fromUpdateUserDTOtoUser(UpdateUserDTO updateUserDTO, User user);
 
-    // ***************************************** Avatar to UserDTO  *******************************************
-    UserDTO updateAvatarUserDTO(String imagePath, String username);
 }

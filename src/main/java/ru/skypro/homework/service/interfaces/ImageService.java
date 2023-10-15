@@ -19,4 +19,10 @@ public interface ImageService {
      */
     Avatar createAvatar(MultipartFile image, Authentication authentication) throws IOException;
 
+    /**
+     * Удаление аватара после замены
+     * @param avatarPath
+     * @throws IOException
+     */
+    void deleteImage(String avatarId) throws IOException;
 }

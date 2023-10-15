@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,22 +30,21 @@ public class UserServiceImpl implements UserService {
     /**
      * Класс содержит следующие методы:
      * {@link #checkUpdatePassword(UpdatePasswordDTO, String)} - проверка пароля при обновлении
-     *
+     * <p>
      * {@link #getUserForGetController(String)} - загрузка юзера из БД сохранение в UserDTO
-     *
+     * <p>
      * {@link #updateUser(String, UpdateUserDTO)} - обновление данных пользователя из запроса UpdateUserDTO
-     *
+     * <p>
      * {@link #updateUserAvatar(Authentication, MultipartFile)} - обновление аватара пользователя
-     *
+     * <p>
      * Приватные методы проверок:
      * {@link #checkUser(String)} - проверка наличия записи пользователя в БД
-     *
+     * <p>
      * {@link #checkPhoneFormat(String)} - проверка соответствия телефона паттерну
-     *
+     * <p>
      * {@link #checkPassword(String)} - проверка пароля на соблюдение условий
-     *
+     * <p>
      * {@link #checkUsername(String)} - проверка логика пользователя на соответствие паттерну
-     *
      */
 
     private final UserRepository userRepository;
@@ -179,12 +179,28 @@ public class UserServiceImpl implements UserService {
     }
 
 //****************************************** ОБНОВЛЕНИЕ АВАТАРА ЮЗЕРА  *************************************************
-
+@Value("${path.to.image.folder}")
+String path;
+    /**
+     * Метод обновления аватара пользователя
+     * Принимает на вход два параметра
+     * @param image - изображение
+     * @param authentication  - текущего пользователя
+     * @return объект класса {@link UserDTO}
+     * @throws IOException
+     */
     @Override
+//    @Transactional
     public UserDTO updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
-       Avatar avatar= imageService.createAvatar(image, authentication);
+        User user = userRepository.findByUsername(authentication.getName());
+        Avatar avatar = imageService.createAvatar(image, authentication);
+        String imageUrl = path + avatar.getId() + avatar.getFileType();
 
-        return userDTOFactory.updateAvatarUserDTO(avatar.getId(), authentication.getName());
+//        user.setAvatarPath(avatar.getId() + avatar.getFileType());
+        user.setAvatarPath(imageUrl);
+        userRepository.save(user);
+
+        return userDTOFactory.fromUserToUserDTO(user);
     }
 
 

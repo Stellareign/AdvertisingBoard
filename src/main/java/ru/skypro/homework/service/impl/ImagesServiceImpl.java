@@ -30,12 +30,13 @@ public class ImagesServiceImpl implements ImageService {
 
 
     private final UserRepository userRepository;
-    private final AvatarRepository imageRepository;
+    private final AvatarRepository avatarRepository;
 
     @Value("${path.to.image.folder}")
     private String imagePath; // адрес картинки
 
     @Override
+//    @Transactional
     /**
      * Метод загружает аватар пользователя (изображение)
      * @param image - загружаемый файл
@@ -46,93 +47,35 @@ public class ImagesServiceImpl implements ImageService {
      */
     public Avatar createAvatar(MultipartFile image, Authentication authentication) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
-        Avatar currentAvatar = user.getUserAvatar();
-        String avatarName = UUID.randomUUID().toString();
-        Avatar newAvatar;
-        if (currentAvatar != null) {
-            currentAvatar.setImageData(image.getBytes());
-            currentAvatar.setId(avatarName);
-            currentAvatar.setUser(user);
-           newAvatar = imageRepository.save(currentAvatar);
-        } else {
-            Avatar avatar = new Avatar();
-            avatar.setImageData(image.getBytes());
-            avatar.setId(avatarName);
-            avatar.setUser(user);
-            newAvatar = imageRepository.save(avatar);
-        }
+//
+//        if(user.getAvatarPath() != null) {
+//            Avatar currentAvatar = avatarRepository.findAvatarById((user.getAvatarPath())
+//                    .replaceAll("\\..*", ""));
+//            avatarRepository.delete(currentAvatar);
+//        }
+        String type = image.getContentType().replace("image/", ".");
 
-//        Path filePath = Path.of(imagePath, UUID.randomUUID().toString());
-//        Files.createDirectories(filePath.getParent());
-//        Files.deleteIfExists(filePath);
-//        Files.write(filePath, image.getBytes());
-        return newAvatar;
+        String avatarName = UUID.randomUUID().toString();
+
+
+        Avatar avatar = new Avatar();
+        avatar.setImageData(image.getBytes());
+        avatar.setId(avatarName);
+        avatar.setFileType(type);
+        avatar.setUser(user);
+        avatarRepository.save(avatar);
+        return avatar;
     }
 
-//    @Override
-//    /**
-//     * Удаление аватара после замены
-//     * @param avatarPath
-//     * @throws IOException
-//     */
-//    public void deleteImage(Avatar avatar) throws IOException {
-//        if (avatar != null) {
-//            Path filePath = Path.of(avatar.getAvatarPath());
-//            Files.deleteIfExists(filePath);
-//            imageRepository.delete(avatar);
-//        }
-//    }
+    @Override
+    /**
+     * Удаление старого аватара после обновления
+     */
+    public void deleteImage(String avatarId) {
+        Avatar avatar = avatarRepository.findAvatarById(avatarId);
+        if (avatar != null) {
+            avatarRepository.delete(avatar);
+        }
+    }
 
-//
-//    /**
-//     * user.dir - системное свойство, которое возвращает путь к текущей рабочей директории.
-//     * В данном случае он используется для получения пути к директории, где будет сохранён загруженный файл.
-//     * <p>
-//     * File.separator - системно-зависимый разделитель директорий в пути к файлу. Например,
-//     * в Windows это будет обратный слэш (\), а в Unix/Linux - прямой (/).
-//     * <p>
-//     * images - название директории, кот. будет создана в текущей рабочей директории
-//     * для хранения загруженных файлов.
-//     */
-//    private final String filePath = System.getProperty("user.dir") + File.separator + "images";
-//
-//    //********************************************************************************************************************
-//    @Override
-//    public String createAvatarForUser(MultipartFile image, Authentication authentication) throws IOException {
-//        Avatar avatarPath = new Avatar();
-//        try {
-//            String imageName = UUID.randomUUID() + fileType(image);
-//            createDirectories(Paths.get(filePath));
-//            image.transferTo(new File(filePath + File.separator + imageName));
-//
-//            avatarPath.setAvatarName(imageName);
-//            avatarPath.setImageData(image.getBytes());
-//            avatarPath.setUser(userRepository.findByUsername(authentication.getName()));
-//            imageRepository.save(avatarPath);
-//
-//            log.info("Аватар создан:: {}", imageName);
-//        } catch (IOException e) {
-//            log.error("Ошибка обновления аватара", avatarPath.getId());
-//        }
-//        return avatarPath.getAvatarName();
-//    }
-//
-////**********************************************************************************************************************
-//
-//
-//    /**
-//     * Метод {@link #fileType(MultipartFile)} принимает в качестве параметра объект класса {@link MultipartFile},
-//     * который представляет загружаемый файл. Внутри метода происходит получение типа файла с помощью
-//     * метода getContentType(), который возвращает строку с типом файла. Далее, с помощью метода assert проверяется,
-//     * что тип файла не равен null. Если это так, то выполняется замена подстроки "image/" на "."
-//     * с помощью метода replace().
-//     * В результате получается строка, содержащая расширение файла (например, ".jpg" или ".png"), которая
-//     * возвращается в виде результата метода.
-//     */
-//    private String fileType(MultipartFile image) {
-//        String type = image.getContentType();
-//        assert type != null;
-//        type = type.replace("image/", ".");
-//        return type;
-//    }
 }

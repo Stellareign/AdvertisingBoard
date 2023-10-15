@@ -24,12 +24,13 @@ public class Avatar {
     @Column(name = "image_id", nullable = false)
     private String id;
 
-    @Lob
-    @Column(name = "image")
+//    @Lob
+    @Column(name = "image_data", columnDefinition = "bytea")
+//    @Type(type = "org.hibernate.type.ImageType")
     private byte[] imageData;
 
-//    @Column(name = "image_name")
-//    private String avatarName;
+    @Column(name = "image_type")
+    private String fileType;
 
     @OneToOne
     @JoinColumn(name = "user_id")
