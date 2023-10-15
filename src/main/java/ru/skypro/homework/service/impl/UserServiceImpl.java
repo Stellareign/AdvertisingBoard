@@ -11,6 +11,7 @@ import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
+import ru.skypro.homework.entity.Avatar;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.ImageService;
@@ -180,13 +181,12 @@ public class UserServiceImpl implements UserService {
 //****************************************** ОБНОВЛЕНИЕ АВАТАРА ЮЗЕРА  *************************************************
 
     @Override
-    public MultipartFile updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
-        String imagePath = imageService.createAvatarForUser(image);
-        User user = userRepository.findByUsername(authentication.getName());
-        user.setAvatar(imagePath);
-        userRepository.save(user);
-        return image;
+    public UserDTO updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
+       Avatar avatar= imageService.createAvatar(image, authentication);
+
+        return userDTOFactory.updateAvatarUserDTO(avatar.getId(), authentication.getName());
     }
+
 
 //****************************************** ПРОВЕРКА ВВОДИМЫХ ДАННЫХ *************************************************
 

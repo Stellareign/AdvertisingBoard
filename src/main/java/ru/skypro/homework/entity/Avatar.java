@@ -14,22 +14,22 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Component
-@Table(name = "Images")
+@Table(name = "avatars")
 public class Avatar {
+//    @Id
+//    @Column(name = "image_id", nullable = false)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Integer id;
     @Id
     @Column(name = "image_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
 
     @Lob
     @Column(name = "image")
     private byte[] imageData;
 
-//    @Column(name = "image_path")
-//    private String avatarPath;
-
-    @Column(name = "image_name")
-    private String avatarName;
+//    @Column(name = "image_name")
+//    private String avatarName;
 
     @OneToOne
     @JoinColumn(name = "user_id")
