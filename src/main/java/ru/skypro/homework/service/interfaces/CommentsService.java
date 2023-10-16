@@ -11,12 +11,12 @@ public interface CommentsService {
 
 
 
-    void deleteComment(Integer adId, Integer pk);
+    boolean deleteComment(Integer adId, Integer pk);
 
 
     CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment);
 
-    CommentDTO addComment(CreateOrUpdateCommentDTO COUComment, Integer adId, String userInfo);
+    CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId, String userInfo);
 
 
 //    User getUserId(int id);

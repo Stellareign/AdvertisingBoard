@@ -9,6 +9,7 @@ import ru.skypro.homework.entity.User;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Service
 public class CommentMapping {
@@ -18,20 +19,19 @@ public class CommentMapping {
         commentDTO.setAuthor(entity.getAuthor().getId());
         commentDTO.setAuthorFirstName(entity.getAuthor().getFirstName());
         commentDTO.setAuthorImage(entity.getAuthor().getAvatarPath());
-        LocalDateTime time = LocalDateTime.from(entity.getCreatedAt());
-        commentDTO.setCreatedAt(time);
+        commentDTO.setCreatedAt(Objects.requireNonNullElse(entity.getCreatedAt(), 0L));
         commentDTO.setText(entity.getText());
 
         return commentDTO;
 
     }
 
-    public Comment mapToEntity(CreateOrUpdateCommentDTO COUComment, User author, AdEntity ad) {
+    public Comment mapToEntity(CreateOrUpdateCommentDTO createOrUpdateComment, User author, AdEntity ad) {
         Comment entity = new Comment();
-        entity.setText(COUComment.getText());
+        entity.setText(createOrUpdateComment.getText());
         entity.setAuthor(author);
         entity.setAdId(ad);
-        entity.setCreatedAt(LocalDateTime.from(Instant.now()));
+        entity.setCreatedAt(entity.getCreatedAt()); //<-- не могу понять, нужно ли здесь это???
 
         return  entity;
     }

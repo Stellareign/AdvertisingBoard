@@ -47,17 +47,23 @@ public class CommentServiceImpl implements CommentsService {
     }
 
     @Override
-    public CommentDTO addComment(CreateOrUpdateCommentDTO COUComment, Integer adId, String userInfo) {
+    public CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId, String userInfo) {
         Optional<AdEntity> ad = adsRepository.findById(adId);
         User user = userRepository.findByUsername(userInfo);
-        Comment comment = commentMapping.mapToEntity(COUComment, user, ad.get());
+        Comment comment = commentMapping.mapToEntity(createOrUpdateComment, user, ad.get());
+        comment.setCreatedAt(System.currentTimeMillis());
         commentRepository.save(comment);
         return commentMapping.mapToDto(comment);
     }
 
     @Override
-    public void deleteComment(Integer adId, Integer pk) {
-        commentRepository.deleteByPkAndAdId(pk, adId);
+    public boolean deleteComment(Integer adId, Integer pk) {
+        if (
+        commentRepository.deleteByPkAndAdId(adId, pk)){
+            return true;
+        } else {
+            return false;
+        }
 
     }
 
