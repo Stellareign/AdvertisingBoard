@@ -57,13 +57,11 @@ public class AdsController {
             summary = "Добавление нового объявления",
             tags = {"Объявления"},
             responses = {
-                    @ApiResponse(responseCode = "201", description = "*** Content"),
+                    @ApiResponse(responseCode = "201", description = "Created"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PreAuthorize("hasRole('USER') and @adsService.getAdById(#adId).email == authentication.principal.username")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 
     @PostMapping
     public ResponseEntity<?> createAd(@RequestBody String title,   // 'заголовок объявления'
@@ -87,9 +85,8 @@ public class AdsController {
             summary = "Получение информации об объявлении по id",
             tags = {"Объявления"},
             responses = {
-                    @ApiResponse(responseCode = "201", description = "*** Content"),
+                    @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
@@ -125,7 +122,7 @@ public class AdsController {
             summary = "Обновить объявление по id",
             tags = {"Объявления"},
             responses = {
-                    @ApiResponse(responseCode = "201", description = "*** updated Content"),
+                    @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
@@ -142,14 +139,14 @@ public class AdsController {
     }
 
     @Operation(
-            operationId = "removeAdById",
+            operationId = "getCurrentUserAds",
             summary = "Получение всех объявлений авторизованного пользователя",
             tags = {"Объявления"},
             responses = {
-                    @ApiResponse(responseCode = "201", description = "No Content"),
+                    @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+//                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+//                    @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
     @PreAuthorize("hasRole('USER') and @adsService.getAdById(#adId).email == authentication.principal.username")
@@ -163,7 +160,7 @@ public class AdsController {
             summary = "Обновление картинки объявления",
             tags = {"Объявления"},
             responses = {
-                    @ApiResponse(responseCode = "201", description = "*** Content"),
+                    @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
