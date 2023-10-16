@@ -10,14 +10,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.config.MapperUtil;
 import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
 import ru.skypro.homework.entity.AdsImage;
-import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.interfaces.AdsImageService;
 import ru.skypro.homework.service.interfaces.AdsService;
 
 import java.io.*;
@@ -149,7 +146,7 @@ public class AdsController {
 //                    @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PreAuthorize("hasRole('USER') and @adsService.getAdById(#adId).email == authentication.principal.username")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/me")
 
     public ResponseEntity<AdsDTO> getCurrentUserAds(Authentication authentication) {
