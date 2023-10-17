@@ -21,7 +21,7 @@ public class Comment {
     private String text;
 
     @Column(name = "date_time_create")
-    private LocalDateTime createdAt; // дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
+    private Long createdAt; // дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ads_id")

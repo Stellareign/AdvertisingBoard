@@ -13,7 +13,6 @@ import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
-import ru.skypro.homework.service.interfaces.AdsService;
 import ru.skypro.homework.service.interfaces.CommentsService;
 
 import java.util.List;
@@ -31,68 +30,54 @@ public class CommentsController {
 
     private CommentsService commentsService;
 
-    private AdsService adsService;
 
-
-    public CommentsController(CommentsService commentsService, AdsService adsService) {
+    public CommentsController(CommentsService commentsService) {
         this.commentsService = commentsService;
-        this.adsService = adsService;
     }
 
     @Operation(summary = "Получение списка всех комментариев")
     @GetMapping("/{id}/comments")
-    public ResponseEntity<CommentsDTO>  getComments(@PathVariable int adId) {
-        try {
+    public ResponseEntity<CommentsDTO>  getComments(@PathVariable("id") int adId) {
             CommentsDTO commentsDTO = commentsService.getAllComments(adId);
             return ResponseEntity.ok(commentsDTO);
-        } catch (RuntimeException e) {
-            e.getStackTrace();
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
     }
 
     // добавление комментариев
     @Operation(summary = "Добавление нового комментария")
     @PostMapping("/{id}/comments")
-    public ResponseEntity<CommentDTO> addComment(@PathVariable Integer pk,
-                                                 @RequestBody CreateOrUpdateCommentDTO COUComment,
+    public ResponseEntity<CommentDTO> addComment(@PathVariable("id") Integer pk,
+                                                 @RequestBody CreateOrUpdateCommentDTO createOrUpdateComment,
                                                  String userInfo ) {
-        try {
-            CommentDTO commentDTO = commentsService.addComment(COUComment, pk, userInfo);
+            CommentDTO commentDTO = commentsService.addComment(createOrUpdateComment, pk, userInfo);
             return ResponseEntity.ok(commentDTO);
-        } catch (RuntimeException e) {
-            e.getStackTrace();
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
     }
 
     // удаление комментария по id
     @Operation(summary = "Удаление комментария")
     @DeleteMapping("/{adId}/comments/{commentId}")
 //    public void deleteComment(@PathVariable int adId , @RequestParam int commentId ) {
-    public ResponseEntity<CommentDTO> deleteComment(@PathVariable int adId , @PathVariable int pk ) {
-        try {
-            commentsService.deleteComment(adId, pk);
+    public ResponseEntity<CommentDTO> deleteComment(@PathVariable int adId , @PathVariable("commentId") int pk ) {
+
+        if (commentsService.deleteComment(adId, pk)) {
             return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            e.getStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+        return ResponseEntity.notFound().build();
         }
+
     }
 
     // обновление комментария
         @Operation(summary = "Обновление комментария")
         @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId,@PathVariable int pk,
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId,@PathVariable("commentId") int pk,
                                                     @RequestBody CreateOrUpdateCommentDTO COUComment) {
-          try {
-              commentsService.updateComment(adId, pk, COUComment);
-              return ResponseEntity.ok().build();
-          } catch (RuntimeException e) {
-              e.getStackTrace();
-              return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+          CommentDTO commentDTO = commentsService.updateComment(adId, pk, COUComment);
+          if (commentDTO != null){
+              return ResponseEntity.ok(commentDTO);
+          } else {
+              return ResponseEntity.notFound().build();
           }
+
 
     }
 }
