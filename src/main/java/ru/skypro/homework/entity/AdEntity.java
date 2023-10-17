@@ -6,16 +6,12 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Entity
+
 @Table(name = "ads")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 
-/*
-проработать связь сущностей автор-объявление
- */
 public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,25 +23,20 @@ public class AdEntity {
     private String description;             // 'описание объявления'
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
-//    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User author;          // автор объявления
-@OneToOne(fetch = FetchType.LAZY)
-@JoinColumn(name = "image_id")
-    private AdsImage image;                   //'ссылка на картинку объявления'
+    private String image;                   //'ссылка на картинку объявления'
 
-    public AdEntity(String title, int price, String description, AdsImage image, User author) {
+    public AdEntity(String title, int price, String description, String image, User author) {
         this.title = title;
         this.price = price;
         this.description = description;
         this.image = image;
         this.author = author;
     }
-    public AdEntity(String title, int price, String description, User author) {
-        this.title = title;
-        this.price = price;
-        this.description = description;
-this.author = author;
+
+    public AdEntity() {
+
     }
 
     @Override

@@ -6,8 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.comments.CommentDTO;
 import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
-
-import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.User;
 
@@ -48,9 +47,9 @@ public class CommentServiceImpl implements CommentsService {
 
     @Override
     public CommentDTO addComment(CreateOrUpdateCommentDTO COUComment, Integer adId, String userInfo) {
-        Optional<AdEntity> ad = adsRepository.findById(adId);
+        Ad ad = adsRepository.findAdByPk(adId);
         User user = userRepository.findByUsername(userInfo);
-        Comment comment = commentMapping.mapToEntity(COUComment, user, ad.get());
+        Comment comment = commentMapping.mapToEntity(COUComment, user, ad);
         commentRepository.save(comment);
         return commentMapping.mapToDto(comment);
     }
