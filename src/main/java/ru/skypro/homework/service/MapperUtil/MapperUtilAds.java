@@ -1,4 +1,4 @@
-package ru.skypro.homework.config;
+package ru.skypro.homework.service.MapperUtil;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Data
 @NoArgsConstructor
 @Configuration
-public class MapperUtil {
+public class MapperUtilAds {
 
     @Bean
     public ModelMapper getMapper() {
@@ -44,7 +44,9 @@ public class MapperUtil {
                 user.getPhone());
     }
 
-    public AdEntity createAdFromDTO(CreateOrUpdateAdDTO inputAd, MultipartFile image, User user) throws IOException {
+    public AdEntity createAdFromDTO(CreateOrUpdateAdDTO inputAd,
+                                    MultipartFile image,
+                                    User user) throws IOException {
         Path filePath = Path.of("/images/ad_" + image.getOriginalFilename() + "."
                 + StringUtils.getFilenameExtension(image.getOriginalFilename()));
         uploadImage(image, filePath);
@@ -53,6 +55,7 @@ public class MapperUtil {
                 inputAd.getPrice(),
                 inputAd.getDescription(),
                 filePath.toString(),
+//                "/image",
                 user
         );
     }

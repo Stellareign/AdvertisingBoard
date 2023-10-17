@@ -22,6 +22,10 @@ public interface AdsService {
 
     Ad createAd(CreateOrUpdateAdDTO createAdDTO, MultipartFile image) throws IOException;
 
+//    Ad createAd(CreateOrUpdateAdDTO createAdDTO
+////                       ,MultipartFile image
+//    ) throws IOException;
+
     Ad editAdById(int id, CreateOrUpdateAdDTO updateAd)
             throws EntityNotFoundException;
 

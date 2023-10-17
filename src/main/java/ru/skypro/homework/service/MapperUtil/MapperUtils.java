@@ -1,4 +1,4 @@
-package ru.skypro.homework.service.impl.MapperUtil;
+package ru.skypro.homework.service.MapperUtil;
 
 import org.springframework.stereotype.Service;
 

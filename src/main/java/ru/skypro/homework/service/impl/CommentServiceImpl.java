@@ -15,7 +15,7 @@ import ru.skypro.homework.repository.AdsRepository;
 
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.impl.MapperUtil.CommentMapping;
+import ru.skypro.homework.service.MapperUtil.CommentMapping;
 import ru.skypro.homework.service.interfaces.CommentsService;
 
 import java.util.ArrayList;

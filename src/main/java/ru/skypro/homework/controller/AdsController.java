@@ -32,7 +32,7 @@ public class AdsController {
 
     public AdsController(AdsService adsService
 //            , UserRepository userRepository
-//            , MapperUtil mapperUtil
+//            , MapperUtilAds mapperUtil
 //            , AdsImageService adsImageService
     ) {
         this.adsService = adsService;
@@ -67,10 +67,12 @@ public class AdsController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 // (consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PostMapping
-    public ResponseEntity<Ad> createAd(@RequestPart("image") MultipartFile image,
+    public ResponseEntity<Ad> createAd(
+            @RequestPart("image") MultipartFile image,
                                        @RequestPart("properties") CreateOrUpdateAdDTO properties) throws IOException {
         log.info("Добавляем новое объявление: " + properties);
         return ResponseEntity.ok(adsService.createAd(properties, image));
+
         }
 
 

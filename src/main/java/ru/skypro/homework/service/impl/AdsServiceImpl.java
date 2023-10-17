@@ -5,7 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.config.MapperUtil;
+import ru.skypro.homework.service.MapperUtil.MapperUtilAds;
 import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
@@ -25,11 +25,11 @@ import java.util.stream.Collectors;
 @Service
 public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
-    private final MapperUtil mapperUtil;
+    private final MapperUtilAds mapperUtilAds;
 
-    public AdsServiceImpl(AdsRepository adsRepository, MapperUtil mapperUtil) {
+    public AdsServiceImpl(AdsRepository adsRepository, MapperUtilAds mapperUtilAds) {
         this.adsRepository = adsRepository;
-        this.mapperUtil = mapperUtil;
+        this.mapperUtilAds = mapperUtilAds;
     }
 
 
@@ -45,7 +45,7 @@ public class AdsServiceImpl implements AdsService {
         if (optionalAds.isEmpty())       {
             throw new RecordNotFoundException("Не удалось найти объявление с id =  "+adsId);
         }
-        return mapperUtil.createExtendedAdDTO(optionalAds.get());
+        return mapperUtilAds.createExtendedAdDTO(optionalAds.get());
     }
 
     //+++++++++++++++++++++++++++++++++++++++++
@@ -57,13 +57,16 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ad createAd(CreateOrUpdateAdDTO createAdDTO, MultipartFile image) throws IOException {
+    public Ad createAd(CreateOrUpdateAdDTO createAdDTO,
+                       MultipartFile image
+    ) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = mapperUtil.getMapper().map(authentication, User.class);
+        User currentUser = mapperUtilAds.getMapper().map(authentication, User.class);
  //       User currentUser = userRepository.findById(2).get();// временно, пока не разберусь с Authentication
-        AdEntity newAd = mapperUtil.createAdFromDTO(createAdDTO, image, currentUser);
+        AdEntity newAd = mapperUtilAds.createAdFromDTO(createAdDTO, image, currentUser);
+//        AdEntity newAd = mapperUtilAds.createAdFromDTO(createAdDTO, currentUser);
         adsRepository.save(newAd);
-        return mapperUtil.getMapper().map(newAd, Ad.class);
+        return mapperUtilAds.getMapper().map(newAd, Ad.class);
     }
 
     @Override
@@ -77,7 +80,7 @@ public class AdsServiceImpl implements AdsService {
         existingAd.setPrice(updateAd.getPrice());
         existingAd.setDescription(updateAd.getDescription());
         adsRepository.save(existingAd);
-        return mapperUtil.getMapper().map(existingAd, Ad.class);
+        return mapperUtilAds.getMapper().map(existingAd, Ad.class);
     }
 //       Обновляет изображение
 //    с заданным
@@ -91,7 +94,7 @@ public class AdsServiceImpl implements AdsService {
         AdEntity existingAd = optionalAd.get();
         Path filePath = Path.of("/images/ad_" + image.getOriginalFilename() + "."
                 + StringUtils.getFilenameExtension(image.getOriginalFilename()));
-        mapperUtil.uploadImage(image, filePath);
+        mapperUtilAds.uploadImage(image, filePath);
         existingAd.setImage(filePath.toString());
         adsRepository.save(existingAd);
         return existingAd;
