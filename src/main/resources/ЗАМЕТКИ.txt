@@ -1,0 +1,31 @@
+*) исходный код: https://github.com/skypro-backend/example-for-graduate-work
+
+ *) "currentPassword": "stringst",
+  "newPassword": "stringst
+  - что за тип stringst????
+
+
+ *) Запуск докера из терминала: docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.19
+
+ *) in changelog-master написать:
+ databaseChangeLog:
+   - include:
+       file: liquibase/init.sql::raw::includeAll
+
+*) Регистрация в сваггер
+{
+  "username": "pupkin@poy.ru",
+  "password": "qwerty123",
+  "firstName": "Вася",
+  "lastName": "Пупкин",
+  "phone": "+7(123)456-78-90",
+  "role": "USER"
+}
+
+*) логин:
+{
+  "username": "pupkin@poy.ru",
+  "password": "qwerty123"
+}
+
+*) https://editor.swagger.io/

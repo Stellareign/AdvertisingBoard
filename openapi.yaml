@@ -158,7 +158,7 @@ paths:
       tags:
         - Комментарии
       summary: 'Получение комментариев объявления'
-      operationId: getComments
+      operationId: getComment
       parameters:
         - name: id
           in: path
