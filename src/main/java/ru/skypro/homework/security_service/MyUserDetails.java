@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import ru.skypro.homework.dto.user.AuthUserDTO;
 import ru.skypro.homework.entity.User;
 
 import java.util.Collection;
@@ -11,19 +12,19 @@ import java.util.Set;
 
 @Component
 public  class MyUserDetails implements UserDetails {
-    private final User user;
-    public MyUserDetails(User user) {
-        this.user = user;
+    private final AuthUserDTO authUser;
+    public MyUserDetails(AuthUserDTO authUser) {
+        this.authUser = authUser;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return authUser.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return authUser.getUsername();
     }
 
 /**
@@ -35,9 +36,8 @@ public  class MyUserDetails implements UserDetails {
  */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Set.of(new SimpleGrantedAuthority(user.getRole().name()));
+        return Set.of(new SimpleGrantedAuthority("ROLE_" + authUser.getRole().name()));
     }
-
 
     @Override
     public boolean isAccountNonExpired() {

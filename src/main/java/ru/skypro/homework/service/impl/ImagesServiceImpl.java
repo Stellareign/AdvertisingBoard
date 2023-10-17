@@ -47,24 +47,28 @@ public class ImagesServiceImpl implements ImageService {
      */
     public Avatar createAvatar(MultipartFile image, Authentication authentication) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
-//
-//        if(user.getAvatarPath() != null) {
-//            Avatar currentAvatar = avatarRepository.findAvatarById((user.getAvatarPath())
-//                    .replaceAll("\\..*", ""));
-//            avatarRepository.delete(currentAvatar);
-//        }
-        String type = image.getContentType().replace("image/", ".");
 
-        String avatarName = UUID.randomUUID().toString();
+        if (user.getAvatarPath() != null) {
+            String avatarId = user.getAvatarPath().replace("/image/", "");
+            avatarId = avatarId.substring(0, avatarId.lastIndexOf("."));
+            if (avatarRepository.existsAvatarById(avatarId)) {
+                avatarRepository.delete(avatarRepository.findAvatarById(avatarId));
+            }
+        }
+        if (!image.isEmpty()) {
+            String type = image.getContentType().replace("image/", ".");
 
+            String avatarName = UUID.randomUUID().toString();
 
-        Avatar avatar = new Avatar();
-        avatar.setImageData(image.getBytes());
-        avatar.setId(avatarName);
-        avatar.setFileType(type);
-        avatar.setUser(user);
-        avatarRepository.save(avatar);
-        return avatar;
+            Avatar avatar = new Avatar();
+            avatar.setImageData(image.getBytes());
+            avatar.setId(avatarName);
+            avatar.setFileType(type);
+            avatar.setUser(user);
+            avatarRepository.save(avatar);
+            return avatar;
+        }
+        throw new IOException("Ошибка загрузки файла");
     }
 
     @Override
@@ -77,5 +81,4 @@ public class ImagesServiceImpl implements ImageService {
             avatarRepository.delete(avatar);
         }
     }
-
 }
