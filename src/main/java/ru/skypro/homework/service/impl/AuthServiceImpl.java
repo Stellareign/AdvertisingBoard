@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.security_service.SecurityUserDetailsService;
-import ru.skypro.homework.security_service.MyUserDetails;
 import ru.skypro.homework.service.interfaces.AuthService;
 import ru.skypro.homework.service.interfaces.UserService;
 @Slf4j
@@ -18,9 +16,9 @@ import ru.skypro.homework.service.interfaces.UserService;
 public class AuthServiceImpl implements AuthService {
 //    private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
-    private final SecurityUserDetailsService securityUserDetailsService;
+//    private final SecurityUserDetailsService securityUserDetailsService;
     private final UserService userService;
-    private final MyUserDetails myUserDetails;
+//    private final MyUserDetails myUserDetails;
     private final UserRepository userRepository;
 
 
@@ -35,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean login(String userName, String password) {
         User user = userRepository.findByUsername(userName);
-       if(user == null) {
+       if (user == null) {
            log.info("Неправильные имя пользователя или пароль!");
            return false;
        }return encoder.matches(password, user.getPassword());

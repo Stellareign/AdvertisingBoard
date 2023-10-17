@@ -123,7 +123,7 @@ public class UserController {
             @ApiResponse(responseCode = "200",
                     description = "Аватар пользователя обновлён",
                     content = {@Content(mediaType = "multipart/form-data",
-                            schema = @Schema(implementation = Avatar.class))}),
+                            schema = @Schema(implementation = UserDTO.class))}),
             @ApiResponse(
                     responseCode = "401", description = "Ошибка при авторизации"
             )

@@ -178,14 +178,16 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-//****************************************** ОБНОВЛЕНИЕ АВАТАРА ЮЗЕРА  *************************************************
-@Value("${path.to.image.folder}")
-String path;
+    //****************************************** ОБНОВЛЕНИЕ АВАТАРА ЮЗЕРА  *************************************************
+    @Value("${path.to.image.folder}")
+    String path;
+//    String path ="file:///C:\\Users\\runae\\IdeaProjects\\DIPLOMA_WORK\\images";
     /**
      * Метод обновления аватара пользователя
      * Принимает на вход два параметра
-     * @param image - изображение
-     * @param authentication  - текущего пользователя
+     *
+     * @param image          - изображение
+     * @param authentication - текущего пользователя
      * @return объект класса {@link UserDTO}
      * @throws IOException
      */
@@ -194,7 +196,10 @@ String path;
     public UserDTO updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
         Avatar avatar = imageService.createAvatar(image, authentication);
-        String imageUrl = path + avatar.getId() + avatar.getFileType();
+        /**
+         * *************** ИЗМЕНИТЬ ССЫЛКУ
+         */
+        String imageUrl = path + avatar.getId();
 
 //        user.setAvatarPath(avatar.getId() + avatar.getFileType());
         user.setAvatarPath(imageUrl);
@@ -210,8 +215,8 @@ String path;
         if (password.length() >= 8 && !password.isBlank()) {
             log.info("Пароль соответствует требованиям!");
             return true;
-        } else log.info("Пароль не соответствует требованиям! Пароль не должен состоять из пробелов, длина" +
-                "пароля должны быть не менее 8-ми символов!");
+        } log.info("Пароль не соответствует требованиям! Пароль не должен состоять из пробелов, длина" +
+                    "пароля должны быть не менее 8-ми символов!");
         return false;
     }
 
@@ -219,7 +224,7 @@ String path;
         if (phone.matches("\\+7\\s?\\(\\d{3}\\)\\s?\\d{3}-\\d{2}-\\d{2}")) {
             log.info("Формат телефона верный.");
             return true;
-        } else log.info("Укажите номер телефона в формате +7(ХХХ)ХХХ-ХХ-ХХ!");
+        } log.info("Укажите номер телефона в формате +7(ХХХ)ХХХ-ХХ-ХХ!");
         return false;
     }
 
@@ -227,7 +232,7 @@ String path;
         if (username.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
             log.info("Логин указан верно");
             return true;
-        } else log.info("Проверьте указанный email. Логин должен быть указан в формате user@user.us!");
+        } log.info("Проверьте указанный email. Логин должен быть указан в формате user@user.us!");
         return false;
     }
 }

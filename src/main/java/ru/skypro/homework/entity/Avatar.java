@@ -29,8 +29,8 @@ public class Avatar {
 //    @Type(type = "org.hibernate.type.ImageType")
     private byte[] imageData;
 
-    @Column(name = "image_type")
-    private String fileType;
+//    @Column(name = "image_type")
+//    private String fileType;
 
     @OneToOne
     @JoinColumn(name = "user_id")

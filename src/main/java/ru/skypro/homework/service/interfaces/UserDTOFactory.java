@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.interfaces;
 
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.user.AuthUserDTO;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
@@ -23,4 +24,8 @@ public interface UserDTOFactory {
 
     User fromUpdateUserDTOtoUser(UpdateUserDTO updateUserDTO, User user);
 
+    // **************************** User to AuthUserDTO // AuthUserDTO to User ***************************
+    AuthUserDTO fromUserToAuthUserDTO(User user);
+
+    User fromAuthUserDTOtoUser(User user, AuthUserDTO authUserDTO);
 }
