@@ -13,6 +13,7 @@ import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
+import ru.skypro.homework.service.interfaces.AdsService;
 import ru.skypro.homework.service.interfaces.CommentsService;
 
 import java.util.List;
@@ -30,10 +31,10 @@ public class CommentsController {
 
     private CommentsService commentsService;
 
-    private AdsServiceImpl adsService;
+    private AdsService adsService;
 
 
-    public CommentsController(CommentsService commentsService, AdsServiceImpl adsService) {
+    public CommentsController(CommentsService commentsService, AdsService adsService) {
         this.commentsService = commentsService;
         this.adsService = adsService;
     }

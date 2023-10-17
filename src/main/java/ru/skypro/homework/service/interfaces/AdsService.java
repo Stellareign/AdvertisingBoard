@@ -8,7 +8,6 @@ import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
 import ru.skypro.homework.entity.AdEntity;
-import ru.skypro.homework.entity.AdsImage;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
@@ -19,31 +18,19 @@ public interface AdsService {
 
     ExtendedAdDTO getAdById(int adsId);
 
-    //+++++++++++++++++++++++++++++++++++++++++
     void deleteAdsById(int adsId);
 
-
-
-    Ad createAd(String title, int price, String description, MultipartFile image) throws IOException;
+    Ad createAd(CreateOrUpdateAdDTO createAdDTO, MultipartFile image) throws IOException;
 
     Ad editAdById(int id, CreateOrUpdateAdDTO updateAd)
             throws EntityNotFoundException;
 
-
     AdsDTO getAdsDTO();
 
-//       Обновляет изображение
-//    с заданным
-//    идентификатором.
-//
-//             * @param id Идентификатор изображения, которое необходимо обновить.
-//     * @param image Файл изображения, который необходимо обновить.
-//     * @return Обновленное изображение в виде массива байтов.
-//            * @throws IOException Если есть ошибка при чтении файла изображения.
-//            * @throws IllegalArgumentException Если файл изображения пуст.
-    AdsImage updateImage(int id, MultipartFile image) throws IOException;
-
-    AdEntity editImageAdById(int id, AdsImage image);
+    //       Обновляет изображение
+    //    с заданным
+    //    идентификатором.
+    AdEntity updateImage(int id, MultipartFile image) throws IOException;
 
     AdsDTO getAllAdsByUser(Authentication authentication);
 }
