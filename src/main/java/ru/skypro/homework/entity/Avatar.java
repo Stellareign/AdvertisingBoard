@@ -25,6 +25,7 @@ public class Avatar {
     private String id;
 
 //    @Lob
+//    @Column(name = "image_data", columnDefinition = "bytea")
     @Column(name = "image_data", columnDefinition = "bytea")
 //    @Type(type = "org.hibernate.type.ImageType")
     private byte[] imageData;

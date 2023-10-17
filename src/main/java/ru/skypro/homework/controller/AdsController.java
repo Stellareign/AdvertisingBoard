@@ -1,6 +1,8 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,7 @@ import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
-import ru.skypro.homework.entity.AdsImage;
+import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.service.interfaces.AdsService;
 
 import java.io.*;
@@ -49,32 +51,28 @@ public class AdsController {
     public ResponseEntity<AdsDTO> getAdsDTO() {
         return ResponseEntity.ok().body(adsService.getAdsDTO());
     }
+
     @Operation(
-            operationId = "createAd",
             summary = "Добавление нового объявления",
             tags = {"Объявления"},
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Created"),
+                    @ApiResponse(responseCode = "201", description = "Created",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Ad.class)
+                            )),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
             }
     )
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-
+// (consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PostMapping
-    public ResponseEntity<?> createAd(@RequestBody String title,   // 'заголовок объявления'
-                                      int price,               // 'цена объявления'
-                                      String description,            //'описание объявления'
-                                      MultipartFile image) throws IOException             //'адрес картинки объявления'
-    //                                      User author)          //'id автора объявления'
-    {
-        Ad newAd = adsService.createAd(title, price, description, image);
-        if (newAd != null) {
-            if (newAd.getAuthor() == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            return ResponseEntity.ok().body(newAd);
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    public ResponseEntity<Ad> createAd(@RequestPart("image") MultipartFile image,
+                                       @RequestPart("properties") CreateOrUpdateAdDTO properties) throws IOException {
+        log.info("Добавляем новое объявление: " + properties);
+        return ResponseEntity.ok(adsService.createAd(properties, image));
         }
-    }
+
 
     // получение информации об объявлении
     @Operation(
@@ -142,8 +140,6 @@ public class AdsController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
-//                    @ApiResponse(responseCode = "403", description = "Forbidden"),
-//                    @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
     @PreAuthorize("hasRole('USER')")
@@ -166,7 +162,7 @@ public class AdsController {
     @PreAuthorize("hasRole('USER') and @adsService.getAdById(#adId).email == authentication.principal.username")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 
-    public ResponseEntity<AdsImage> updateImage(@PathVariable int adId,
+    public ResponseEntity<AdEntity> updateImage(@PathVariable int adId,
                                                 @RequestParam("image") MultipartFile image) throws IOException {
 
         return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(adId, image));
