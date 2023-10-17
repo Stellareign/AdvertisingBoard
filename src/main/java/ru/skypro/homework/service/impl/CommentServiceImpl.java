@@ -11,6 +11,7 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.User;
 
+import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.AdsRepository;
 
 import ru.skypro.homework.repository.CommentRepository;
@@ -49,6 +50,7 @@ public class CommentServiceImpl implements CommentsService {
     @Override
     public CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId, String userInfo) {
         Optional<AdEntity> ad = adsRepository.findById(adId);
+        if(ad.isEmpty()){ throw new RecordNotFoundException("Запись не найдена");}
         User user = userRepository.findByUsername(userInfo);
         Comment comment = commentMapping.mapToEntity(createOrUpdateComment, user, ad.get());
         comment.setCreatedAt(System.currentTimeMillis());

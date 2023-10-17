@@ -7,7 +7,7 @@ import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 
 
 
-
+@Service
 public interface CommentsService {
 
    CommentsDTO getAllComments(Integer adId);

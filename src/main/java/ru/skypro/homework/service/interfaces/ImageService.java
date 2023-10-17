@@ -21,7 +21,7 @@ public interface ImageService {
 
     /**
      * Удаление аватара после замены
-     * @param avatarPath
+     *
      * @throws IOException
      */
     void deleteImage(String avatarId) throws IOException;

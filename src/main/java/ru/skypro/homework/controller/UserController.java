@@ -128,7 +128,8 @@ public class UserController {
                     responseCode = "401", description = "Ошибка при авторизации"
             )
     })
-    public ResponseEntity<?> updateUserImage(@RequestPart("image") MultipartFile image, Authentication authentication)
+    public ResponseEntity<?> updateUserImage(@RequestPart("image") MultipartFile image,
+                                             Authentication authentication)
             {
                 try{
             log.info("Аватар обновлён");
