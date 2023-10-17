@@ -29,3 +29,23 @@
 }
 
 *) https://editor.swagger.io/
+
+***********************************************************************************
+spring.datasource.url=jdbc:postgresql://localhost:5432/diplom
+spring.datasource.username=postgres
+spring.datasource.password=1234
+spring.jpa.hibernate.ddl-auto=update
+logging.level.root=info
+spring.liquibase.change-log=classpath:liquibase/changelog-master.yml
+
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+#pereopredeenie binov:
+#spring.main.allow-bean-definition-overriding = true
+
+
+#vyvodit telo sql zaposa v konsol'
+spring.jpa.show-sql=true
+#dlya ustraneniya oshibki s sozdaniem tablitsy authors:
+spring.jpa.properties.hibernate.globally_quoted_identifiers=true
+
+path.to.image.folder=/images/

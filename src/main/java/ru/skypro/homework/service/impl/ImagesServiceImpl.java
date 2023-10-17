@@ -63,7 +63,6 @@ public class ImagesServiceImpl implements ImageService {
             Avatar avatar = new Avatar();
             avatar.setImageData(image.getBytes());
             avatar.setId(avatarName);
-            avatar.setFileType(type);
             avatar.setUser(user);
             avatarRepository.save(avatar);
             return avatar;

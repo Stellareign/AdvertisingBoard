@@ -25,7 +25,7 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ads_id")
-    private Ad adId;  // id объявления
+    private AdEntity adId;  // id объявления
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
