@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @AllArgsConstructor
 @Component
-
 public class CreateOrUpdateAd {
     private String title;
     private int price;
