@@ -23,7 +23,9 @@ public interface AdsService {
                                 MultipartFile image
     ) throws IOException;
 
-    public abstract Ad createAd2(CreateOrUpdateAd createAdDTO) throws IOException;
+//    public abstract Ad createAd2(CreateOrUpdateAd createAdDTO) throws IOException;
+
+    Ad createAd2(CreateOrUpdateAd createAdDTO, Authentication authentication) throws IOException;
 
     public abstract Ad editAdById(int id, CreateOrUpdateAd updateAd);
 

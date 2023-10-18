@@ -52,7 +52,7 @@ public class AdsController {
         try {
             log.info("Добавляем новое объявление: " + properties);
 //        return ResponseEntity.ok(adsService.createAd(properties, image));
-            return ResponseEntity.ok(adsService.createAd2(properties));
+            return ResponseEntity.ok(adsService.createAd2(properties, authentication));
         }
 catch (IOException e){
     log.info("Ошибка при добавлении объявления");

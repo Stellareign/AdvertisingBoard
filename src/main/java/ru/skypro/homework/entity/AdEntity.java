@@ -37,9 +37,7 @@ public class AdEntity {
         this.author = author;
     }
 
-    public AdEntity() {
-
-    }
+    public AdEntity() {}
 
     @Override
     public String toString() {

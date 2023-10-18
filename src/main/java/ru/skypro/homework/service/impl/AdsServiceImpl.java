@@ -69,12 +69,9 @@ public class AdsServiceImpl implements AdsService {
         return mapperUtil.getMapper().map(newAd, Ad.class);
     }
     @Override
-    public Ad createAd2(CreateOrUpdateAd createAdDTO) throws IOException {
-       Optional<User> optionalUser = userRepository.findById(1);// временно, пока не разберусь с Authentication
-        if (optionalUser.isEmpty()){
-            throw new RecordNotFoundException("User not found");
-        }
-       User currentUser = optionalUser.get();
+    public Ad createAd2(CreateOrUpdateAd createAdDTO, Authentication authentication) throws IOException {
+
+       User currentUser = userRepository.findByUsername(authentication.getName());
         AdEntity newAd = mapperUtil.createAdFromDTO2(createAdDTO, currentUser);
         adsRepository.save(newAd);
         return mapperUtil.getMapper().map(newAd, Ad.class);
