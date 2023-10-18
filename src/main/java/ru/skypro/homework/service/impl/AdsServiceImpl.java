@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.MapperUtil.MapperUtilAds;
 import ru.skypro.homework.service.interfaces.AdsService;
 
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -24,16 +26,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AdsServiceImpl implements AdsService {
+
     private final AdsRepository adsRepository;
     private final UserRepository userRepository;
     private final MapperUtilAds mapperUtil;
 
-    public AdsServiceImpl(AdsRepository adsRepository, UserRepository userRepository, MapperUtilAds mapperUtil) {
-        this.adsRepository = adsRepository;
-        this.userRepository = userRepository;
-        this.mapperUtil = mapperUtil;
-    }
 
 
     @Override

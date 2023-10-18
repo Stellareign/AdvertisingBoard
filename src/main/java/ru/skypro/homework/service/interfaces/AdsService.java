@@ -9,38 +9,28 @@ import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
 import ru.skypro.homework.entity.AdEntity;
 
-import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
-
-
 @Service
 public interface AdsService {
+    public abstract AdsDTO getAdsDTO();
 
-    ExtendedAdDTO getAdById(int adsId);
+    public abstract ExtendedAdDTO getAdById(int adsId);
 
-    void deleteAdsById(int adsId);
+    //+++++++++++++++++++++++++++++++++++++++++
+    public abstract void deleteAdsById(int adsId);
 
-    Ad createAd(CreateOrUpdateAd createAdDTO, MultipartFile image) throws IOException;
+    public abstract Ad createAd(CreateOrUpdateAd createAdDTO,
+                                MultipartFile image
+    ) throws IOException;
 
-//    Ad createAd(CreateOrUpdateAdDTO createAdDTO
-////                       ,MultipartFile image
-//    ) throws IOException;
+    public abstract Ad createAd2(CreateOrUpdateAd createAdDTO) throws IOException;
 
-//    Ad createAd(CreateOrUpdateAdDTO createAdDTO
-////                       ,MultipartFile image
-//    ) throws IOException;
-
-    Ad createAd2(CreateOrUpdateAd createAdDTO) throws IOException;
-
-    Ad editAdById(int id, CreateOrUpdateAd updateAd)
-            throws EntityNotFoundException;
-
-    AdsDTO getAdsDTO();
+    public abstract Ad editAdById(int id, CreateOrUpdateAd updateAd);
 
     //       Обновляет изображение
     //    с заданным
     //    идентификатором.
-    AdEntity updateImage(int id, MultipartFile image) throws IOException;
+        public abstract AdEntity updateImage(int id, MultipartFile image) throws IOException;
 
-    AdsDTO getAllAdsByUser(Authentication authentication);
+    public abstract AdsDTO getAllAdsByUser(Authentication authentication);
 }
