@@ -116,6 +116,7 @@ catch (IOException e){
 //    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and" +
 //            "@adsService.getAdById(#adId).email == authentication.principal.username)")
 
+    @Operation(summary = "Обновление информации об объявлении")
     @PatchMapping("/{adId}")
 
     public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestBody CreateOrUpdateAd updateAd) {
