@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.AdsDTO;
-import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
+import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
 import ru.skypro.homework.entity.AdEntity;
 
@@ -20,13 +20,19 @@ public interface AdsService {
 
     void deleteAdsById(int adsId);
 
-    Ad createAd(CreateOrUpdateAdDTO createAdDTO, MultipartFile image) throws IOException;
+    Ad createAd(CreateOrUpdateAd createAdDTO, MultipartFile image) throws IOException;
 
 //    Ad createAd(CreateOrUpdateAdDTO createAdDTO
 ////                       ,MultipartFile image
 //    ) throws IOException;
 
-    Ad editAdById(int id, CreateOrUpdateAdDTO updateAd)
+//    Ad createAd(CreateOrUpdateAdDTO createAdDTO
+////                       ,MultipartFile image
+//    ) throws IOException;
+
+    Ad createAd2(CreateOrUpdateAd createAdDTO) throws IOException;
+
+    Ad editAdById(int id, CreateOrUpdateAd updateAd)
             throws EntityNotFoundException;
 
     AdsDTO getAdsDTO();

@@ -10,8 +10,8 @@ public class ExtendedAdDTO {
 
     private String description;
     private int price;
-    private  String title;
-    private String imagePath; // ссылка на фото товара
+    private String title;
+    private String image; // ссылка на фото товара
 
     private String authorFirstName;
     private String authorLastName;

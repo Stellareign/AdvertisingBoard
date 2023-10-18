@@ -5,15 +5,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.service.MapperUtil.MapperUtilAds;
 import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.AdsDTO;
-import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
+import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.repository.AdsRepository;
+import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.MapperUtil.MapperUtilAds;
 import ru.skypro.homework.service.interfaces.AdsService;
 
 import java.io.IOException;
@@ -25,17 +26,19 @@ import java.util.stream.Collectors;
 @Service
 public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
-    private final MapperUtilAds mapperUtilAds;
+    private final UserRepository userRepository;
+    private final MapperUtilAds mapperUtil;
 
-    public AdsServiceImpl(AdsRepository adsRepository, MapperUtilAds mapperUtilAds) {
+    public AdsServiceImpl(AdsRepository adsRepository, UserRepository userRepository, MapperUtilAds mapperUtil) {
         this.adsRepository = adsRepository;
-        this.mapperUtilAds = mapperUtilAds;
+        this.userRepository = userRepository;
+        this.mapperUtil = mapperUtil;
     }
 
 
     @Override
     public AdsDTO getAdsDTO() {
-        List<AdEntity> adList = adsRepository.findAll();
+        List<Ad> adList = mapperUtil.convertListAdEntityToAd(adsRepository.findAll());
         return new AdsDTO(adList.size(), adList);
     }
 
@@ -45,7 +48,7 @@ public class AdsServiceImpl implements AdsService {
         if (optionalAds.isEmpty())       {
             throw new RecordNotFoundException("Не удалось найти объявление с id =  "+adsId);
         }
-        return mapperUtilAds.createExtendedAdDTO(optionalAds.get());
+        return mapperUtil.createExtendedAdDTO(optionalAds.get());
     }
 
     //+++++++++++++++++++++++++++++++++++++++++
@@ -57,20 +60,29 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ad createAd(CreateOrUpdateAdDTO createAdDTO,
+    public Ad createAd(CreateOrUpdateAd createAdDTO,
                        MultipartFile image
     ) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = mapperUtilAds.getMapper().map(authentication, User.class);
- //       User currentUser = userRepository.findById(2).get();// временно, пока не разберусь с Authentication
-        AdEntity newAd = mapperUtilAds.createAdFromDTO(createAdDTO, image, currentUser);
-//        AdEntity newAd = mapperUtilAds.createAdFromDTO(createAdDTO, currentUser);
+        User currentUser = userRepository.findByUsername(authentication.getName());
+        AdEntity newAd = mapperUtil.createAdFromDTO(createAdDTO, image, currentUser);
         adsRepository.save(newAd);
-        return mapperUtilAds.getMapper().map(newAd, Ad.class);
+        return mapperUtil.getMapper().map(newAd, Ad.class);
+    }
+    @Override
+    public Ad createAd2(CreateOrUpdateAd createAdDTO) throws IOException {
+       Optional<User> optionalUser = userRepository.findById(1);// временно, пока не разберусь с Authentication
+        if (optionalUser.isEmpty()){
+            throw new RecordNotFoundException("User not found");
+        }
+       User currentUser = optionalUser.get();
+        AdEntity newAd = mapperUtil.createAdFromDTO2(createAdDTO, currentUser);
+        adsRepository.save(newAd);
+        return mapperUtil.getMapper().map(newAd, Ad.class);
     }
 
     @Override
-    public Ad editAdById(int id, CreateOrUpdateAdDTO updateAd) {
+    public Ad editAdById(int id, CreateOrUpdateAd updateAd) {
         Optional<AdEntity> optionalAd = adsRepository.findById(id);
         if (optionalAd.isEmpty()) {
             throw new RecordNotFoundException("Не удалось найти объявление с id =  "+id);
@@ -80,7 +92,7 @@ public class AdsServiceImpl implements AdsService {
         existingAd.setPrice(updateAd.getPrice());
         existingAd.setDescription(updateAd.getDescription());
         adsRepository.save(existingAd);
-        return mapperUtilAds.getMapper().map(existingAd, Ad.class);
+        return mapperUtil.getMapper().map(existingAd, Ad.class);
     }
 //       Обновляет изображение
 //    с заданным
@@ -94,7 +106,7 @@ public class AdsServiceImpl implements AdsService {
         AdEntity existingAd = optionalAd.get();
         Path filePath = Path.of("/images/ad_" + image.getOriginalFilename() + "."
                 + StringUtils.getFilenameExtension(image.getOriginalFilename()));
-        mapperUtilAds.uploadImage(image, filePath);
+        mapperUtil.uploadImage(image, filePath);
         existingAd.setImage(filePath.toString());
         adsRepository.save(existingAd);
         return existingAd;
@@ -103,10 +115,11 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsDTO getAllAdsByUser(Authentication authentication) {
         String currentUserName = authentication.getName();
-        List<AdEntity> adList = adsRepository.findAll()
+        List<AdEntity> adEntityList = adsRepository.findAll()
                 .stream()
                 .filter(e -> e.getAuthor().getUsername().equals(currentUserName))
                 .collect(Collectors.toList());
+        List<Ad> adList = mapperUtil.convertListAdEntityToAd(adEntityList);
         return new AdsDTO(adList.size(), adList);
     }
 

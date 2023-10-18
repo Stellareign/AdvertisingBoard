@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
+import ru.skypro.homework.dto.ads.Ad;
+import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.User;
@@ -15,6 +16,8 @@ import ru.skypro.homework.entity.User;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -43,8 +46,7 @@ public class MapperUtilAds {
                 user.getUsername(),
                 user.getPhone());
     }
-
-    public AdEntity createAdFromDTO(CreateOrUpdateAdDTO inputAd,
+    public AdEntity createAdFromDTO(CreateOrUpdateAd inputAd,
                                     MultipartFile image,
                                     User user) throws IOException {
         Path filePath = Path.of("/images/ad_" + image.getOriginalFilename() + "."
@@ -59,6 +61,18 @@ public class MapperUtilAds {
                 user
         );
     }
+
+    public AdEntity createAdFromDTO2(CreateOrUpdateAd inputAd,
+                                    User user) throws IOException {
+
+        return new AdEntity(
+                inputAd.getTitle(),
+                inputAd.getPrice(),
+                inputAd.getDescription(),
+                "/image",
+                user
+        );
+    }
     public void uploadImage(MultipartFile image, Path filePath) throws IOException {
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
@@ -70,5 +84,18 @@ public class MapperUtilAds {
         ) {
             bis.transferTo(bos);
         }
+    }
+    public List<Ad> convertListAdEntityToAd(List<AdEntity> adEntityList) {
+        List<Ad> listAd = new ArrayList<>();
+        Ad ad = new Ad();
+        for (AdEntity adEntity : adEntityList) {
+            ad.setPk(adEntity.getPk());                     //id объявления
+            ad.setPrice(adEntity.getPrice());               // 'цена объявления'
+            ad.setTitle(adEntity.getTitle());               // 'заголовок объявления'
+            ad.setAuthorId(adEntity.getAuthor().getId());   // id автора объявления
+            ad.setImage(adEntity.getImage());               //'ссылка на картинку объявления'
+            listAd.add(ad);
+        }
+        return listAd;
     }
 }
