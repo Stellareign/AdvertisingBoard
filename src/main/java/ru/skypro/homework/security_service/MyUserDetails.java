@@ -1,5 +1,6 @@
 package ru.skypro.homework.security_service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,12 +12,9 @@ import java.util.Collection;
 import java.util.Set;
 
 @Component
+@RequiredArgsConstructor
 public  class MyUserDetails implements UserDetails {
     private final AuthUserDTO authUser;
-    public MyUserDetails(AuthUserDTO authUser) {
-        this.authUser = authUser;
-    }
-
     @Override
     public String getPassword() {
         return authUser.getPassword();

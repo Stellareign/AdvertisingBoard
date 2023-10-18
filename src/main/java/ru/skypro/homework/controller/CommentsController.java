@@ -70,7 +70,5 @@ public class CommentsController {
           } else {
               return ResponseEntity.notFound().build();
           }
-
-
     }
 }
