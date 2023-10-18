@@ -1,8 +1,14 @@
 package ru.skypro.homework.dto.ads;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Data
+@Component
+@AllArgsConstructor
+@NoArgsConstructor
 public class Ad {
     private int pk;                         //'id объявления'
     private int price;                      // 'цена объявления'

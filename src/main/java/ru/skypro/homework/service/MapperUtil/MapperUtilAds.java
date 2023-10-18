@@ -87,8 +87,9 @@ public class MapperUtilAds {
     }
     public List<Ad> convertListAdEntityToAd(List<AdEntity> adEntityList) {
         List<Ad> listAd = new ArrayList<>();
-        Ad ad = new Ad();
+
         for (AdEntity adEntity : adEntityList) {
+            Ad ad = new Ad();
             ad.setPk(adEntity.getPk());                     //id объявления
             ad.setPrice(adEntity.getPrice());               // 'цена объявления'
             ad.setTitle(adEntity.getTitle());               // 'заголовок объявления'

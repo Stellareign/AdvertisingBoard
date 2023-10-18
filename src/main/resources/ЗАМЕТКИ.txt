@@ -30,7 +30,7 @@
 
 *) https://editor.swagger.io/
 
-***********************************************************************************
+***************************************** DLYA PODKLYUCHENIYA DB  ***************************************
 spring.datasource.url=jdbc:postgresql://localhost:5432/diplom
 spring.datasource.username=postgres
 spring.datasource.password=1234

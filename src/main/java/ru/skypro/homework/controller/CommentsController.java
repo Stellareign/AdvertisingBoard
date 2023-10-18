@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comments.CommentDTO;
 import ru.skypro.homework.dto.comments.CommentsDTO;
@@ -35,8 +36,8 @@ public class CommentsController {
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDTO> addComment(@PathVariable("id") Integer pk,
                                                  @RequestBody CreateOrUpdateCommentDTO createOrUpdateComment,
-                                                 String userInfo ) {
-            CommentDTO commentDTO = commentsService.addComment(createOrUpdateComment, pk, userInfo);
+                                                 Authentication authentication) {
+            CommentDTO commentDTO = commentsService.addComment(createOrUpdateComment, pk, authentication);
             return ResponseEntity.ok(commentDTO);
     }
 

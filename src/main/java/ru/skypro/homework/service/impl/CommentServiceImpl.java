@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.comments.CommentDTO;
 import ru.skypro.homework.dto.comments.CommentsDTO;
@@ -36,6 +37,7 @@ public class CommentServiceImpl implements CommentsService {
 
     @Override
     public CommentsDTO getAllComments(Integer adId) {
+
         List<Comment> commentsList = commentRepository.findByAdId(adId);
         List<CommentDTO> commentDTO = new ArrayList<>();
 
@@ -48,10 +50,11 @@ public class CommentServiceImpl implements CommentsService {
     }
 
     @Override
-    public CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId, String userInfo) {
+    public CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId,
+                                 Authentication authentication) {
         Optional<AdEntity> ad = adsRepository.findById(adId);
         if(ad.isEmpty()){ throw new RecordNotFoundException("Запись не найдена");}
-        User user = userRepository.findByUsername(userInfo);
+        User user = userRepository.findByUsername(authentication.getName());
         Comment comment = commentMapping.mapToEntity(createOrUpdateComment, user, ad.get());
         comment.setCreatedAt(System.currentTimeMillis());
         commentRepository.save(comment);

@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.interfaces;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.comments.CommentDTO;
 import ru.skypro.homework.dto.comments.CommentsDTO;
@@ -19,7 +20,7 @@ public interface CommentsService {
 
     CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment);
 
-    CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId, String userInfo);
+    CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId, Authentication authentication);
 
 
 //    User getUserId(int id);
