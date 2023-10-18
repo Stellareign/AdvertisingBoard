@@ -21,12 +21,7 @@ import ru.skypro.homework.service.interfaces.CommentsService;
 @Tag(name = "Комментарии")
 public class CommentsController {
 
-    private CommentsService commentsService;
-
-
-    public CommentsController(CommentsService commentsService) {
-        this.commentsService = commentsService;
-    }
+    private final CommentsService commentsService;
 
     @Operation(summary = "Получение списка всех комментариев")
     @GetMapping("/{id}/comments")
