@@ -87,13 +87,13 @@ public class MapperUtilAds {
     }
     public List<Ad> convertListAdEntityToAd(List<AdEntity> adEntityList) {
         List<Ad> listAd = new ArrayList<>();
-        Ad ad = new Ad();
         for (AdEntity adEntity : adEntityList) {
-            ad.setPk(adEntity.getPk());                     //id объявления
-            ad.setPrice(adEntity.getPrice());               // 'цена объявления'
-            ad.setTitle(adEntity.getTitle());               // 'заголовок объявления'
-            ad.setAuthorId(adEntity.getAuthor().getId());   // id автора объявления
-            ad.setImage(adEntity.getImage());               //'ссылка на картинку объявления'
+            Ad ad = new Ad(
+            adEntity.getPk(),                     //id объявления
+            adEntity.getPrice(),               // 'цена объявления'
+            adEntity.getTitle(),               // 'заголовок объявления'
+            adEntity.getAuthor().getId(),   // id автора объявления
+            adEntity.getImage());               //'ссылка на картинку объявления'
             listAd.add(ad);
         }
         return listAd;
