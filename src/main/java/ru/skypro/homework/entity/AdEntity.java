@@ -8,6 +8,8 @@ import javax.persistence.*;
 
 @Data
 @Entity
+@AllArgsConstructor
+
 
 @Table(name = "ads")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
