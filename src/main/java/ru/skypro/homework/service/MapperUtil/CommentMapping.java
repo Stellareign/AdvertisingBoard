@@ -7,8 +7,9 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.User;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 @Service
@@ -31,8 +32,10 @@ public class CommentMapping {
         entity.setText(createOrUpdateComment.getText());
         entity.setAuthor(author);
         entity.setAdId(ad);
-        entity.setCreatedAt(entity.getCreatedAt()); //<-- не могу понять, нужно ли здесь это???
+        entity.convertTime(); //<- нашёл в интернете способ конвертирования лонга в дату
+//        entity.setCreatedAt(LocalDateTime.from(Instant.now())); <- поменять тип данных на Instant и можно будет использовать, но в ТЗ тип должен быть Long
 
         return  entity;
     }
+
 }
