@@ -7,7 +7,7 @@ import ru.skypro.homework.entity.AdEntity;
 
 import java.util.List;
 
-@EnableJpaRepositories
+
 public interface AdsRepository extends JpaRepository<AdEntity, Integer> {
     AdEntity findByPk(int pk);
 
