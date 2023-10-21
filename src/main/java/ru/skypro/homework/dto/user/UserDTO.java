@@ -7,7 +7,7 @@ import ru.skypro.homework.dto.Role;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Component
+
 public class UserDTO {
 
     private int id;

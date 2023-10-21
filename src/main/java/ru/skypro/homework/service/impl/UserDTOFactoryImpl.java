@@ -37,7 +37,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     public User fromUserDTOtoUser(UserDTO userDTO, User user) {
         return new User(user.getId(), userDTO.getEmail(), user.getPassword(), userDTO.getFirstName(),
                 userDTO.getLastName(), userDTO.getPhone(), userDTO.getAvatar(), userDTO.getRole(),
-                user.getRegisterDate());
+                user.getRegisterDate(), user.getUserAvatar());
     }
 
     // **************************** User to UpdateUserDTO // UpdateUserDTO to User ***************************
@@ -50,7 +50,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     public User fromUpdateUserDTOtoUser(UpdateUserDTO updateUserDTO, User user) {
         return new User(user.getId(), user.getUsername(), user.getPassword(), updateUserDTO.getFirstName(),
                 updateUserDTO.getLastName(), updateUserDTO.getPhone(), user.getAvatarPath(), user.getRole(),
-                user.getRegisterDate());
+                user.getRegisterDate(), user.getUserAvatar());
     }
 
     // **************************** User to AuthUserDTO // AuthUserDTO to User ***************************
@@ -62,6 +62,6 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     public User fromAuthUserDTOtoUser(User user, AuthUserDTO authUserDTO){
         return new User(user.getId(), authUserDTO.getUsername(), authUserDTO.getPassword(),user.getFirstName(),
                 user.getLastName(), user.getPhone(),  user.getAvatarPath(), authUserDTO.getRole(),
-                user.getRegisterDate());
+                user.getRegisterDate(), user.getUserAvatar());
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
@@ -179,9 +180,7 @@ public class UserServiceImpl implements UserService {
     }
 
     //****************************************** ОБНОВЛЕНИЕ АВАТАРА ЮЗЕРА  *************************************************
-    @Value("${path.to.image.folder}")
-    String path;
-//    String path ="file:///C:\\Users\\runae\\IdeaProjects\\DIPLOMA_WORK\\images";
+
     /**
      * Метод обновления аватара пользователя
      * Принимает на вход два параметра
@@ -195,14 +194,9 @@ public class UserServiceImpl implements UserService {
 //    @Transactional
     public UserDTO updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
-        Avatar avatar = imageService.createAvatar(image, authentication);
-        /**
-         * *************** ИЗМЕНИТЬ ССЫЛКУ
-         */
-        String imageUrl = path + avatar.getId();
-
-//        user.setAvatarPath(avatar.getId() + avatar.getFileType());
-        user.setAvatarPath(imageUrl);
+        Avatar avatar = imageService.createAvatar(image, authentication.getName());
+        user.setAvatarPath(avatar.getImagePath());
+        user.setUserAvatar(avatar);
         userRepository.save(user);
 
         return userDTOFactory.fromUserToUserDTO(user);
