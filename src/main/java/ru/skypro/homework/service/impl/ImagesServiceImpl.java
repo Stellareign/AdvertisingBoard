@@ -14,8 +14,13 @@ import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.ImageService;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
+
+import static org.springframework.util.StringUtils.getFilenameExtension;
 
 @Slf4j
 @Service
@@ -47,32 +52,49 @@ public class ImagesServiceImpl implements ImageService {
      * Метод может выкидывать исключение:
      * @throws IOException
      */
-    public Avatar createAvatar(MultipartFile image, String userId)  {
+    public Avatar createAvatar(MultipartFile image, String userId) throws IOException {
         User user = userRepository.findByUsername(userId);
 
-        if (user.getAvatarPath() != null && !user.getAvatarPath().isEmpty()) {
+        if (user.getAvatarPath() != null) {
             String avatarId = user.getUserAvatar().getId();
             Avatar oldAvatar = avatarRepository.findAvatarById(avatarId);
+            Path deletePath = Path.of(user.getAvatarPath());
+            Files.deleteIfExists(deletePath);
+            log.info("Старая аватарка удалена.");
             if (oldAvatar != null) {
                 user.setUserAvatar(null);
                 user.setAvatarPath(null);
                 userRepository.save(user);
                 avatarRepository.delete(oldAvatar);
-
             }
-        }else {log.info("Текущий аватар отсутствует");}
+        } else {
+            log.info("Текущий аватар отсутствует");
+        }
         Avatar newAvatar = new Avatar();
         try {
             String avatarId = UUID.randomUUID().toString();
             byte[] bytes = image.getBytes();
             newAvatar.setId(avatarId);
             newAvatar.setImageData(bytes);
-            newAvatar.setImagePath(imagePath + avatarId + image.getContentType());
+            newAvatar.setImagePath(saveImage(image, avatarId, user));
+            avatarRepository.save(newAvatar);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info("Ошибка загрузки файла");
         }
-        avatarRepository.save(newAvatar);
+
         return newAvatar;
+    }
+
+    private String saveImage(MultipartFile file, String fileName, User user) throws IOException {
+        Path imagePath = Path.of("/images/" + fileName + "."
+                + getFilenameExtension(file.getOriginalFilename()));
+
+        String destination = imagePath.toString();
+        Files.createDirectories(imagePath.getParent());
+
+        File newFile = new File(imagePath.toUri());
+        file.transferTo(newFile);
+        return destination;
     }
 
     @Override
@@ -88,6 +110,7 @@ public class ImagesServiceImpl implements ImageService {
 
     /**
      * Извлечение аватара из БД через пользователя
+     *
      * @param authentication
      * @return
      * @throws RecordNotFoundException

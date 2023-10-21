@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,8 @@ import ru.skypro.homework.service.interfaces.UserDTOFactory;
 import ru.skypro.homework.service.interfaces.UserService;
 
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.time.LocalDate;
 
 @Slf4j

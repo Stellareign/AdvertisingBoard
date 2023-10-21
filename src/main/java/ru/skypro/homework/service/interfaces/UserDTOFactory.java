@@ -7,6 +7,8 @@ import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
 
+import java.net.MalformedURLException;
+
 @Service
 public interface UserDTOFactory {
     //******************************** пароли  *********************
@@ -17,7 +19,7 @@ public interface UserDTOFactory {
     // **************************** User to UserDTO // UserDTO to User ***************************
     UserDTO fromUserToUserDTO(User user);
 
-    User fromUserDTOtoUser(UserDTO userDTO, User user);
+    User fromUserDTOtoUser(UserDTO userDTO, User user) throws MalformedURLException;
 
     // **************************** User to UpdateUserDTO // UpdateUserDTO to User ***************************
     UpdateUserDTO fromUserToUpdateUserDTO(User user);

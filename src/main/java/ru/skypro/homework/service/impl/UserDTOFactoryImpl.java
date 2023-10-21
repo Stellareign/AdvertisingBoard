@@ -9,6 +9,9 @@ import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.service.interfaces.UserDTOFactory;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+
 @Service
 @RequiredArgsConstructor
 public class UserDTOFactoryImpl implements UserDTOFactory {
@@ -34,7 +37,8 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     }
 
     @Override
-    public User fromUserDTOtoUser(UserDTO userDTO, User user) {
+    public User fromUserDTOtoUser(UserDTO userDTO, User user) throws MalformedURLException {
+
         return new User(user.getId(), userDTO.getEmail(), user.getPassword(), userDTO.getFirstName(),
                 userDTO.getLastName(), userDTO.getPhone(), userDTO.getAvatar(), userDTO.getRole(),
                 user.getRegisterDate(), user.getUserAvatar());
