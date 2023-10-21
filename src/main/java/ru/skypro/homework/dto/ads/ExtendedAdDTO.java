@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Component
 public class ExtendedAdDTO {
     private int pk; //id объявления
 

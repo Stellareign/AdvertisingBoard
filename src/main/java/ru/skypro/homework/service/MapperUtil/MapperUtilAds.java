@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.Ad;
@@ -23,6 +24,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Data
 @NoArgsConstructor
+//@Component
 @Configuration
 public class MapperUtilAds {
 
@@ -30,7 +32,16 @@ public class MapperUtilAds {
     public ModelMapper getMapper() {
         return new ModelMapper();
     }
-
+/*
+@Configuration
+public class MapperUtil {
+-------
+    public static <R, E> List<R> convertList(List<E> list, Function<E, R> converter) {
+        return list.stream().map(e -> converter.apply(e)).collect(Collectors.toList());
+    }
+    нужно добавить правило конвертации 1 элемента, типа образец
+}
+ */
 
 
     public ExtendedAdDTO createExtendedAdDTO(AdEntity ad) {
@@ -47,30 +58,25 @@ public class MapperUtilAds {
                 user.getPhone());
     }
     public AdEntity createAdFromDTO(CreateOrUpdateAd inputAd,
-                                    MultipartFile image,
+                                    String image,
                                     User user) throws IOException {
-        Path filePath = Path.of("/images/ad_" + image.getOriginalFilename() + "."
-                + StringUtils.getFilenameExtension(image.getOriginalFilename()));
-        uploadImage(image, filePath);
         return new AdEntity(
                 inputAd.getTitle(),
                 inputAd.getPrice(),
                 inputAd.getDescription(),
-                filePath.toString(),
-//                "/image",
+                image,
                 user
         );
     }
 
-    public AdEntity createAdFromDTO2(CreateOrUpdateAd inputAd,
-                                    User user) throws IOException {
+    public Ad createAdFromEntity(AdEntity adEntity) throws IOException {
 
-        return new AdEntity(
-                inputAd.getTitle(),
-                inputAd.getPrice(),
-                inputAd.getDescription(),
-                "/image",
-                user
+        return new Ad(
+                adEntity.getPk(),                     //'id объявления'
+                adEntity.getPrice(),                // 'цена объявления'
+                adEntity.getTitle(),                // 'заголовок объявления'
+                adEntity.getAuthor().getId(),           // автор объявления
+                adEntity.getImage()                 // photo
         );
     }
     public void uploadImage(MultipartFile image, Path filePath) throws IOException {

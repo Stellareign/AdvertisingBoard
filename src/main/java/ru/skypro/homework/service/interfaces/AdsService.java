@@ -19,13 +19,10 @@ public interface AdsService {
     //+++++++++++++++++++++++++++++++++++++++++
     public abstract void deleteAdsById(int adsId);
 
-    public abstract Ad createAd(CreateOrUpdateAd createAdDTO,
-                                MultipartFile image
+
+    Ad createAd(CreateOrUpdateAd createAdDTO,
+                MultipartFile image, Authentication authentication
     ) throws IOException;
-
-//    public abstract Ad createAd2(CreateOrUpdateAd createAdDTO) throws IOException;
-
-    Ad createAd2(CreateOrUpdateAd createAdDTO, Authentication authentication) throws IOException;
 
     public abstract Ad editAdById(int id, CreateOrUpdateAd updateAd);
 
@@ -35,4 +32,7 @@ public interface AdsService {
         public abstract AdEntity updateImage(int id, MultipartFile image) throws IOException;
 
     public abstract AdsDTO getAllAdsByUser(Authentication authentication);
+
+
+    String saveImage(MultipartFile file, int id) throws IOException;
 }
