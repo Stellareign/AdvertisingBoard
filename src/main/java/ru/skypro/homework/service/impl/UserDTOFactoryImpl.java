@@ -52,9 +52,10 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
 
     @Override
     public User fromUpdateUserDTOtoUser(UpdateUserDTO updateUserDTO, User user) {
-        return new User(user.getId(), user.getUsername(), user.getPassword(), updateUserDTO.getFirstName(),
-                updateUserDTO.getLastName(), updateUserDTO.getPhone(), user.getAvatarPath(), user.getRole(),
-                user.getRegisterDate(), user.getUserAvatar());
+        user.setFirstName(updateUserDTO.getFirstName());
+        user.setLastName(updateUserDTO.getLastName());
+        user.setPhone(updateUserDTO.getPhone());
+        return user;
     }
 
     // **************************** User to AuthUserDTO // AuthUserDTO to User ***************************
