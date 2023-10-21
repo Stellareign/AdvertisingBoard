@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.Avatar;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.ImageService;
@@ -45,29 +47,32 @@ public class ImagesServiceImpl implements ImageService {
      * Метод может выкидывать исключение:
      * @throws IOException
      */
-    public Avatar createAvatar(MultipartFile image, Authentication authentication) throws IOException {
-        User user = userRepository.findByUsername(authentication.getName());
+    public Avatar createAvatar(MultipartFile image, String userId)  {
+        User user = userRepository.findByUsername(userId);
 
-        if (user.getAvatarPath() != null) {
-            String avatarId = user.getAvatarPath().replace("/image/", "");
-            avatarId = avatarId.substring(0, avatarId.lastIndexOf("."));
-            if (avatarRepository.existsAvatarById(avatarId)) {
-                avatarRepository.delete(avatarRepository.findAvatarById(avatarId));
+        if (user.getAvatarPath() != null && !user.getAvatarPath().isEmpty()) {
+            String avatarId = user.getUserAvatar().getId();
+            Avatar oldAvatar = avatarRepository.findAvatarById(avatarId);
+            if (oldAvatar != null) {
+                user.setUserAvatar(null);
+                user.setAvatarPath(null);
+                userRepository.save(user);
+                avatarRepository.delete(oldAvatar);
+
             }
+        }else {log.info("Текущий аватар отсутствует");}
+        Avatar newAvatar = new Avatar();
+        try {
+            String avatarId = UUID.randomUUID().toString();
+            byte[] bytes = image.getBytes();
+            newAvatar.setId(avatarId);
+            newAvatar.setImageData(bytes);
+            newAvatar.setImagePath(imagePath + avatarId + image.getContentType());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        if (!image.isEmpty()) {
-            String type = image.getContentType().replace("image/", ".");
-
-            String avatarName = UUID.randomUUID().toString();
-
-            Avatar avatar = new Avatar();
-            avatar.setImageData(image.getBytes());
-            avatar.setId(avatarName);
-            avatar.setUser(user);
-            avatarRepository.save(avatar);
-            return avatar;
-        }
-        throw new IOException("Ошибка загрузки файла");
+        avatarRepository.save(newAvatar);
+        return newAvatar;
     }
 
     @Override
@@ -79,5 +84,21 @@ public class ImagesServiceImpl implements ImageService {
         if (avatar != null) {
             avatarRepository.delete(avatar);
         }
+    }
+
+    /**
+     * Извлечение аватара из БД через пользователя
+     * @param authentication
+     * @return
+     * @throws RecordNotFoundException
+     */
+    @Override
+    public byte[] getAvatar(Authentication authentication) {
+        User user = userRepository.findByUsername(authentication.getName());
+        String avatarId = user.getUserAvatar().getId();
+        if (avatarRepository.existsAvatarById(avatarId)) {
+            return avatarRepository.findAvatarById(avatarId).getImageData();
+        }
+        throw new RecordNotFoundException("Сейчас у пользователя нет аватара");
     }
 }

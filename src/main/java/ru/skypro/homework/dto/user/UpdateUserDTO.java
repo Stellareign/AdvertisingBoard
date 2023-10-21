@@ -9,7 +9,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
-@Component
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateUserDTO {

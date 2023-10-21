@@ -44,7 +44,7 @@ public class AdsController {
 // **********************************************************************************************
 // **********  возвращаю код к состоянию, когда не было авторизации и картинок  *****************
 //    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @Operation(summary = "Создание нового объявлений")
+    @Operation(summary = "Создание нового объявления")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Ad> addAd(@RequestPart("image") MultipartFile image,
                                     @RequestPart("properties") CreateOrUpdateAd properties,

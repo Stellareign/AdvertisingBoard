@@ -141,4 +141,14 @@ public class UserController {
         }
     }
 
+    //****************************** ПЕРЕДАЧА АВАТАРА ПОЛЬЗОВАТЕЛЯ НА ФРОНТ **************************
+    @Operation(summary = "Передача картинки пользователя на фронт")
+    @GetMapping(value = "/me/image", produces = {MediaType.IMAGE_PNG_VALUE,
+            MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
+    public ResponseEntity<?> getImage(Authentication authentication) {
+        byte[] avatar =imageService.getAvatar(authentication);
+        if(avatar != null) {
+            return ResponseEntity.ok().body(avatar);
+        } return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 }

@@ -11,13 +11,14 @@ import java.io.IOException;
 public interface ImageService {
     /**
      * Метод загружает аватар пользователя (изображение)
-     * @param image - загружаемый файл
+     *
+     * @param image          - загружаемый файл
      * @param authentication - аутентификаия текущего пользователя
      * @return - возвращает сохранённую картику как резкльтат выполнения метода
      * Метод может выкидывать исключение:
      * @throws IOException
      */
-    Avatar createAvatar(MultipartFile image, Authentication authentication) throws IOException;
+    Avatar createAvatar(MultipartFile image, String userId) throws IOException;
 
     /**
      * Удаление аватара после замены
@@ -25,4 +26,6 @@ public interface ImageService {
      * @throws IOException
      */
     void deleteImage(String avatarId) throws IOException;
+
+    byte[] getAvatar(Authentication authentication);
 }

@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Role;
 
 @Data
-@Component
 @AllArgsConstructor
 @NoArgsConstructor
+@Component
 public class AuthUserDTO {
     /**
      * класс для авторизации по ролям
