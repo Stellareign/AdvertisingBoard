@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.MapperUtil;
 
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.comments.CommentDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.AdEntity;
@@ -9,7 +10,9 @@ import ru.skypro.homework.entity.User;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -24,7 +27,22 @@ public class CommentMapping {
         commentDTO.setText(entity.getText());
 
         return commentDTO;
+    }
 
+    public List<CommentDTO> convertListCommentsToCommentDTO(List<Comment> commentsList) {
+        List<CommentDTO> commentDTOList = new ArrayList<>();
+
+        for (Comment comment : commentsList) {
+            CommentDTO commentDTO = new CommentDTO();
+            commentDTO.setPk(comment.getPk());
+            commentDTO.setAuthor(comment.getAuthor().getId());
+            commentDTO.setAuthorFirstName(comment.getAuthor().getFirstName());
+            commentDTO.setAuthorImage(comment.getAuthor().getAvatarPath());
+            commentDTO.setCreatedAt(Objects.requireNonNullElse(comment.getCreatedAt(), 0L));
+            commentDTO.setText(comment.getText());
+            commentDTOList.add(commentDTO);
+        }
+        return commentDTOList;
     }
 
     public Comment mapToEntity(CreateOrUpdateCommentDTO createOrUpdateComment, User author, AdEntity ad) {

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.comments.CommentDTO;
 import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
@@ -35,18 +36,31 @@ public class CommentServiceImpl implements CommentsService {
     private final UserRepository userRepository;
 
 
+//    @Override
+//    public CommentsDTO getAllComments(Integer adId) {
+////        AdEntity ad = adsRepository.findByPk(adId);
+//
+//        List<Comment> commentsList = commentRepository.findByAdId(adId);
+//        if (commentsList.isEmpty()) {
+//            log.info("Комментарии отсутствуют");
+//        }
+//        List<CommentDTO> commentDTO = new ArrayList<>();
+//
+//        for (Comment comment : commentsList) {
+//            commentDTO.add(commentMapping.mapToDto(comment));
+//        }
+//        return new CommentsDTO(commentDTO.size(), commentDTO);
+//    }
+
     @Override
-    public CommentsDTO getAllComments(Integer adId) {
+    public CommentsDTO getAllComments(int adId) {
 
-        List<Comment> commentsList = commentRepository.findByAdId(adId);
-        List<CommentDTO> commentDTO = new ArrayList<>();
-
-        for (Comment comment : commentsList) {
-            commentDTO.add(commentMapping.mapToDto(comment));
+        List<Comment> commentsList = commentRepository.findByAdId_Pk(adId);
+        if (commentsList.isEmpty()) {
+            log.info("Комментарии отсутствуют");
         }
+       List <CommentDTO> commentDTO = commentMapping.convertListCommentsToCommentDTO(commentsList);
         return new CommentsDTO(commentDTO.size(), commentDTO);
-
-
     }
 
     @Override
