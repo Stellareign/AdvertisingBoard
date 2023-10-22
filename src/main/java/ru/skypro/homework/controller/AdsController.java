@@ -128,6 +128,7 @@ catch (IOException e){
     public ResponseEntity<AdsDTO> getCurrentUserAds(Authentication authentication) {
         return ResponseEntity.ok().body(adsService.getAllAdsByUser(authentication));
     }
+
     @Operation(summary = "Обновление картинки объявления")
 //    @PreAuthorize("hasRole('USER') and @adsService.getAdById(#adId).email == authentication.principal.username")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

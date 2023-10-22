@@ -2,19 +2,15 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.method.P;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
-import ru.skypro.homework.entity.Avatar;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.ImageService;
@@ -22,8 +18,6 @@ import ru.skypro.homework.service.interfaces.UserDTOFactory;
 import ru.skypro.homework.service.interfaces.UserService;
 
 import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Path;
 import java.time.LocalDate;
 
 @Slf4j
@@ -195,14 +189,13 @@ public class UserServiceImpl implements UserService {
      */
     @Override
 //    @Transactional
-    public UserDTO updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
+    public String updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
-        Avatar avatar = imageService.createAvatar(image, authentication.getName());
-        user.setAvatarPath(avatar.getImagePath());
-        user.setUserAvatar(avatar);
+        imageService.deleteOldAvatar(authentication);
+        user.setAvatarPath(imageService.saveImage(image));
         userRepository.save(user);
 
-        return userDTOFactory.fromUserToUserDTO(user);
+        return user.getAvatarPath();
     }
 
 

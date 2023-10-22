@@ -41,7 +41,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
 
         return new User(user.getId(), userDTO.getEmail(), user.getPassword(), userDTO.getFirstName(),
                 userDTO.getLastName(), userDTO.getPhone(), userDTO.getAvatar(), userDTO.getRole(),
-                user.getRegisterDate(), user.getUserAvatar());
+                user.getRegisterDate());
     }
 
     // **************************** User to UpdateUserDTO // UpdateUserDTO to User ***************************
@@ -67,6 +67,6 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     public User fromAuthUserDTOtoUser(User user, AuthUserDTO authUserDTO){
         return new User(user.getId(), authUserDTO.getUsername(), authUserDTO.getPassword(),user.getFirstName(),
                 user.getLastName(), user.getPhone(),  user.getAvatarPath(), authUserDTO.getRole(),
-                user.getRegisterDate(), user.getUserAvatar());
+                user.getRegisterDate());
     }
 }

@@ -5,17 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.entity.Avatar;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
-import ru.skypro.homework.repository.AvatarRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.ImageService;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
@@ -37,90 +35,63 @@ public class ImagesServiceImpl implements ImageService {
 
 
     private final UserRepository userRepository;
-    private final AvatarRepository avatarRepository;
+
 
     @Value("${path.to.image.folder}")
-    private String imagePath; // адрес картинки
+    private String pathToImage;
 
     @Override
-//    @Transactional
     /**
-     * Метод загружает аватар пользователя (изображение)
-     * @param image - загружаемый файл
-     * @param authentication - аутентификаия текущего пользователя
-     * @return - возвращает сохранённую картику как резкльтат выполнения метода
-     * Метод может выкидывать исключение:
+     * @param userId
      * @throws IOException
      */
-    public Avatar createAvatar(MultipartFile image, String userId) throws IOException {
-        User user = userRepository.findByUsername(userId);
+    public void deleteOldAvatar(Authentication authentication) throws IOException {
+        User user = userRepository.findByUsername(authentication.getName());
 
-        if (user.getAvatarPath() != null) {
-            String avatarId = user.getUserAvatar().getId();
-            Avatar oldAvatar = avatarRepository.findAvatarById(avatarId);
+        if (user.getAvatarPath() != null && !user.getAvatarPath().isEmpty()) {
             Path deletePath = Path.of(user.getAvatarPath());
             Files.deleteIfExists(deletePath);
             log.info("Старая аватарка удалена.");
-            if (oldAvatar != null) {
-                user.setUserAvatar(null);
-                user.setAvatarPath(null);
-                userRepository.save(user);
-                avatarRepository.delete(oldAvatar);
-            }
+            user.setAvatarPath(null);
+            userRepository.save(user);
+
         } else {
             log.info("Текущий аватар отсутствует");
         }
-        Avatar newAvatar = new Avatar();
-        try {
-            String avatarId = UUID.randomUUID().toString();
-            byte[] bytes = image.getBytes();
-            newAvatar.setId(avatarId);
-            newAvatar.setImageData(bytes);
-            newAvatar.setImagePath(saveImage(image, avatarId, user));
-            avatarRepository.save(newAvatar);
-        } catch (IOException e) {
-            log.info("Ошибка загрузки файла");
-        }
-
-        return newAvatar;
-    }
-
-    private String saveImage(MultipartFile file, String fileName, User user) throws IOException {
-        Path imagePath = Path.of("/images/" + fileName + "."
-                + getFilenameExtension(file.getOriginalFilename()));
-
-        String destination = imagePath.toString();
-        Files.createDirectories(imagePath.getParent());
-
-        File newFile = new File(imagePath.toUri());
-        file.transferTo(newFile);
-        return destination;
     }
 
     @Override
     /**
-     * Удаление старого аватара после обновления
+     * @param image
+     * @return
+     * @throws IOException
      */
-    public void deleteImage(String avatarId) {
-        Avatar avatar = avatarRepository.findAvatarById(avatarId);
-        if (avatar != null) {
-            avatarRepository.delete(avatar);
-        }
+    public String saveImage(MultipartFile image) throws IOException {
+        String fileName = UUID.randomUUID().toString();
+        Path imagePath = Path.of(pathToImage + fileName + "."
+                + getFilenameExtension(image.getOriginalFilename()));
+
+       URL avatarPath = imagePath.toUri().toURL();
+        Files.createDirectories(imagePath.getParent());
+
+        File newFile = new File(imagePath.toUri());
+        image.transferTo(newFile);
+        return avatarPath.toString().replace("file:/", "");
     }
 
+
+    @Override
     /**
-     * Извлечение аватара из БД через пользователя
-     *
+     * Получение файла аватара
      * @param authentication
      * @return
      * @throws RecordNotFoundException
      */
-    @Override
-    public byte[] getAvatar(Authentication authentication) {
+    public byte[] getAvatar(Authentication authentication) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
-        String avatarId = user.getUserAvatar().getId();
-        if (avatarRepository.existsAvatarById(avatarId)) {
-            return avatarRepository.findAvatarById(avatarId).getImageData();
+        if (user.getAvatarPath() != null && !user.getAvatarPath().isEmpty()) {
+            Path path = Path.of(user.getAvatarPath());
+            return Files.readAllBytes(path);
         }
         throw new RecordNotFoundException("Сейчас у пользователя нет аватара");
     }
