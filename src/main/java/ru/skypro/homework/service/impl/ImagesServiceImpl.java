@@ -41,20 +41,17 @@ public class ImagesServiceImpl implements ImageService {
     private String pathToImage;
 
     @Override
-    /**
-     * @param userId
-     * @throws IOException
+    /** Удаление старого аватара перед обновлением
+     * @param authentication
      */
     public void deleteOldAvatar(Authentication authentication) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
 
         if (user.getAvatarPath() != null && !user.getAvatarPath().isEmpty()) {
-            Path deletePath = Path.of(user.getAvatarPath());
-            Files.deleteIfExists(deletePath);
+            Files.deleteIfExists(Path.of(user.getAvatarPath()));
             log.info("Старая аватарка удалена.");
             user.setAvatarPath(null);
             userRepository.save(user);
-
         } else {
             log.info("Текущий аватар отсутствует");
         }
