@@ -36,32 +36,22 @@ public class CommentServiceImpl implements CommentsService {
     private final UserRepository userRepository;
 
 
-//    @Override
-//    public CommentsDTO getAllComments(Integer adId) {
-////        AdEntity ad = adsRepository.findByPk(adId);
-//
-//        List<Comment> commentsList = commentRepository.findByAdId(adId);
-//        if (commentsList.isEmpty()) {
-//            log.info("Комментарии отсутствуют");
-//        }
-//        List<CommentDTO> commentDTO = new ArrayList<>();
-//
-//        for (Comment comment : commentsList) {
-//            commentDTO.add(commentMapping.mapToDto(comment));
-//        }
-//        return new CommentsDTO(commentDTO.size(), commentDTO);
-//    }
-
     @Override
     public CommentsDTO getAllComments(int adId) {
+//        AdEntity ad = adsRepository.findByPk(adId);
 
         List<Comment> commentsList = commentRepository.findByAdId_Pk(adId);
         if (commentsList.isEmpty()) {
             log.info("Комментарии отсутствуют");
         }
-       List <CommentDTO> commentDTO = commentMapping.convertListCommentsToCommentDTO(commentsList);
+        List<CommentDTO> commentDTO = new ArrayList<>();
+
+        for (Comment comment : commentsList) {
+            commentDTO.add(commentMapping.mapToDto(comment));
+        }
         return new CommentsDTO(commentDTO.size(), commentDTO);
     }
+
 
     @Override
     public CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId,
