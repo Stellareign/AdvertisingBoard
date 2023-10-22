@@ -32,8 +32,7 @@ public class CommentMapping {
         entity.setText(createOrUpdateComment.getText());
         entity.setAuthor(author);
         entity.setAdId(ad);
-        entity.convertTime(); //<- нашёл в интернете способ конвертирования лонга в дату
-//        entity.setCreatedAt(LocalDateTime.from(Instant.now())); <- поменять тип данных на Instant и можно будет использовать, но в ТЗ тип должен быть Long
+        entity.setCreatedAt(System.currentTimeMillis());
 
         return  entity;
     }
