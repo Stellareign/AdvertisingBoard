@@ -11,6 +11,6 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 //    List<Comment> findByAdId(Integer adId);
     List<Comment> findByAdId_Pk (int adPk);
     boolean deleteByPkAndAdId(Integer pk, Integer adId);
-
-    Comment findByPkAndAdId(Integer pk, Integer adId);
+    boolean deleteByPkAndAdId_Pk(Integer pk, Integer adId);
+    Comment findByPkAndAdId_Pk(Integer pk, Integer adId);
 }

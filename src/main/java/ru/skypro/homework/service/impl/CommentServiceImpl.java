@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.comments.CommentDTO;
 import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
@@ -68,7 +67,7 @@ public class CommentServiceImpl implements CommentsService {
     @Override
     public boolean deleteComment(Integer adId, Integer pk) {
         if (
-        commentRepository.deleteByPkAndAdId(adId, pk)){
+        commentRepository.deleteByPkAndAdId_Pk(adId, pk)){
             return true;
         } else {
             return false;
@@ -78,7 +77,7 @@ public class CommentServiceImpl implements CommentsService {
 
     @Override
     public CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment) {
-        Comment comment = commentRepository.findByPkAndAdId(pk, adId);
+        Comment comment = commentRepository.findByPkAndAdId_Pk(pk, adId);
         comment.setText(updateComment.getText());
         commentRepository.save(comment);
 
