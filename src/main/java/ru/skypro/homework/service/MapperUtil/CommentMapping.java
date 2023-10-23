@@ -33,7 +33,6 @@ public class CommentMapping {
         entity.setAuthor(author);
         entity.setAdId(ad);
         entity.setCreatedAt(System.currentTimeMillis());
-
         return  entity;
     }
 
