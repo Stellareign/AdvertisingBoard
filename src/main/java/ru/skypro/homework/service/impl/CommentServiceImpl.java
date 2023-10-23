@@ -38,7 +38,7 @@ public class CommentServiceImpl implements CommentsService {
     @Override
     public CommentsDTO getAllComments(Integer adId) {
 
-        List<Comment> commentsList = commentRepository.findByAdId(adId);
+        List<Comment> commentsList = commentRepository.findByAdId_Pk(adId);
         List<CommentDTO> commentDTO = new ArrayList<>();
 
         for (Comment comment : commentsList) {
@@ -64,7 +64,7 @@ public class CommentServiceImpl implements CommentsService {
     @Override
     public boolean deleteComment(Integer adId, Integer pk) {
         if (
-        commentRepository.deleteByPkAndAdId(adId, pk)){
+        commentRepository.deleteByPkAndAdId_Pk(adId, pk)){
             return true;
         } else {
             return false;
@@ -74,7 +74,7 @@ public class CommentServiceImpl implements CommentsService {
 
     @Override
     public CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment) {
-        Comment comment = commentRepository.findByPkAndAdId(pk, adId);
+        Comment comment = commentRepository.findByPkAndAdId_Pk(pk, adId);
         comment.setText(updateComment.getText());
         commentRepository.save(comment);
 
