@@ -77,7 +77,7 @@ catch (IOException e){
 
     // получение информации об объявлении
     @Operation(summary = "Получение информации об объявлении по id")
-    @PreAuthorize("hasRole('ROLE_USER') and @adsService.getAdById(#adId).email == authentication.principal.username")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{adId}")
             @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -90,8 +90,8 @@ catch (IOException e){
 
     // удаление объявления по id
     @Operation(summary = "Удалить объявление по id")
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and" +
-            "@adsService.getAdById(#adId).email == authentication.principal.username)")
+    @PreAuthorize("hasRole('ADMIN') or " +
+            "@adsService.getAdById(#adId).email == authentication.principal.username")
     @DeleteMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "No Content"),
@@ -104,8 +104,8 @@ catch (IOException e){
     }
 
     @Operation(summary = "Обновить объявление по id")
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and" +
-            "@adsService.getAdById(#adId).email == authentication.principal.username)")
+    @PreAuthorize("hasRole('ADMIN') or " +
+            "@adsService.getAdById(#adId).email == authentication.principal.username")
     @PatchMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -119,7 +119,7 @@ catch (IOException e){
     }
 
     @Operation( summary = "Получение всех объявлений авторизованного пользователя")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/me")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),

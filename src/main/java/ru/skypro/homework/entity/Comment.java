@@ -31,6 +31,12 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User author; // id автора комментария
 
+    public void convertTime(){
+        Date  date = new Date(createdAt);
+        Format format = new SimpleDateFormat("dd MMM yyyy HH:mm:ss:SSS");
+        format.format(date);
+    }
+
 
 
 }
