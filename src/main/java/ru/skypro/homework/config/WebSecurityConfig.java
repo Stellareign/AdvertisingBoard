@@ -36,18 +36,14 @@ public class WebSecurityConfig {
         http.csrf()
                 .disable()
                 .authorizeHttpRequests(
-                        (authorization) ->
+                        authorization ->
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .mvcMatchers(HttpMethod.GET, "/ads","/ads/me", "/users/me")
-                                        .permitAll()
                                         .mvcMatchers("/ads/**", "/users/**")
-                                        .authenticated()
-                )
+                                        .authenticated())
                 .cors()
                 .and()
-                .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(withDefaults());
         return http.build();
     }
