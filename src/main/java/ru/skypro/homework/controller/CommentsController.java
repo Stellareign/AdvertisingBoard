@@ -18,53 +18,42 @@ import ru.skypro.homework.service.interfaces.CommentsService;
 // (http://localhost:3000), даже если он отличается от домена, на котором запущено приложение.
 @RequiredArgsConstructor // генерирует конструктор с аргументами для всех полей, помеченных аннотацией @NonNull
 @RestController
-@RequestMapping("/ads")
+@RequestMapping("/ads/{adId}/comments")
 @Tag(name = "Комментарии")
 public class CommentsController {
 
     private final CommentsService commentsService;
 
     @Operation(summary = "Получение списка всех комментариев")
-    @GetMapping("/{id}/comments")
-    public ResponseEntity<CommentsDTO>  getComments(@PathVariable("id") int adId) {
+    @GetMapping
+    public ResponseEntity<CommentsDTO>  getComments(@PathVariable("adId") int adId) {
             CommentsDTO commentsDTO = commentsService.getAllComments(adId);
             return ResponseEntity.ok(commentsDTO);
     }
 
     // добавление комментариев
     @Operation(summary = "Добавление нового комментария")
-    @PostMapping("/{id}/comments")
-    public ResponseEntity<CommentDTO> addComment(@PathVariable("id") Integer pk,
+    @PostMapping
+    public ResponseEntity<CommentDTO> addComment(@PathVariable("adId") Integer adId,
                                                  @RequestBody CreateOrUpdateCommentDTO createOrUpdateComment,
                                                  Authentication authentication) {
-            CommentDTO commentDTO = commentsService.addComment(createOrUpdateComment, pk, authentication);
+            CommentDTO commentDTO = commentsService.addComment(createOrUpdateComment, adId, authentication);
             return ResponseEntity.ok(commentDTO);
     }
 
     // удаление комментария по id
     @Operation(summary = "Удаление комментария")
-    @DeleteMapping("/{adId}/comments/{commentId}")
+    @DeleteMapping("/{commentId}")
 //    public void deleteComment(@PathVariable int adId , @RequestParam int commentId ) {
-    public ResponseEntity<CommentDTO> deleteComment(@PathVariable int adId , @PathVariable("commentId") int pk ) {
-
-        if (commentsService.deleteComment(adId, pk)) {
-            return ResponseEntity.ok().build();
-        } else {
-        return ResponseEntity.notFound().build();
-        }
-
+    public void deleteComment(@PathVariable("commentId") int pk ) {
+      commentsService.deleteComment(pk);
     }
 
     // обновление комментария
         @Operation(summary = "Обновление комментария")
-        @PatchMapping("/{adId}/comments/{commentId}")
+        @PatchMapping("{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId,@PathVariable("commentId") int pk,
                                                     @RequestBody CreateOrUpdateCommentDTO COUComment) {
-          CommentDTO commentDTO = commentsService.updateComment(adId, pk, COUComment);
-          if (commentDTO != null){
-              return ResponseEntity.ok(commentDTO);
-          } else {
-              return ResponseEntity.notFound().build();
-          }
+              return ResponseEntity.ok(commentsService.updateComment(adId, pk, COUComment));
     }
 }

@@ -14,9 +14,7 @@ public interface CommentsService {
    CommentsDTO getAllComments(Integer adId);
 
 
-
-    boolean deleteComment(Integer adId, Integer pk);
-
+    boolean deleteComment(Integer pk);
 
     CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment);
 

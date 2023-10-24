@@ -77,7 +77,6 @@ catch (IOException e){
 
     // получение информации об объявлении
     @Operation(summary = "Получение информации об объявлении по id")
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{adId}")
             @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -99,8 +98,8 @@ catch (IOException e){
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    public void removeAdById(@PathVariable int adId) {
-        adsService.deleteAdsById(adId);
+    public void removeAdById(@PathVariable int adId) throws IOException {
+                adsService.deleteAdsById(adId);
     }
 
     @Operation(summary = "Обновить объявление по id")
@@ -119,7 +118,7 @@ catch (IOException e){
     }
 
     @Operation( summary = "Получение всех объявлений авторизованного пользователя")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/me")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -129,7 +128,7 @@ catch (IOException e){
         return ResponseEntity.ok().body(adsService.getAllAdsByUser(authentication));
     }
     @Operation(summary = "Обновление картинки объявления")
-//    @PreAuthorize("hasRole('USER') and @adsService.getAdById(#adId).email == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') and @adsService.getAdById(#adId).email == authentication.principal.username")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),

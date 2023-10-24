@@ -31,7 +31,7 @@ public class CommentMapping {
         Comment entity = new Comment();
         entity.setText(createOrUpdateComment.getText());
         entity.setAuthor(author);
-        entity.setAdId(ad);
+        entity.setAds(ad);
         entity.setCreatedAt(System.currentTimeMillis());
         return  entity;
     }

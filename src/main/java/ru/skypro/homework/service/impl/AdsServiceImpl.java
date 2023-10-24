@@ -57,10 +57,15 @@ public class AdsServiceImpl implements AdsService {
 
     //+++++++++++++++++++++++++++++++++++++++++
     @Override
-    public void deleteAdsById(int adsId) {
+    public void deleteAdsById(int adsId) throws IOException {
         Optional<AdEntity> optionalAds = adsRepository.findById(adsId);
-        if (optionalAds.isPresent())
-            adsRepository.deleteById(adsId);
+       if (optionalAds.isPresent())
+         {
+             adsRepository.deleteById(adsId);                        //Удаляем само объявление
+             Files.delete(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
+        }
+         else {throw new RecordNotFoundException("Объявление не найдено");
+        }
     }
 
     @Override
@@ -74,9 +79,7 @@ public class AdsServiceImpl implements AdsService {
         String imagePath = saveImage(image, pk);
         newAd.setImage(imagePath);
         adsRepository.save(newAd);
-//        Ad ad = mapperUtil.createAdFromEntity(newAd);
-        Ad ad = modelMapper.map(newAd, Ad.class);
-        return ad;
+        return modelMapper.map(newAd, Ad.class);
     }
 //    @Override
 //    private Path createPath(MultipartFile image, AdEntity adEntity) throws IOException {

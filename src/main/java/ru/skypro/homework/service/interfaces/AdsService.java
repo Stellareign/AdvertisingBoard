@@ -17,7 +17,7 @@ public interface AdsService {
     public abstract ExtendedAdDTO getAdById(int adsId);
 
     //+++++++++++++++++++++++++++++++++++++++++
-    public abstract void deleteAdsById(int adsId);
+    public abstract void deleteAdsById(int adsId) throws IOException;
 
 
     Ad createAd(CreateOrUpdateAd createAdDTO,

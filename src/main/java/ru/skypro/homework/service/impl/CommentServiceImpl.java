@@ -38,15 +38,13 @@ public class CommentServiceImpl implements CommentsService {
     @Override
     public CommentsDTO getAllComments(Integer adId) {
 
-        List<Comment> commentsList = commentRepository.findByAdId_Pk(adId);
+        List<Comment> commentsList = commentRepository.findByAds_Pk(adId);
         List<CommentDTO> commentDTO = new ArrayList<>();
 
         for (Comment comment : commentsList) {
             commentDTO.add(commentMapping.mapToDto(comment));
         }
         return new CommentsDTO(commentDTO.size(), commentDTO);
-
-
     }
 
     @Override
@@ -58,13 +56,15 @@ public class CommentServiceImpl implements CommentsService {
         Comment comment = commentMapping.mapToEntity(createOrUpdateComment, user, ad.get());
         comment.setCreatedAt(System.currentTimeMillis());
         commentRepository.save(comment);
-        return commentMapping.mapToDto(comment);
+        CommentDTO commentDTO = commentMapping.mapToDto(comment);
+        return commentDTO;
     }
 
     @Override
-    public boolean deleteComment(Integer adId, Integer pk) {
+    public boolean deleteComment(Integer pk) {
         if (
-        commentRepository.deleteByPkAndAdId_Pk(adId, pk)){
+        commentRepository.findById(pk).isPresent()) {
+        commentRepository.deleteById(pk);
             return true;
         } else {
             return false;
@@ -74,10 +74,12 @@ public class CommentServiceImpl implements CommentsService {
 
     @Override
     public CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment) {
-        Comment comment = commentRepository.findByPkAndAdId_Pk(pk, adId);
+        Optional<Comment> commentOpt = commentRepository.findById(pk);
+        if (commentOpt.isEmpty()){ throw new RecordNotFoundException("Comment not found # id = "+pk);}
+        Comment comment = commentOpt.get();
         comment.setText(updateComment.getText());
         commentRepository.save(comment);
-
-        return commentMapping.mapToDto(comment);
+CommentDTO commentDTO = commentMapping.mapToDto(comment);
+        return commentDTO;
     }
 }
