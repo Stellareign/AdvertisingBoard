@@ -32,17 +32,6 @@ public class MapperUtilAds {
     public ModelMapper getMapper() {
         return new ModelMapper();
     }
-/*
-@Configuration
-public class MapperUtil {
--------
-    public static <R, E> List<R> convertList(List<E> list, Function<E, R> converter) {
-        return list.stream().map(e -> converter.apply(e)).collect(Collectors.toList());
-    }
-    нужно добавить правило конвертации 1 элемента, типа образец
-}
- */
-
 
     public ExtendedAdDTO createExtendedAdDTO(AdEntity ad) {
         User user = ad.getAuthor();
