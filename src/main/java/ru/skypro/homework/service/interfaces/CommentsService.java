@@ -7,14 +7,12 @@ import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 
 
-
 @Service
 public interface CommentsService {
 
-   CommentsDTO getAllComments(Integer adId);
+    CommentsDTO getAllComments(Integer adId);
 
-
-    boolean deleteComment(Integer pk);
+    boolean deleteComment(int pk);
 
     CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment);
 
@@ -32,7 +30,6 @@ public interface CommentsService {
 //    User getUserFirstName (String firstName );
 //
 //    Comments getText (String text)
-
 
 
 }

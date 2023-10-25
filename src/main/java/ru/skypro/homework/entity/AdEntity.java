@@ -31,11 +31,11 @@ public class AdEntity {
     private User author;          // автор объявления
     private String image;                   //'ссылка на картинку объявления'
 
-        @OneToMany(mappedBy = "ads",
-                orphanRemoval = true,
-                fetch = FetchType.LAZY,
-                cascade = CascadeType.ALL)
-    private Set<Comment> comments = new HashSet<>();
+//        @OneToMany(mappedBy = "ads",
+//                orphanRemoval = true,
+//                fetch = FetchType.LAZY,
+//                cascade = CascadeType.ALL)
+//    private Set<Comment> comments = new HashSet<>();
     public AdEntity(String title, int price, String description, String image, User author) {
         this.title = title;
         this.price = price;

@@ -51,7 +51,9 @@ public class CommentServiceImpl implements CommentsService {
     public CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId,
                                  Authentication authentication) {
         Optional<AdEntity> ad = adsRepository.findById(adId);
-        if(ad.isEmpty()){ throw new RecordNotFoundException("Запись не найдена");}
+        if (ad.isEmpty()) {
+            throw new RecordNotFoundException("Запись не найдена");
+        }
         User user = userRepository.findByUsername(authentication.getName());
         Comment comment = commentMapping.mapToEntity(createOrUpdateComment, user, ad.get());
         comment.setCreatedAt(System.currentTimeMillis());
@@ -61,10 +63,11 @@ public class CommentServiceImpl implements CommentsService {
     }
 
     @Override
-    public boolean deleteComment(Integer pk) {
+    public boolean deleteComment(int pk) {
         if (
-        commentRepository.findById(pk).isPresent()) {
-        commentRepository.deleteById(pk);
+                commentRepository.findById(pk).isPresent()) {
+            commentRepository.deleteById(pk);
+
             return true;
         } else {
             return false;
@@ -75,11 +78,13 @@ public class CommentServiceImpl implements CommentsService {
     @Override
     public CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment) {
         Optional<Comment> commentOpt = commentRepository.findById(pk);
-        if (commentOpt.isEmpty()){ throw new RecordNotFoundException("Comment not found # id = "+pk);}
+        if (commentOpt.isEmpty()) {
+            throw new RecordNotFoundException("Comment not found # id = " + pk);
+        }
         Comment comment = commentOpt.get();
         comment.setText(updateComment.getText());
         commentRepository.save(comment);
-CommentDTO commentDTO = commentMapping.mapToDto(comment);
+        CommentDTO commentDTO = commentMapping.mapToDto(comment);
         return commentDTO;
     }
 }
