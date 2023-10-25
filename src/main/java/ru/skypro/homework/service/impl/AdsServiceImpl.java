@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.Ad;
@@ -15,6 +16,7 @@ import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.repository.AdsRepository;
+import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.MapperUtil.MapperUtilAds;
 import ru.skypro.homework.service.interfaces.AdsService;
@@ -37,6 +39,7 @@ public class AdsServiceImpl implements AdsService {
     private final UserRepository userRepository;
     private final MapperUtilAds mapperUtil;
     private final ModelMapper modelMapper;
+    private final CommentRepository commentRepository;
 //    @Value("${path.to.image.folder}")
 //    private String adsImageDir;
 
@@ -57,10 +60,12 @@ public class AdsServiceImpl implements AdsService {
 
     //+++++++++++++++++++++++++++++++++++++++++
     @Override
+    @Transactional
     public void deleteAdsById(int adsId) throws IOException {
         Optional<AdEntity> optionalAds = adsRepository.findById(adsId);
        if (optionalAds.isPresent())
          {
+             commentRepository.deleteCommentsByAds_Pk(adsId);
              adsRepository.deleteById(adsId);                        //Удаляем само объявление
              Files.delete(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
         }

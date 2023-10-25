@@ -18,23 +18,23 @@ import ru.skypro.homework.service.interfaces.CommentsService;
 // (http://localhost:3000), даже если он отличается от домена, на котором запущено приложение.
 @RequiredArgsConstructor // генерирует конструктор с аргументами для всех полей, помеченных аннотацией @NonNull
 @RestController
-@RequestMapping("/ads/{adId}/comments")
+@RequestMapping("/ads")
 @Tag(name = "Комментарии")
 public class CommentsController {
 
     private final CommentsService commentsService;
 
     @Operation(summary = "Получение списка всех комментариев")
-    @GetMapping
-    public ResponseEntity<CommentsDTO>  getComments(@PathVariable("adId") int adId) {
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<CommentsDTO>  getComments(@PathVariable("id") int adId) {
             CommentsDTO commentsDTO = commentsService.getAllComments(adId);
             return ResponseEntity.ok(commentsDTO);
     }
 
     // добавление комментариев
     @Operation(summary = "Добавление нового комментария")
-    @PostMapping
-    public ResponseEntity<CommentDTO> addComment(@PathVariable("adId") Integer adId,
+    @PostMapping("/{id}/comments")
+    public ResponseEntity<CommentDTO> addComment(@PathVariable("id") Integer adId,
                                                  @RequestBody CreateOrUpdateCommentDTO createOrUpdateComment,
                                                  Authentication authentication) {
             CommentDTO commentDTO = commentsService.addComment(createOrUpdateComment, adId, authentication);
@@ -44,8 +44,8 @@ public class CommentsController {
     // удаление комментария по id
     @Operation(summary = "Удаление комментария")
     @DeleteMapping("/{adId}/comments/{commentId}")
-//    public void deleteComment(@PathVariable int adId , @RequestParam int commentId ) {
-    public void deleteComment(@PathVariable("commentId") int pk ) {
+    public void deleteComment(@PathVariable int adId , @PathVariable("commentId") int pk ) {
+//    public void deleteComment(@PathVariable("commentId") int pk ) {
       commentsService.deleteComment(pk);
     }
 
