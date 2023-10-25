@@ -43,15 +43,15 @@ public class CommentsController {
 
     // удаление комментария по id
     @Operation(summary = "Удаление комментария")
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("/{adId}/comments/{commentId}")
 //    public void deleteComment(@PathVariable int adId , @RequestParam int commentId ) {
-    public void deleteComment(@PathVariable int adId, @PathVariable("commentId") int pk ) {
+    public void deleteComment(@PathVariable("commentId") int pk ) {
       commentsService.deleteComment(pk);
     }
 
     // обновление комментария
         @Operation(summary = "Обновление комментария")
-        @PatchMapping("/{commentId}")
+        @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId,@PathVariable("commentId") int pk,
                                                     @RequestBody CreateOrUpdateCommentDTO COUComment) {
               return ResponseEntity.ok(commentsService.updateComment(adId, pk, COUComment));
