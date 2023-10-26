@@ -62,10 +62,10 @@ public class User {
     @Column(name = "register_date", nullable = false)
     private LocalDate registerDate;
 
-    @OneToOne
-    @JoinColumn(name = "image_id")
-//    @Column(columnDefinition = "VARCHAR(255)")
-    private Avatar userAvatar;
+//    @OneToOne
+//    @JoinColumn(name = "image_id")
+////    @Column(columnDefinition = "VARCHAR(255)")
+//    private Avatar userAvatar;
 
 
 //*********************** конструкторы **************************
