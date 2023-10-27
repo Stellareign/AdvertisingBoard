@@ -91,7 +91,7 @@ catch (IOException e){
 
     // удаление объявления по id
     @Operation(summary = "Удалить объявление по id")
-    @PreAuthorize("hasRole('ADMIN') or " +
+    @PreAuthorize("hasRole('ADMIN') and " +
             "@adsService.getAdById(#adId).email == authentication.getName()")
 
 
