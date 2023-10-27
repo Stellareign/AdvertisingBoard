@@ -14,18 +14,18 @@
 //**************************************************************************************
 *) Регистрация в сваггер
 {
-  "username": "pupkin@poy.ru",
-  "password": "qwerty123",
-  "firstName": "Вася",
-  "lastName": "Пупкин",
-  "phone": "+7(123)456-78-90",
+  "username": "user@user.ru",
+  "password": "123456789",
+  "firstName": "Светослав",
+  "lastName": "Кожедубович",
+  "phone": "+7(123)456-78-56",
   "role": "USER"
 }
 
 *) логин:
 {
-  "username": "pupkin@poy.ru",
-  "password": "qwerty123"
+  "username": "admin@gmail.com",
+  "password": "password"
 }
 
 {

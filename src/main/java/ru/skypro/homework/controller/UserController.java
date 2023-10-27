@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
-import ru.skypro.homework.entity.Avatar;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.service.interfaces.ImageService;
 import ru.skypro.homework.service.interfaces.UserService;
@@ -56,7 +55,7 @@ public class UserController {
             ),
     })
     public ResponseEntity<UpdatePasswordDTO> setPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO,
-                                                         Authentication authentication)  {
+                                                         Authentication authentication) {
         log.info("Изменить пароль: " + updatePasswordDTO);
         boolean checkPassword = userService.checkUpdatePassword(updatePasswordDTO, authentication.getName());
         if (checkPassword) {
@@ -68,7 +67,7 @@ public class UserController {
 
         } else
             log.info("Недостаточно прав!");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     //****************************** ПОЛУЧЕНИЕ ИНФО О ПОЛЬЗОВАТЕЛЕ ************************************
@@ -129,13 +128,12 @@ public class UserController {
             )
     })
     public ResponseEntity<?> updateUserImage(@RequestPart("image") MultipartFile image,
-                                             Authentication authentication)
-            {
-                try{
+                                             Authentication authentication) {
+        try {
             log.info("Аватар обновлён");
-            return ResponseEntity.ok().body( userService.updateUserAvatar(authentication, image));
+            return ResponseEntity.ok().body(userService.updateUserAvatar(authentication, image));
 
-        } catch (IOException e){
+        } catch (IOException e) {
             log.info("Ошибка обновления аватара");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -144,11 +142,11 @@ public class UserController {
     //****************************** ПЕРЕДАЧА АВАТАРА ПОЛЬЗОВАТЕЛЯ НА ФРОНТ **************************
     @Operation(summary = "Передача картинки пользователя на фронт")
     @GetMapping(value = "/me/image", produces = {MediaType.IMAGE_PNG_VALUE,
-            MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
-    public ResponseEntity<?> getImage(Authentication authentication) {
-        byte[] avatar =imageService.getAvatar(authentication);
-        if(avatar != null) {
-            return ResponseEntity.ok().body(avatar);
-        } return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE})
+
+    public ResponseEntity<?> getImage(Authentication authentication) throws IOException {
+
+        return ResponseEntity.ok().body(imageService.getAvatar(authentication));
+
     }
 }
