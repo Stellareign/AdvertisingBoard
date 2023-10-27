@@ -108,8 +108,7 @@ catch (IOException e){
     }
 
     @Operation(summary = "Обновить объявление по id")
-    @PreAuthorize("hasRole('ADMIN') or " +
-            "@adsService.getAdById(#adId).email == authentication.principal.username")
+    @PreAuthorize("@adsService.getAdById(#adId).email == authentication.principal.username")
     @PatchMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -134,7 +133,7 @@ catch (IOException e){
     }
 
     @Operation(summary = "Обновление картинки объявления")
-    @PreAuthorize("hasRole('ADMIN') or @adsService.getAdById(#adId).email == authentication.principal.username")
+    @PreAuthorize("@adsService.getAdById(#adId).email == authentication.principal.username")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
