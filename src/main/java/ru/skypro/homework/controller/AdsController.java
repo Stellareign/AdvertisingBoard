@@ -61,6 +61,7 @@ public class AdsController {
                     )),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
+
     public ResponseEntity<Ad> addAd(@RequestPart("image") MultipartFile image,
                                     @RequestPart("properties") CreateOrUpdateAd properties,
             Authentication authentication) throws IOException {

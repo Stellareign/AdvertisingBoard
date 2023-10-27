@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -30,6 +32,12 @@ public class AdEntity {
     @JoinColumn(name = "user_id")
     private User author;          // автор объявления
     private String image;                   //'ссылка на картинку объявления'
+
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ads")
+    private List<Comment> comments = new ArrayList<>();
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private ImageAd imageAd = new ImageAd();
 
 //        @OneToMany(mappedBy = "ads",
 //                orphanRemoval = true,

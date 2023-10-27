@@ -12,7 +12,10 @@ public interface CommentsService {
 
     CommentsDTO getAllComments(Integer adId);
 
-    boolean deleteComment(int pk);
+//    void deleteComment(int pk);
+
+
+    void deleteComment(int adId, int pk);
 
     CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment);
 

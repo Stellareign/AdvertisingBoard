@@ -23,7 +23,7 @@ public class Comment {
     @Column(name = "date_time_create")
     private Long createdAt; // дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "ads_id", referencedColumnName = "pk")  // id объявления
     private AdEntity ads;
 

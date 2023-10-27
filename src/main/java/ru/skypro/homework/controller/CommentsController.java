@@ -44,9 +44,10 @@ public class CommentsController {
     // удаление комментария по id
     @Operation(summary = "Удаление комментария")
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public void deleteComment(@PathVariable int adId , @PathVariable("commentId") int pk ) {
+    public void deleteComment(@PathVariable("adId") int adId , @PathVariable("commentId") int pk ) {
+
 //    public void deleteComment(@PathVariable("commentId") int pk ) {
-      commentsService.deleteComment(pk);
+      commentsService.deleteComment(adId, pk);
     }
 
     // обновление комментария

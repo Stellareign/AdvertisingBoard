@@ -63,15 +63,14 @@ public class CommentServiceImpl implements CommentsService {
     }
 
     @Override
-    public boolean deleteComment(int pk) {
-        if (
-                commentRepository.findById(pk).isPresent()) {
-            commentRepository.deleteById(pk);
+    public void deleteComment(int adId, int pk) {
+        commentRepository.findByAds_Pk(adId) ;
 
-            return true;
-        } else {
-            return false;
+        if (commentRepository.findById(pk).isPresent()){
+            commentRepository.deleteById(pk);
         }
+
+
 
     }
 
