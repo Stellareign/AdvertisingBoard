@@ -22,10 +22,10 @@
   "role": "USER"
 }
 
-*) логин:
+*) логин: (юзер)
 {
-  "username": "admin@gmail.com",
-  "password": "password"
+  "username": "user@user.ru",
+    "password": "123456789"
 }
 
 {

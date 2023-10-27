@@ -67,7 +67,10 @@ public class AdsServiceImpl implements AdsService {
          {
              commentRepository.deleteCommentsByAds_Pk(adsId);
              adsRepository.deleteById(adsId);                        //Удаляем само объявление
-             Files.delete(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
+             if(optionalAds.get().getImage() != null && !optionalAds.get().getImage().isEmpty()) {
+                 Files.deleteIfExists(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
+             }
+             log.info("Объявление " + adsId + " удалено");
         }
          else {throw new RecordNotFoundException("Объявление не найдено");
         }

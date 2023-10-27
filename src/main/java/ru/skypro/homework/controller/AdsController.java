@@ -22,6 +22,7 @@ import ru.skypro.homework.dto.ads.ExtendedAdDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.service.interfaces.AdsService;
+import ru.skypro.homework.service.interfaces.AuthService;
 
 import java.io.*;
 
@@ -36,6 +37,7 @@ import java.io.*;
 public class AdsController {
 
     private final AdsService adsService;
+
     //****************************************************
     // получение всех объявлений
     @Operation(summary = "Список всех объявлений")
@@ -90,7 +92,9 @@ catch (IOException e){
     // удаление объявления по id
     @Operation(summary = "Удалить объявление по id")
     @PreAuthorize("hasRole('ADMIN') or " +
-            "@adsService.getAdById(#adId).email == authentication.principal.username")
+            "@adsService.getAdById(#adId).email == authentication.getName()")
+
+
     @DeleteMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "No Content"),
@@ -99,6 +103,7 @@ catch (IOException e){
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     public void removeAdById(@PathVariable int adId) throws IOException {
+
                 adsService.deleteAdsById(adId);
     }
 
@@ -129,7 +134,7 @@ catch (IOException e){
     }
 
     @Operation(summary = "Обновление картинки объявления")
-    @PreAuthorize("hasRole('ADMIN') and @adsService.getAdById(#adId).email == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or @adsService.getAdById(#adId).email == authentication.principal.username")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
