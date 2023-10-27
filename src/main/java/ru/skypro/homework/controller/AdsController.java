@@ -118,7 +118,6 @@ catch (IOException e){
     }
 
     @Operation( summary = "Получение всех объявлений авторизованного пользователя")
-//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/me")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),

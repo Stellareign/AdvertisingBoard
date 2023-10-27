@@ -65,7 +65,7 @@ public class AdsServiceImpl implements AdsService {
         Optional<AdEntity> optionalAds = adsRepository.findById(adsId);
        if (optionalAds.isPresent())
          {
-             commentRepository.deleteCommentsByAds_Pk(adsId);
+             commentRepository.deleteCommentsByAds_Pk(adsId);        //Удаляем все комментарии объявления
              adsRepository.deleteById(adsId);                        //Удаляем само объявление
              Files.delete(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
         }
