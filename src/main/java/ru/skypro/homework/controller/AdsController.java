@@ -85,14 +85,15 @@ catch (IOException e){
     @ApiResponse(responseCode = "401", description = "Unauthorized"),
     @ApiResponse(responseCode = "404", description = "Not Found")
 })
+    @PreAuthorize("hasRole('ADMIN') or " + "hasAuthority(authentication.getName())")
     public ResponseEntity<ExtendedAdDTO> getAdById(@PathVariable int adId) {
         return ResponseEntity.ok().body(adsService.getAdById(adId));
     }
 
     // удаление объявления по id
     @Operation(summary = "Удалить объявление по id")
-    @PreAuthorize("hasRole('ADMIN') and " +
-            "@adsService.getAdById(#adId).email == authentication.getName()")
+    @PreAuthorize("hasRole('ADMIN') or " + "hasAuthority(authentication.getName())")
+//            "@adsService.getAdById(#adId).email == authentication.getName()")
 
 
     @DeleteMapping("/{adId}")
@@ -108,7 +109,7 @@ catch (IOException e){
     }
 
     @Operation(summary = "Обновить объявление по id")
-    @PreAuthorize("@adsService.getAdById(#adId).email == authentication.principal.username")
+    @PreAuthorize("hasAuthority( authentication.getName())")
     @PatchMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
