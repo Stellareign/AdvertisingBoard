@@ -20,13 +20,16 @@ Content-Type: application/json
 }
 
 ###4 удаление ads
-DELETE http://localhost:8080/ads/20
+DELETE http://localhost:8080/ads/23
 
 ###5 ads по id
-GET  http://localhost:8080/ads/21
+GET  http://localhost:8080/ads/23
 
 ###6 все ads
 GET  http://localhost:8080/ads
 
 ###7 все ads пользователя
 GET  http://localhost:8080/ads/me
+
+###8 info о пользователе
+GET http://localhost:8080/users/me
