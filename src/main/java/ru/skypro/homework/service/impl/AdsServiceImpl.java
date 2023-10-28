@@ -63,7 +63,7 @@ public class AdsServiceImpl implements AdsService {
     @Transactional
     public void deleteAdsById(int adsId) throws IOException {
         Optional<AdEntity> optionalAds = adsRepository.findById(adsId);
-       if (optionalAds.isPresent())
+       if (optionalAds.isPresent() )
          {
              commentRepository.deleteCommentsByAds_Pk(adsId);
              adsRepository.deleteById(adsId);                        //Удаляем само объявление
@@ -137,13 +137,14 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDTO getAllAdsByUser(Authentication authentication) {
-        String currentUserName = authentication.getName();
+    public AdsDTO getAllAdsByUser(String currentUserName) {
+//        String currentUserName = authentication.getName();
         List<AdEntity> adEntityList = adsRepository.findAll()
                 .stream()
                 .filter(e -> e.getAuthor().getUsername().equals(currentUserName))
                 .collect(Collectors.toList());
         List<Ad> adList = mapperUtil.convertListAdEntityToAd(adEntityList);
+        log.info("Список всех объявлений пользователя " + currentUserName);
         return new AdsDTO(adList.size(), adList);
     }
     @Override

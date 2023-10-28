@@ -19,12 +19,12 @@ import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
-import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.service.interfaces.AdsService;
-import ru.skypro.homework.service.interfaces.AuthService;
+
 
 import java.io.*;
+
 
 @Slf4j //  добавляет logger в класс
 @CrossOrigin(value = "http://localhost:3000") // Позволяет настроить CORS (Cross-Origin Resource Sharing)
@@ -92,9 +92,8 @@ catch (IOException e){
 
     // удаление объявления по id
     @Operation(summary = "Удалить объявление по id")
-    @PreAuthorize("hasRole('ADMIN') or " + "hasAuthority(authentication.getName())")
-//            "@adsService.getAdById(#adId).email == authentication.getName()")
-
+    @PreAuthorize("hasRole('ADMIN') or " +
+            "@adsService.getAdById(#adId).email == authentication.principal.username")
 
     @DeleteMapping("/{adId}")
     @ApiResponses(value = {
@@ -103,13 +102,15 @@ catch (IOException e){
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
+
     public void removeAdById(@PathVariable int adId) throws IOException {
 
                 adsService.deleteAdsById(adId);
     }
 
     @Operation(summary = "Обновить объявление по id")
-    @PreAuthorize("hasAuthority( authentication.getName())")
+    @PreAuthorize("hasRole('ADMIN') or " +
+            "@adsService.getAdById(#adId).email == authentication.principal.username")
     @PatchMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -123,14 +124,13 @@ catch (IOException e){
     }
 
     @Operation( summary = "Получение всех объявлений авторизованного пользователя")
-//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/me")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     public ResponseEntity<AdsDTO> getCurrentUserAds(Authentication authentication) {
-        return ResponseEntity.ok().body(adsService.getAllAdsByUser(authentication));
+        return ResponseEntity.ok().body(adsService.getAllAdsByUser(authentication.getName()));
     }
 
     @Operation(summary = "Обновление картинки объявления")

@@ -31,7 +31,7 @@ public interface AdsService {
     //    идентификатором.
         public abstract AdEntity updateImage(int id, MultipartFile image) throws IOException;
 
-    public abstract AdsDTO getAllAdsByUser(Authentication authentication);
+    public abstract AdsDTO getAllAdsByUser(String currentUserName);
 
 
     String saveImage(MultipartFile file, int id) throws IOException;
