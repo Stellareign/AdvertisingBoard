@@ -64,7 +64,7 @@ public class AdsServiceImpl implements AdsService {
     @Transactional
     public void deleteAdsById(int adsId) throws IOException {
         Optional<AdEntity> optionalAds = adsRepository.findById(adsId);
-        if (optionalAds.isPresent()) {
+        if (optionalAds.isPresent() ) {
             commentRepository.deleteCommentsByAds_Pk(adsId);
             adsRepository.deleteById(adsId);                        //Удаляем само объявление
             if (optionalAds.get().getImage() != null && !optionalAds.get().getImage().isEmpty()) {
