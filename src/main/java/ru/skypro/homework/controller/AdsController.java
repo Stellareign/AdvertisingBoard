@@ -76,7 +76,6 @@ catch (IOException e){
 }
         }
 
-
     // получение информации об объявлении
     @Operation(summary = "Получение информации об объявлении по id")
     @GetMapping("/{adId}")
