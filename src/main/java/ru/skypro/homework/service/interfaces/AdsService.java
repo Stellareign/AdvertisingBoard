@@ -2,6 +2,7 @@ package ru.skypro.homework.service.interfaces;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.AdsDTO;
@@ -16,9 +17,11 @@ public interface AdsService {
 
     public abstract ExtendedAdDTO getAdById(int adsId);
 
-    //+++++++++++++++++++++++++++++++++++++++++
-    public abstract void deleteAdsById(int adsId) throws IOException;
 
+
+    //+++++++++++++++++++++++++++++++++++++++++
+    @Transactional
+    void deleteAdsById(int adsId) throws IOException;
 
     Ad createAd(CreateOrUpdateAd createAdDTO,
                 MultipartFile image, Authentication authentication
@@ -31,7 +34,7 @@ public interface AdsService {
     //    идентификатором.
         public abstract AdEntity updateImage(int id, MultipartFile image) throws IOException;
 
-    public abstract AdsDTO getAllAdsByUser(Authentication authentication);
+    public abstract AdsDTO getAllAdsByUser(String currentUserName);
 
 
     String saveImage(MultipartFile file, int id) throws IOException;
