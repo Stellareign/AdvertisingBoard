@@ -14,7 +14,7 @@ import ru.skypro.homework.service.interfaces.AdsService;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -29,11 +29,7 @@ public class WebSecurityConfig {
      * Конфигурация для фильтра цепочки безопасности (SecurityFilterChain) в Spring Security.
      * Он определяет правила доступа для различных URL-адресов и HTTP-методов.
      */
-    private final AdsService adsService;
 
-    public WebSecurityConfig(AdsService adsService) {
-        this.adsService = adsService;
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -44,16 +40,16 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .mvcMatchers(HttpMethod.GET, "ads", "image")
+
+                                        .mvcMatchers(HttpMethod.GET, "/ads", "/image")
                                         .permitAll()
 
-                                        .mvcMatchers("ads/**", "users/**")
+                                        .mvcMatchers("/ads/**", "/users/**")
                                         .authenticated()
-
                 )
                 .cors()
                 .and()
-//                .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(withDefaults());
         return http.build();
     }

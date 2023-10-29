@@ -116,11 +116,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username);
 
         if (checkPhoneFormat(updateUserDTO.getPhone())) {
-            user.setFirstName(updateUserDTO.getFirstName());
-            user.setLastName(updateUserDTO.getLastName());
-            user.setPhone(updateUserDTO.getPhone());
-            userRepository.save(user);
-
+            userRepository.save(userDTOFactory.fromUpdateUserDTOtoUser(updateUserDTO, user));
         }
         return userDTOFactory.fromUserToUserDTO(user);
     }

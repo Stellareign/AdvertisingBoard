@@ -19,10 +19,8 @@ import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
-import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.service.interfaces.AdsService;
-import ru.skypro.homework.service.interfaces.AuthService;
 
 import java.io.*;
 
@@ -108,7 +106,8 @@ catch (IOException e){
     }
 
     @Operation(summary = "Обновить объявление по id")
-    @PreAuthorize("@adsService.getAdById(#adId).email == authentication.principal.username")
+//    @PreAuthorize("@adsService.getAdById(#adId).email == authentication.principal.username")
+    @PreAuthorize(" @authentication.getName()")
     @PatchMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),

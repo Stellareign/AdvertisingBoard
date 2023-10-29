@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -80,7 +81,7 @@ public class AdsServiceImpl implements AdsService {
     public Ad createAd(CreateOrUpdateAd createAdDTO,
                        MultipartFile image, Authentication authentication
     ) throws IOException {
-        User currentUser = userRepository.findByUsername(authentication.getName());
+        User currentUser = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         AdEntity newAd = mapperUtil.createAdFromDTO(createAdDTO, "", currentUser);
         adsRepository.save(newAd);
         int pk = newAd.getPk();

@@ -88,5 +88,49 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+//**************************************************************************************************************
+@Service
+@RequiredArgsConstructor
+public class SecurityService {
+    private final AdsRepository adsRepository;
+    private final CommentRepository commentRepository;
+    public boolean canDeleteComment(int commentId, int adId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+            return true;
+        }
+        Comment comment = checkForAdAndComment(adId, commentId);
+        String name = comment.getAuthor().getUsername();
+
+        return authentication.getName().equals(name);
+    }
+    public boolean moderateAdd(int id) {
+
+        Optional<AdEntity> adEntity = Optional.ofNullable(adsRepository.findById(id)).orElseThrow(() ->
+                new NotFoundException("Объявление "+ id + " не найдено ")
+        );
+        String name = adEntity.get().getAuthor().getUsername();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+            System.out.println(authentication.getAuthorities());
+            return true;
+        }
+        return authentication.getName().equals(name);
+    }
+
+    private Comment checkForAdAndComment(int adId, int commentId) {
+        adsRepository.findById(adId).orElseThrow(() -> new NotFoundException(
+                "Объявление " + adId + " не найдено.")
+        );
+
+        return commentRepository.findCommentByPkAndAds_pk(commentId, adId)
+                .orElseThrow(() ->
+                        new NotFoundException("Комментарий " + commentId +" не найден для объявления " + adId)
+
+                );
+    }
+}
 
 }

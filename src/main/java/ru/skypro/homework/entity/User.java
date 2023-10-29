@@ -86,7 +86,15 @@ public class User {
         this.registerDate = registerDate;
     }
 
- // ********************************************************************
+    // ********************* ДЛЯ ТЕСТА *****************************************
+    public User(String username, String firstName, String lastName, String phone) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+    }
+
+    // ********************************************************************
 
     @Override
     public boolean equals(Object o) {
