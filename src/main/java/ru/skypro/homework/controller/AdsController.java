@@ -51,7 +51,7 @@ public class AdsController {
 
     //  ********* Без предусловий **********
 // **********************************************************************************************
-//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+
     @Operation(summary = "Создание нового объявления")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {
@@ -85,7 +85,6 @@ catch (IOException e){
     @ApiResponse(responseCode = "401", description = "Unauthorized"),
     @ApiResponse(responseCode = "404", description = "Not Found")
 })
-    @PreAuthorize("hasRole('ADMIN') or " + "hasAuthority(authentication.getName())")
     public ResponseEntity<ExtendedAdDTO> getAdById(@PathVariable int adId) {
         return ResponseEntity.ok().body(adsService.getAdById(adId));
     }
@@ -93,7 +92,7 @@ catch (IOException e){
     // удаление объявления по id
     @Operation(summary = "Удалить объявление по id")
     @PreAuthorize("hasRole('ADMIN') or " +
-            "@adsService.getAdById(#adId).email == authentication.principal.username")
+            "@adsService.getAdById(#adId).email == authentication.name")
 
     @DeleteMapping("/{adId}")
     @ApiResponses(value = {
@@ -110,7 +109,7 @@ catch (IOException e){
 
     @Operation(summary = "Обновить объявление по id")
     @PreAuthorize("hasRole('ADMIN') or " +
-            "@adsService.getAdById(#adId).email == authentication.principal.username")
+            "@adsService.getAdById(#adId).email == authentication.name")
     @PatchMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -134,7 +133,7 @@ catch (IOException e){
     }
 
     @Operation(summary = "Обновление картинки объявления")
-    @PreAuthorize("@adsService.getAdById(#adId).email == authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or @adsService.getAdById(#adId).email == authentication.name")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),

@@ -35,9 +35,6 @@ public class WebSecurityConfig {
      * Конфигурация для фильтра цепочки безопасности (SecurityFilterChain) в Spring Security.
      * Он определяет правила доступа для различных URL-адресов и HTTP-методов.
      */
-    @Autowired
-    MyUserDetails myUserDetails;
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,7 +45,7 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .mvcMatchers(HttpMethod.GET, "ads", "/image")
+                                        .mvcMatchers(HttpMethod.GET, "/ads", "/image")
                                         .permitAll()
 
                                         .mvcMatchers("/ads/**", "/users/**")
