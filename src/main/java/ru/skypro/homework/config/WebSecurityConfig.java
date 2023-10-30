@@ -31,7 +31,7 @@ public class WebSecurityConfig {
             "/register"
     };
 
-    /**
+    /*
      * Конфигурация для фильтра цепочки безопасности (SecurityFilterChain) в Spring Security.
      * Он определяет правила доступа для различных URL-адресов и HTTP-методов.
      */
@@ -41,7 +41,7 @@ public class WebSecurityConfig {
         http.csrf()
                 .disable()
                 .authorizeHttpRequests(
-                        (authorization) ->
+                        authorization ->
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
@@ -57,6 +57,7 @@ public class WebSecurityConfig {
                 .httpBasic(withDefaults());
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

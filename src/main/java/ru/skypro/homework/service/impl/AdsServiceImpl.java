@@ -58,21 +58,18 @@ public class AdsServiceImpl implements AdsService {
         return mapperUtil.createExtendedAdDTO(optionalAds.get());
     }
 
-
     //+++++++++++++++++++++++++++++++++++++++++
     @Override
     @Transactional
     public void deleteAdsById(int adsId) throws IOException {
         Optional<AdEntity> optionalAds = adsRepository.findById(adsId);
-        if (optionalAds.isPresent() ) {
-            commentRepository.deleteCommentsByAds_Pk(adsId);
-            adsRepository.deleteById(adsId);                        //Удаляем само объявление
-            if (optionalAds.get().getImage() != null && !optionalAds.get().getImage().isEmpty()) {
-                Files.deleteIfExists(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
-            }
-            log.info("Объявление " + adsId + " удалено");
-        } else {
-            throw new RecordNotFoundException("Объявление не найдено");
+       if (optionalAds.isPresent())
+         {
+             commentRepository.deleteCommentsByAds_Pk(adsId);        //Удаляем все комментарии объявления
+             adsRepository.deleteById(adsId);                        //Удаляем само объявление
+             Files.delete(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
+        }
+         else {throw new RecordNotFoundException("Объявление не найдено");
         }
     }
 
@@ -89,8 +86,7 @@ public class AdsServiceImpl implements AdsService {
         adsRepository.save(newAd);
         return modelMapper.map(newAd, Ad.class);
     }
-
-    //    @Override
+//    @Override
 //    private Path createPath(MultipartFile image, AdEntity adEntity) throws IOException {
 //        Path filePath = Path.of(adsImageDir, "Объявление_" + adEntity.getId() + "."
 //                + StringUtils.getFilenameExtension(image.getOriginalFilename()));
@@ -122,8 +118,7 @@ public class AdsServiceImpl implements AdsService {
         adsRepository.save(existingAd);
         return modelMapper.map(existingAd, Ad.class);
     }
-
-    //       Обновляет изображение
+//       Обновляет изображение
 //    с заданным
 //    идентификатором.
     @Override
@@ -139,28 +134,26 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDTO getAllAdsByUser(String currentUserName) {
-//        String currentUserName = authentication.getName();
+    public AdsDTO getAllAdsByUser(Authentication authentication) {
+        String currentUserName = authentication.getName();
         List<AdEntity> adEntityList = adsRepository.findAll()
                 .stream()
                 .filter(e -> e.getAuthor().getUsername().equals(currentUserName))
                 .collect(Collectors.toList());
         List<Ad> adList = mapperUtil.convertListAdEntityToAd(adEntityList);
-        log.info("Список всех объявлений пользователя " + currentUserName);
         return new AdsDTO(adList.size(), adList);
     }
-
     @Override
-    public String saveImage(MultipartFile file, int id) throws IOException {
+public String saveImage(MultipartFile file, int id) throws IOException {
         Path filePath = Path.of("/images/Фото_объявления_" + id + "."
                 + StringUtils.getFilenameExtension(file.getOriginalFilename()));
         String destination = filePath.toString();
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         File newFile = new File(filePath.toUri());
-        file.transferTo(newFile);
-        return destination;
-    }
+    file.transferTo(newFile);
+    return destination;
+}
 
 }
     /*
