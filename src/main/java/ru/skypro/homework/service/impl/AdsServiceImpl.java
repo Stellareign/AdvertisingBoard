@@ -60,7 +60,6 @@ public class AdsServiceImpl implements AdsService {
     }
 
     //+++++++++++++++++++++++++++++++++++++++++
-    private final CheckAccess checkAccess;
     @Override
     @Transactional
 
