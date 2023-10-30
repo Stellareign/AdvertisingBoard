@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
@@ -24,6 +25,7 @@ import ru.skypro.homework.service.interfaces.AdsService;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -52,8 +54,8 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public ExtendedAdDTO getAdById(int adsId) {
         Optional<AdEntity> optionalAds = adsRepository.findById(adsId);
-        if (optionalAds.isEmpty())       {
-            throw new RecordNotFoundException("Не удалось найти объявление с id =  "+adsId);
+        if (optionalAds.isEmpty()) {
+            throw new RecordNotFoundException("Не удалось найти объявление с id =  " + adsId);
         }
         return mapperUtil.createExtendedAdDTO(optionalAds.get());
     }
@@ -61,17 +63,25 @@ public class AdsServiceImpl implements AdsService {
     //+++++++++++++++++++++++++++++++++++++++++
     @Override
     @Transactional
-    public void deleteAdsById(int adsId) throws IOException {
+
+    public void deleteAdsById(int adsId, String username) throws IOException {
         Optional<AdEntity> optionalAds = adsRepository.findById(adsId);
-       if (optionalAds.isPresent())
-         {
-             commentRepository.deleteCommentsByAds_Pk(adsId);
-             adsRepository.deleteById(adsId);                        //Удаляем само объявление
-             Files.delete(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
-        }
-         else {throw new RecordNotFoundException("Объявление не найдено");
+
+        if (optionalAds.isPresent()
+                && ((optionalAds.get().getAuthor().getUsername().equals(username) ||
+                userRepository.findByUsername(username).getRole() == Role.ADMIN))) {
+
+            commentRepository.deleteCommentsByAds_Pk(adsId);
+            adsRepository.deleteById(adsId);                        //Удаляем само объявление
+            if (optionalAds.get().getImage() != null && !optionalAds.get().getImage().isEmpty()) {
+                Files.deleteIfExists(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
+            }
+            log.info("Объявление " + adsId + " удалено");
+        } else {
+            throw new AccessDeniedException("403 - Доступ запрещен");
         }
     }
+
 
     @Override
     public Ad createAd(CreateOrUpdateAd createAdDTO,
@@ -106,10 +116,15 @@ public class AdsServiceImpl implements AdsService {
 //        }
 //    }
     @Override
-    public Ad editAdById(int id, CreateOrUpdateAd updateAd) {
+    public Ad editAdById(int id, CreateOrUpdateAd updateAd, String username) throws AccessDeniedException {
         Optional<AdEntity> optionalAd = adsRepository.findById(id);
-        if (optionalAd.isEmpty()) {
-            throw new RecordNotFoundException("Не удалось найти объявление с id =  "+id);
+//        if (optionalAd.isEmpty()) {
+//            throw new RecordNotFoundException("Не удалось найти объявление с id =  " + id);
+//        }
+        if (optionalAd.isPresent()
+                && ((optionalAd.get().getAuthor().getUsername().equals(username) ||
+                userRepository.findByUsername(username).getRole() == Role.ADMIN))) {
+            throw new AccessDeniedException("403 - Доступ запрещен");
         }
         AdEntity existingAd = optionalAd.get();
         existingAd.setTitle(updateAd.getTitle());
@@ -118,14 +133,17 @@ public class AdsServiceImpl implements AdsService {
         adsRepository.save(existingAd);
         return modelMapper.map(existingAd, Ad.class);
     }
+
 //       Обновляет изображение
 //    с заданным
 //    идентификатором.
     @Override
-    public AdEntity updateImage(int id, MultipartFile image) throws IOException {
+    public AdEntity updateImage(int id, MultipartFile image, String username) throws IOException {
         Optional<AdEntity> optionalAd = adsRepository.findById(id);
-        if (optionalAd.isEmpty()) {
-            throw new RecordNotFoundException(String.valueOf(id));
+        if (optionalAd.isPresent()
+                && ((optionalAd.get().getAuthor().getUsername().equals(username) ||
+                userRepository.findByUsername(username).getRole() == Role.ADMIN))) {
+            throw new AccessDeniedException("403 - Доступ запрещен");
         }
         AdEntity existingAd = optionalAd.get();
         existingAd.setImage(saveImage(image, id));
@@ -134,8 +152,8 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDTO getAllAdsByUser(Authentication authentication) {
-        String currentUserName = authentication.getName();
+    public AdsDTO getAllAdsByUser(String currentUserName) {
+
         List<AdEntity> adEntityList = adsRepository.findAll()
                 .stream()
                 .filter(e -> e.getAuthor().getUsername().equals(currentUserName))

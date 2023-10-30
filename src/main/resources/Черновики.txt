@@ -25,9 +25,9 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .mvcMatchers(HttpMethod.GET, "/ads","/comment", "/images")
+                                        .mvcMatchers(HttpMethod.GET, "/ads","/comments", "/image")
                                         .permitAll()
-                                        .mvcMatchers("/ads/**", "/users/**")
+                                        .mvcMatchers("/ads/**", "/users/**", "/comments/**")
                                         .authenticated()
                 )
                 .cors()

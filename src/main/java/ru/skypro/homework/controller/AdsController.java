@@ -19,11 +19,11 @@ import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
-import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.service.interfaces.AdsService;
 
 import java.io.*;
+import java.nio.file.AccessDeniedException;
 
 @Slf4j //  добавляет logger в класс
 @CrossOrigin(value = "http://localhost:3000") // Позволяет настроить CORS (Cross-Origin Resource Sharing)
@@ -89,9 +89,9 @@ catch (IOException e){
     }
 
     // удаление объявления по id
+
     @Operation(summary = "Удалить объявление по id")
-    @PreAuthorize("hasRole('ADMIN') or " +
-            "@adsService.getAdById(#adId).email == authentication.principal.username")
+
     @DeleteMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "No Content"),
@@ -99,13 +99,16 @@ catch (IOException e){
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    public void removeAdById(@PathVariable int adId) throws IOException {
-                adsService.deleteAdsById(adId);
+//    @PreAuthorize("hasRole('ADMIN') or " +
+//            "@adsService.getAdById(#adId).email == authentication.name")
+
+    public void removeAdById(@PathVariable int adId, Authentication authentication) throws IOException {
+                adsService.deleteAdsById(adId, authentication.getName());
     }
 
     @Operation(summary = "Обновить объявление по id")
-    @PreAuthorize("hasRole('ADMIN') or " +
-            "@adsService.getAdById(#adId).email == authentication.principal.username")
+//    @PreAuthorize("hasRole('ADMIN') or " +
+//            "@adsService.getAdById(#adId).email == authentication.name")
     @PatchMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -113,24 +116,22 @@ catch (IOException e){
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestBody CreateOrUpdateAd updateAd) {
+    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestBody CreateOrUpdateAd updateAd, Authentication authentication) throws AccessDeniedException {
 
-        return ResponseEntity.ok().body(adsService.editAdById(adId, updateAd));
+        return ResponseEntity.ok().body(adsService.editAdById(adId, updateAd, authentication.getName()));
     }
 
     @Operation( summary = "Получение всех объявлений авторизованного пользователя")
-//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/me")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     public ResponseEntity<AdsDTO> getCurrentUserAds(Authentication authentication) {
-        return ResponseEntity.ok().body(adsService.getAllAdsByUser(authentication));
+        return ResponseEntity.ok().body(adsService.getAllAdsByUser(authentication.getName()));
     }
-
     @Operation(summary = "Обновление картинки объявления")
-    @PreAuthorize("hasRole('ADMIN') and @adsService.getAdById(#adId).email == authentication.principal.username")
+//    @PreAuthorize("hasRole('ADMIN') and @adsService.getAdById(#adId).email == authentication.name")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -139,9 +140,9 @@ catch (IOException e){
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     public ResponseEntity<AdEntity> updateImage(@PathVariable int adId,
-                                                @RequestParam("image") MultipartFile image) throws IOException {
+                                                @RequestParam("image") MultipartFile image, Authentication authentication) throws IOException {
 
-        return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(adId, image));
+        return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(adId, image, authentication.getName()));
     }
 }
 
