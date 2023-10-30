@@ -23,6 +23,7 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.service.interfaces.AdsService;
 
 import java.io.*;
+import java.nio.file.AccessDeniedException;
 
 @Slf4j //  добавляет logger в класс
 @CrossOrigin(value = "http://localhost:3000") // Позволяет настроить CORS (Cross-Origin Resource Sharing)
@@ -100,8 +101,8 @@ catch (IOException e){
     @PreAuthorize("hasRole('ADMIN') or " +
             "@adsService.getAdById(#adId).email == authentication.name")
 
-    public void removeAdById(@PathVariable int adId) throws IOException {
-                adsService.deleteAdsById(adId);
+    public void removeAdById(@PathVariable int adId, Authentication authentication) throws IOException {
+                adsService.deleteAdsById(adId, authentication.getName());
     }
 
     @Operation(summary = "Обновить объявление по id")
@@ -114,9 +115,9 @@ catch (IOException e){
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestBody CreateOrUpdateAd updateAd) {
+    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestBody CreateOrUpdateAd updateAd, Authentication authentication) throws AccessDeniedException {
 
-        return ResponseEntity.ok().body(adsService.editAdById(adId, updateAd));
+        return ResponseEntity.ok().body(adsService.editAdById(adId, updateAd, authentication.getName()));
     }
 
     @Operation( summary = "Получение всех объявлений авторизованного пользователя")
@@ -138,9 +139,9 @@ catch (IOException e){
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     public ResponseEntity<AdEntity> updateImage(@PathVariable int adId,
-                                                @RequestParam("image") MultipartFile image) throws IOException {
+                                                @RequestParam("image") MultipartFile image, Authentication authentication) throws IOException {
 
-        return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(adId, image));
+        return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(adId, image, authentication.getName()));
     }
 }
 
