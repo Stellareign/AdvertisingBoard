@@ -44,7 +44,6 @@ public class MyUserDetails implements UserDetails {
                 .map(SimpleGrantedAuthority::new)
                 .map(Collections::singleton)
                 .orElseGet(Collections::emptySet);
-//                Set.of(new SimpleGrantedAuthority("ROLE_" + authUser.getRole().name()));
     }
 
     @Override

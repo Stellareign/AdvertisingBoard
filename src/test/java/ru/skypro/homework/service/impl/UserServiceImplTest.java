@@ -1,17 +1,15 @@
 package ru.skypro.homework.service.impl;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
@@ -23,19 +21,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-//@WebMvcTest(UserServiceImpl.class)
+@WebMvcTest(UserServiceImpl.class)
+@AllArgsConstructor
 class UserServiceImplTest {
 
+    @Autowired
+    MockMvc mockMvc;
+
     @InjectMocks
-    private UserServiceImpl userService;
-    @InjectMocks
+    private UserService userService;
+
+   @Autowired
     private UserDTOFactoryImpl userDTOFactory;
+
     @Mock
     private UserRepository userRepository;
 
+
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.initMocks(this);
 
     }
 
@@ -52,6 +57,7 @@ class UserServiceImplTest {
 
     @Test
     void updateUserTest() {
+
         String username = "asd@asd.asd";
         String ln = "ln";
         String fn = "fn";
@@ -66,11 +72,11 @@ class UserServiceImplTest {
         user.setPhone(updateUserDTO.getPhone());
 
         when(userRepository.findByUsername(username)).thenReturn(user);
-        when(userDTOFactory.fromUpdateUserDTOtoUser(updateUserDTO, user)).thenReturn(user);
-
-
-//        when(userDTOFactory.fromUserToUserDTO(user)).thenReturn(userDTO);
+//        when(userDTOFactory.fromUpdateUserDTOtoUser(updateUserDTO, user)).thenReturn(user);
         UserDTO result = userService.updateUser(username, updateUserDTO);
+//        UserDTO result = userDTOFactory.fromUserToUserDTO(user);
+//        when(userDTOFactory.fromUserToUserDTO(user)).thenReturn(result);
+
 
 
         // Проверяем, что данные пользователя были обновлены
