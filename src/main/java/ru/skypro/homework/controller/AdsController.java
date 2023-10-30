@@ -19,7 +19,6 @@ import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.AdsDTO;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
-import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.service.interfaces.AdsService;
 
@@ -88,9 +87,9 @@ catch (IOException e){
     }
 
     // удаление объявления по id
+
     @Operation(summary = "Удалить объявление по id")
-    @PreAuthorize("hasRole('ADMIN') or " +
-            "@adsService.getAdById(#adId).email == authentication.name")
+
     @DeleteMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "No Content"),
@@ -98,6 +97,9 @@ catch (IOException e){
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
+    @PreAuthorize("hasRole('ADMIN') or " +
+            "@adsService.getAdById(#adId).email == authentication.name")
+
     public void removeAdById(@PathVariable int adId) throws IOException {
                 adsService.deleteAdsById(adId);
     }
@@ -124,7 +126,7 @@ catch (IOException e){
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     public ResponseEntity<AdsDTO> getCurrentUserAds(Authentication authentication) {
-        return ResponseEntity.ok().body(adsService.getAllAdsByUser(authentication));
+        return ResponseEntity.ok().body(adsService.getAllAdsByUser(authentication.getName()));
     }
     @Operation(summary = "Обновление картинки объявления")
     @PreAuthorize("hasRole('ADMIN') and @adsService.getAdById(#adId).email == authentication.name")

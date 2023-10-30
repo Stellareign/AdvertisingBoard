@@ -1,11 +1,13 @@
-*) исходный код: https://github.com/skypro-backend/example-for-graduate-work
+*) исходный код:
+https://github.com/skypro-backend/example-for-graduate-work
 
  *) "currentPassword": "stringst",
   "newPassword": "stringst
   - что за тип stringst????
 
 
- *) Запуск докера из терминала: docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.19
+ *) Запуск докера из терминала:
+ docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.19
 
  *) in changelog-master написать:
  databaseChangeLog:

@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,19 +60,24 @@ public class AdsServiceImpl implements AdsService {
     }
 
     //+++++++++++++++++++++++++++++++++++++++++
+    private final CheckAccess checkAccess;
     @Override
     @Transactional
+
     public void deleteAdsById(int adsId) throws IOException {
         Optional<AdEntity> optionalAds = adsRepository.findById(adsId);
-       if (optionalAds.isPresent())
-         {
-             commentRepository.deleteCommentsByAds_Pk(adsId);        //Удаляем все комментарии объявления
-             adsRepository.deleteById(adsId);                        //Удаляем само объявление
-             Files.delete(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
-        }
-         else {throw new RecordNotFoundException("Объявление не найдено");
+        if (optionalAds.isPresent()) {
+            commentRepository.deleteCommentsByAds_Pk(adsId);
+            adsRepository.deleteById(adsId);                        //Удаляем само объявление
+            if (optionalAds.get().getImage() != null && !optionalAds.get().getImage().isEmpty()) {
+                Files.deleteIfExists(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
+            }
+            log.info("Объявление " + adsId + " удалено");
+        } else {
+            throw new RecordNotFoundException("Объявление не найдено");
         }
     }
+
 
     @Override
     public Ad createAd(CreateOrUpdateAd createAdDTO,
@@ -134,8 +140,8 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDTO getAllAdsByUser(Authentication authentication) {
-        String currentUserName = authentication.getName();
+    public AdsDTO getAllAdsByUser(String currentUserName) {
+
         List<AdEntity> adEntityList = adsRepository.findAll()
                 .stream()
                 .filter(e -> e.getAuthor().getUsername().equals(currentUserName))

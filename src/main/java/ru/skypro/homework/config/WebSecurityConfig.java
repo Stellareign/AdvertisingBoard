@@ -55,6 +55,7 @@ public class WebSecurityConfig {
                 .and()
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(withDefaults());
+
         return http.build();
     }
 
