@@ -90,7 +90,7 @@ catch (IOException e){
 
     // удаление объявления по id
     @Operation(summary = "Удалить объявление по id")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or " +
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or " +
             "@adsService.getAdById(#adId).email == authentication.name")
 
     @DeleteMapping("/{adId}")
@@ -107,7 +107,7 @@ catch (IOException e){
     }
 
     @Operation(summary = "Обновить объявление по id")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or " +
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or " +
             "@adsService.getAdById(#adId).email == authentication.name")
     @PatchMapping("/{adId}")
     @ApiResponses(value = {
@@ -132,7 +132,7 @@ catch (IOException e){
     }
 
     @Operation(summary = "Обновление картинки объявления")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @adsService.getAdById(#adId).email == authentication.name")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or @adsService.getAdById(#adId).email == authentication.name")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
