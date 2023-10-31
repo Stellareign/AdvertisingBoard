@@ -25,7 +25,6 @@ import ru.skypro.homework.service.interfaces.AdsService;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -63,24 +62,25 @@ public class AdsServiceImpl implements AdsService {
     //+++++++++++++++++++++++++++++++++++++++++
     @Override
     @Transactional
-    public void deleteAdsById(int adsId, String username) throws IOException {
+    public void deleteAdsById(int adsId) throws IOException {
         Optional<AdEntity> optionalAds = adsRepository.findById(adsId);
 
-        if (optionalAds.isPresent()
-                && ((optionalAds.get().getAuthor().getUsername().equals(username) ||
-                userRepository.findByUsername(username).getRole() == Role.ADMIN))) {
-
-            commentRepository.deleteCommentsByAds_Pk(adsId);
-            adsRepository.deleteById(adsId);                        //Удаляем само объявление
-            if (optionalAds.get().getImage() != null && !optionalAds.get().getImage().isEmpty()) {
-                Files.deleteIfExists(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
-            }
-            log.info("Объявление " + adsId + " удалено");
-        } else {
-            throw new AccessDeniedException("403 - Доступ запрещен для");
+        if (optionalAds.isEmpty()) {
+            throw new RecordNotFoundException("Объявление " + adsId + "не найдено");
         }
+        commentRepository.deleteCommentsByAds_Pk(adsId);
+        adsRepository.deleteById(adsId);                        //Удаляем само объявление
+        if (optionalAds.get().getImage() != null && !optionalAds.get().getImage().isEmpty()) {
+            Files.deleteIfExists(Path.of(optionalAds.get().getImage()));    //Удаляем файл с картинкой объявления
+        }
+        log.info("Объявление " + adsId + " удалено");
     }
 
+    @Override
+    public boolean checkAccessToAd(int adId, String username) {
+        return adsRepository.findByPk(adId).getAuthor().getUsername().equals(username) ||
+                userRepository.findByUsername(username).getRole() == Role.ADMIN;
+    }
 
     @Override
     public Ad createAd(CreateOrUpdateAd createAdDTO,
@@ -95,7 +95,8 @@ public class AdsServiceImpl implements AdsService {
         adsRepository.save(newAd);
         return modelMapper.map(newAd, Ad.class);
     }
-//    @Override
+
+    //    @Override
 //    private Path createPath(MultipartFile image, AdEntity adEntity) throws IOException {
 //        Path filePath = Path.of(adsImageDir, "Объявление_" + adEntity.getId() + "."
 //                + StringUtils.getFilenameExtension(image.getOriginalFilename()));
@@ -115,37 +116,34 @@ public class AdsServiceImpl implements AdsService {
 //        }
 //    }
     @Override
-    public Ad editAdById(int id, CreateOrUpdateAd updateAd, String username) throws AccessDeniedException {
+    public Ad editAdById(int id, CreateOrUpdateAd updateAd) {
         Optional<AdEntity> optionalAd = adsRepository.findById(id);
-//        if (optionalAd.isEmpty()) {
-//            throw new RecordNotFoundException("Не удалось найти объявление с id =  " + id);
-//        }
-        if (optionalAd.isPresent()
-                && ((optionalAd.get().getAuthor().getUsername().equals(username) ||
-                userRepository.findByUsername(username).getRole() == Role.ADMIN))) {
+        if (optionalAd.isEmpty()) {
+            throw new RecordNotFoundException("Объявление не найдено " + id);
+        }
         AdEntity existingAd = optionalAd.get();
         existingAd.setTitle(updateAd.getTitle());
         existingAd.setPrice(updateAd.getPrice());
         existingAd.setDescription(updateAd.getDescription());
         adsRepository.save(existingAd);
         return modelMapper.map(existingAd, Ad.class);
-    } throw new AccessDeniedException("403 - Доступ запрещен");
+
+
     }
 
-//       Обновляет изображение
+    //       Обновляет изображение
 //    с заданным
 //    идентификатором.
     @Override
-    public AdEntity updateImage(int id, MultipartFile image, String username) throws IOException {
+    public AdEntity updateImage(int id, MultipartFile image) throws IOException {
         Optional<AdEntity> optionalAd = adsRepository.findById(id);
-        if (optionalAd.isPresent()
-                && ((optionalAd.get().getAuthor().getUsername().equals(username) ||
-                userRepository.findByUsername(username).getRole() == Role.ADMIN))) {
+        if (optionalAd.isEmpty()) {
+            throw new RecordNotFoundException("Объявление не найдено " + id);
+        }
         AdEntity existingAd = optionalAd.get();
         existingAd.setImage(saveImage(image, id));
         adsRepository.save(existingAd);
         return existingAd;
-    } throw new AccessDeniedException("403 - Доступ запрещен");
     }
 
     @Override
@@ -158,17 +156,18 @@ public class AdsServiceImpl implements AdsService {
         List<Ad> adList = mapperUtil.convertListAdEntityToAd(adEntityList);
         return new AdsDTO(adList.size(), adList);
     }
+
     @Override
-public String saveImage(MultipartFile file, int id) throws IOException {
+    public String saveImage(MultipartFile file, int id) throws IOException {
         Path filePath = Path.of("/images/Фото_объявления_" + id + "."
                 + StringUtils.getFilenameExtension(file.getOriginalFilename()));
         String destination = filePath.toString();
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         File newFile = new File(filePath.toUri());
-    file.transferTo(newFile);
-    return destination;
-}
+        file.transferTo(newFile);
+        return destination;
+    }
 
 }
     /*

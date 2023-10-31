@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +22,7 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.service.interfaces.AdsService;
 
 import java.io.*;
-import java.nio.file.AccessDeniedException;
+import java.rmi.AccessException;
 
 @Slf4j //  добавляет logger в класс
 @CrossOrigin(value = "http://localhost:3000") // Позволяет настроить CORS (Cross-Origin Resource Sharing)
@@ -36,6 +35,7 @@ import java.nio.file.AccessDeniedException;
 public class AdsController {
 
     private final AdsService adsService;
+
     //****************************************************
     // получение всех объявлений
     @Operation(summary = "Список всех объявлений")
@@ -64,26 +64,25 @@ public class AdsController {
 
     public ResponseEntity<Ad> addAd(@RequestPart("image") MultipartFile image,
                                     @RequestPart("properties") CreateOrUpdateAd properties,
-            Authentication authentication) throws IOException {
+                                    Authentication authentication) throws IOException {
         try {
             log.info("Добавляем новое объявление: " + properties);
-        return ResponseEntity.ok(adsService.createAd(properties, image, authentication));
+            return ResponseEntity.ok(adsService.createAd(properties, image, authentication));
+        } catch (IOException e) {
+            log.info("Ошибка при добавлении объявления");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-catch (IOException e){
-    log.info("Ошибка при добавлении объявления");
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-}
-        }
+    }
 
 
     // получение информации об объявлении
     @Operation(summary = "Получение информации об объявлении по id")
     @GetMapping("/{adId}")
-            @ApiResponses(value = {
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-    @ApiResponse(responseCode = "401", description = "Unauthorized"),
-    @ApiResponse(responseCode = "404", description = "Not Found")
-})
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Not Found")
+    })
     public ResponseEntity<ExtendedAdDTO> getAdById(@PathVariable int adId) {
         return ResponseEntity.ok().body(adsService.getAdById(adId));
     }
@@ -102,8 +101,11 @@ catch (IOException e){
 //    @PreAuthorize("hasRole('ADMIN') or " +
 //            "@adsService.getAdById(#adId).email == authentication.name")
 
-    public void removeAdById(@PathVariable int adId, Authentication authentication) throws IOException {
-                adsService.deleteAdsById(adId, authentication.getName());
+    public ResponseEntity <?> removeAdById(@PathVariable int adId, Authentication authentication) throws IOException {
+        if (adsService.checkAccessToAd(adId, authentication.getName())) {
+            adsService.deleteAdsById(adId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }  return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @Operation(summary = "Обновить объявление по id")
@@ -116,12 +118,15 @@ catch (IOException e){
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestBody CreateOrUpdateAd updateAd, Authentication authentication) throws AccessDeniedException {
-
-        return ResponseEntity.ok().body(adsService.editAdById(adId, updateAd, authentication.getName()));
+    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestBody CreateOrUpdateAd updateAd,
+                                       Authentication authentication) throws AccessException {
+        if (adsService.checkAccessToAd(adId, authentication.getName())) {
+            return ResponseEntity.ok().body(adsService.editAdById(adId, updateAd));
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    @Operation( summary = "Получение всех объявлений авторизованного пользователя")
+    @Operation(summary = "Получение всех объявлений авторизованного пользователя")
     @GetMapping("/me")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -130,6 +135,7 @@ catch (IOException e){
     public ResponseEntity<AdsDTO> getCurrentUserAds(Authentication authentication) {
         return ResponseEntity.ok().body(adsService.getAllAdsByUser(authentication.getName()));
     }
+
     @Operation(summary = "Обновление картинки объявления")
 //    @PreAuthorize("hasRole('ADMIN') and @adsService.getAdById(#adId).email == authentication.name")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -140,9 +146,12 @@ catch (IOException e){
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     public ResponseEntity<AdEntity> updateImage(@PathVariable int adId,
-                                                @RequestParam("image") MultipartFile image, Authentication authentication) throws IOException {
-
-        return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(adId, image, authentication.getName()));
+                                                @RequestParam("image") MultipartFile image,
+                                                Authentication authentication) throws IOException {
+        if (adsService.checkAccessToAd(adId, authentication.getName())) {
+            return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(adId, image));
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }
 

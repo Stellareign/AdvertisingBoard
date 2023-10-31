@@ -15,6 +15,8 @@ public interface CommentsService {
 
     void deleteComment(int adId, int pk);
 
+    boolean checkAccessToComments(int id, String username);
+
     CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment);
 
     CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId, Authentication authentication);

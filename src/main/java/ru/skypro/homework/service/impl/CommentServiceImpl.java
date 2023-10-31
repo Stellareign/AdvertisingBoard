@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.comments.CommentDTO;
 import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
@@ -73,14 +74,16 @@ public class CommentServiceImpl implements CommentsService {
 
     @Override
     public void deleteComment(int adId, int pk) {
-        commentRepository.findByAds_Pk(adId) ;
+        commentRepository.findByAds_Pk(adId);
 
-        if (commentRepository.findById(pk).isPresent()){
+        if (commentRepository.findById(pk).isPresent()) {
             commentRepository.deleteById(pk);
         }
-
-
-
+    }
+    @Override
+    public boolean checkAccessToComments(int id, String username) {
+        return commentRepository.findCommentByPk(id).getAuthor().getUsername().equals(username) ||
+                userRepository.findByUsername(username).getRole()== Role.ADMIN;
     }
 
     @Override
