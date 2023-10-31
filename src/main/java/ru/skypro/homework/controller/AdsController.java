@@ -102,11 +102,13 @@ public class AdsController {
     @PreAuthorize("hasRole('ADMIN') or " +
             "@adsService.getAdById(#adId).email == authentication.name")
 
-    public ResponseEntity <?> removeAdById(@PathVariable int adId, Authentication authentication) throws IOException {
+    public ResponseEntity<?> removeAdById(@PathVariable int adId, Authentication authentication) throws IOException {
         if (adsService.checkAccessToAd(adId, authentication.getName())) {
             adsService.deleteAdsById(adId);
             return new ResponseEntity<>(HttpStatus.OK);
-        }  return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        log.info("Отказано в доступе для " + authentication.getName());
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @Operation(summary = "Обновить объявление по id")
@@ -124,6 +126,7 @@ public class AdsController {
         if (adsService.checkAccessToAd(adId, authentication.getName())) {
             return ResponseEntity.ok().body(adsService.editAdById(adId, updateAd));
         }
+        log.info("Отказано в доступе для " + authentication.getName());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
@@ -152,6 +155,7 @@ public class AdsController {
         if (adsService.checkAccessToAd(adId, authentication.getName())) {
             return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(adId, image));
         }
+        log.info("Отказано в доступе для " + authentication.getName());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }

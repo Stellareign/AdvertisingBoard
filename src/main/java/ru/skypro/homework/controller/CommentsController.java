@@ -55,6 +55,7 @@ public class CommentsController {
             commentsService.deleteComment(adId, pk);
             return new ResponseEntity<>(HttpStatus.OK);
         }
+        log.info("Отказано в доступе для " + authentication.getName());
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
@@ -68,6 +69,7 @@ public class CommentsController {
         if (commentsService.checkAccessToComments(pk, authentication.getName())) {
             return ResponseEntity.ok(commentsService.updateComment(adId, pk, updateCommentDTO));
         }
+        log.info("Отказано в доступе для " + authentication.getName());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }
