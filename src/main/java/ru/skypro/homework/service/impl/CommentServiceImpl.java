@@ -63,6 +63,15 @@ public class CommentServiceImpl implements CommentsService {
     }
 
     @Override
+    public User getAuthorByCommentId(Integer pk) {
+        if (commentRepository.findById(pk).isPresent()) {
+            return commentRepository.findById(pk).get().getAuthor();
+        } else {
+            throw new RecordNotFoundException("Комментарий не найден!");
+        }
+    }
+
+    @Override
     public void deleteComment(int adId, int pk) {
         commentRepository.findByAds_Pk(adId) ;
 
