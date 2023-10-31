@@ -141,12 +141,11 @@ public class AdsServiceImpl implements AdsService {
         if (optionalAd.isPresent()
                 && ((optionalAd.get().getAuthor().getUsername().equals(username) ||
                 userRepository.findByUsername(username).getRole() == Role.ADMIN))) {
-            throw new AccessDeniedException("403 - Доступ запрещен");
-        }
         AdEntity existingAd = optionalAd.get();
         existingAd.setImage(saveImage(image, id));
         adsRepository.save(existingAd);
         return existingAd;
+    } throw new AccessDeniedException("403 - Доступ запрещен");
     }
 
     @Override
