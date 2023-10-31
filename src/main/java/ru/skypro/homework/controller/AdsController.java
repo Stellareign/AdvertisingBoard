@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,8 +99,8 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-//    @PreAuthorize("hasRole('ADMIN') or " +
-//            "@adsService.getAdById(#adId).email == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or " +
+            "@adsService.getAdById(#adId).email == authentication.name")
 
     public ResponseEntity <?> removeAdById(@PathVariable int adId, Authentication authentication) throws IOException {
         if (adsService.checkAccessToAd(adId, authentication.getName())) {
@@ -109,8 +110,8 @@ public class AdsController {
     }
 
     @Operation(summary = "Обновить объявление по id")
-//    @PreAuthorize("hasRole('ADMIN') or " +
-//            "@adsService.getAdById(#adId).email == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or " +
+            "@adsService.getAdById(#adId).email == authentication.name")
     @PatchMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -137,7 +138,7 @@ public class AdsController {
     }
 
     @Operation(summary = "Обновление картинки объявления")
-//    @PreAuthorize("hasRole('ADMIN') and @adsService.getAdById(#adId).email == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') and @adsService.getAdById(#adId).email == authentication.name")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),

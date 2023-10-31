@@ -47,7 +47,7 @@ public class CommentsController {
 
     // удаление комментария по id
     @Operation(summary = "Удаление комментария")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN') or @commentsService.getAuthorByCommentId(#pk).username == authentication.principal.username")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or @commentsService.getAuthorByCommentId(#pk).username == authentication.principal.username")
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable("adId") int adId, @PathVariable("commentId") int pk,
                                            Authentication authentication) {
@@ -60,7 +60,7 @@ public class CommentsController {
 
     // обновление комментария
     @Operation(summary = "Обновление комментария")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN') or @commentsService.getAuthorByCommentId(#pk).username == authentication.principal.username")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or @commentsService.getAuthorByCommentId(#pk).username == authentication.principal.username")
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId, @PathVariable("commentId") int pk,
                                                     @RequestBody CreateOrUpdateCommentDTO updateCommentDTO,
