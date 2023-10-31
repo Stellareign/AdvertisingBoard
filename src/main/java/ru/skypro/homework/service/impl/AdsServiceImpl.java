@@ -63,7 +63,6 @@ public class AdsServiceImpl implements AdsService {
     //+++++++++++++++++++++++++++++++++++++++++
     @Override
     @Transactional
-
     public void deleteAdsById(int adsId, String username) throws IOException {
         Optional<AdEntity> optionalAds = adsRepository.findById(adsId);
 
@@ -78,7 +77,7 @@ public class AdsServiceImpl implements AdsService {
             }
             log.info("Объявление " + adsId + " удалено");
         } else {
-            throw new AccessDeniedException("403 - Доступ запрещен");
+            throw new AccessDeniedException("403 - Доступ запрещен для");
         }
     }
 
@@ -124,14 +123,13 @@ public class AdsServiceImpl implements AdsService {
         if (optionalAd.isPresent()
                 && ((optionalAd.get().getAuthor().getUsername().equals(username) ||
                 userRepository.findByUsername(username).getRole() == Role.ADMIN))) {
-            throw new AccessDeniedException("403 - Доступ запрещен");
-        }
         AdEntity existingAd = optionalAd.get();
         existingAd.setTitle(updateAd.getTitle());
         existingAd.setPrice(updateAd.getPrice());
         existingAd.setDescription(updateAd.getDescription());
         adsRepository.save(existingAd);
         return modelMapper.map(existingAd, Ad.class);
+    } throw new AccessDeniedException("403 - Доступ запрещен");
     }
 
 //       Обновляет изображение
