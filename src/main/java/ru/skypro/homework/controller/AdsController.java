@@ -100,20 +100,16 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @PreAuthorize("hasRole('ADMIN') or " +
-            "@adsService.getAdById(#adId).email == authentication.name")
+            "@adsRepository.findByPk(#adId).author.username == authentication.name")
 
-    public ResponseEntity<?> removeAdById(@PathVariable int adId, Authentication authentication) throws IOException {
-        if (adsService.checkAccessToAd(adId, authentication.getName())) {
-            adsService.deleteAdsById(adId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        log.info("Отказано в доступе для " + authentication.getName());
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    public void removeAdById(@PathVariable int adId, Authentication authentication) throws IOException {
+
+        adsService.deleteAdsById(adId);
     }
 
     @Operation(summary = "Обновить объявление по id")
     @PreAuthorize("hasRole('ADMIN') or " +
-            "@adsService.getAdById(#adId).email == authentication.name")
+            "@adsRepository.findByPk(#adId).author.username == authentication.name")
     @PatchMapping("/{adId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -123,11 +119,8 @@ public class AdsController {
     })
     public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestBody CreateOrUpdateAd updateAd,
                                        Authentication authentication) throws AccessException {
-        if (adsService.checkAccessToAd(adId, authentication.getName())) {
-            return ResponseEntity.ok().body(adsService.editAdById(adId, updateAd));
-        }
-        log.info("Отказано в доступе для " + authentication.getName());
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        return ResponseEntity.ok().body(adsService.editAdById(adId, updateAd));
     }
 
     @Operation(summary = "Получение всех объявлений авторизованного пользователя")
@@ -141,7 +134,8 @@ public class AdsController {
     }
 
     @Operation(summary = "Обновление картинки объявления")
-    @PreAuthorize("hasRole('ADMIN') and @adsService.getAdById(#adId).email == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or " +
+            "@adsRepository.findByPk(#adId).author.username == authentication.name")
     @PatchMapping(value = "/{adId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -152,11 +146,8 @@ public class AdsController {
     public ResponseEntity<AdEntity> updateImage(@PathVariable int adId,
                                                 @RequestParam("image") MultipartFile image,
                                                 Authentication authentication) throws IOException {
-        if (adsService.checkAccessToAd(adId, authentication.getName())) {
-            return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(adId, image));
-        }
-        log.info("Отказано в доступе для " + authentication.getName());
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(adId, image));
     }
 }
 

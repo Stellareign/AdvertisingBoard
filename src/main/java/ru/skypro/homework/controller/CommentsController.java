@@ -47,29 +47,22 @@ public class CommentsController {
 
     // удаление комментария по id
     @Operation(summary = "Удаление комментария")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or @commentsService.getAuthorByCommentId(#pk).username == authentication.principal.username")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or @commentRepository.findCommentByPk(#pk).author.username  == authentication.name")
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable("adId") int adId, @PathVariable("commentId") int pk,
-                                           Authentication authentication) {
-        if (commentsService.checkAccessToComments(pk, authentication.getName())) {
+    public ResponseEntity<?> deleteComment(@PathVariable("adId") int adId, @PathVariable("commentId") int pk) {
+
             commentsService.deleteComment(adId, pk);
             return new ResponseEntity<>(HttpStatus.OK);
-        }
-        log.info("Отказано в доступе для " + authentication.getName());
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     // обновление комментария
     @Operation(summary = "Обновление комментария")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or @commentsService.getAuthorByCommentId(#pk).username == authentication.principal.username")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or @commentRepository.findCommentByPk(#pk).author.username == authentication.name")
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable int adId, @PathVariable("commentId") int pk,
-                                                    @RequestBody CreateOrUpdateCommentDTO updateCommentDTO,
-                                                    Authentication authentication) {
-        if (commentsService.checkAccessToComments(pk, authentication.getName())) {
+                                                    @RequestBody CreateOrUpdateCommentDTO updateCommentDTO) {
+
             return ResponseEntity.ok(commentsService.updateComment(adId, pk, updateCommentDTO));
-        }
-        log.info("Отказано в доступе для " + authentication.getName());
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
     }
 }
