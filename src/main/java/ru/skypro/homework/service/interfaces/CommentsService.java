@@ -1,28 +1,27 @@
 package ru.skypro.homework.service.interfaces;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.comments.CommentDTO;
 import ru.skypro.homework.dto.comments.CommentsDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
-import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.User;
 
-import java.util.List;
 
-
+@Service
 public interface CommentsService {
 
-   CommentsDTO getAllComments(Integer adId);
+    CommentsDTO getAllComments(Integer adId);
 
+    void deleteComment(int adId, int pk);
 
-
-    void deleteComment(Integer adId, Integer pk);
-
+    boolean checkAccessToComments(int id, String username);
 
     CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment);
 
-    CommentDTO addComment(CreateOrUpdateCommentDTO COUComment, Integer adId, String userInfo);
+    CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId, Authentication authentication);
+
+    User getAuthorByCommentId(Integer pk);
 
 
 //    User getUserId(int id);
@@ -36,7 +35,6 @@ public interface CommentsService {
 //    User getUserFirstName (String firstName );
 //
 //    Comments getText (String text)
-
 
 
 }

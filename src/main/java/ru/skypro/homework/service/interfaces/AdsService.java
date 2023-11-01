@@ -2,35 +2,46 @@ package ru.skypro.homework.service.interfaces;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.AdsDTO;
-import ru.skypro.homework.dto.ads.CreateOrUpdateAdDTO;
+import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
 import ru.skypro.homework.entity.AdEntity;
 
-import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
-
+import java.rmi.AccessException;
 
 @Service
 public interface AdsService {
+    public abstract AdsDTO getAdsDTO();
 
-    ExtendedAdDTO getAdById(int adsId);
+    public abstract ExtendedAdDTO getAdById(int adsId);
 
-    void deleteAdsById(int adsId);
 
-    Ad createAd(CreateOrUpdateAdDTO createAdDTO, MultipartFile image) throws IOException;
 
-    Ad editAdById(int id, CreateOrUpdateAdDTO updateAd)
-            throws EntityNotFoundException;
+    //+++++++++++++++++++++++++++++++++++++++++
+    @Transactional
+    void deleteAdsById(int adsId) throws IOException;
 
-    AdsDTO getAdsDTO();
+    boolean checkAccessToAd(int adId, String username);
+
+    Ad createAd(CreateOrUpdateAd createAdDTO,
+                MultipartFile image, Authentication authentication
+    ) throws IOException;
+
+
+
+    Ad editAdById(int id, CreateOrUpdateAd updateAd) throws AccessException;
+
 
     //       Обновляет изображение
-    //    с заданным
-    //    идентификатором.
+//    с заданным
+//    идентификатором.
     AdEntity updateImage(int id, MultipartFile image) throws IOException;
 
-    AdsDTO getAllAdsByUser(Authentication authentication);
+    AdsDTO getAllAdsByUser(String currentUserName);
+
+    String saveImage(MultipartFile file, int id) throws IOException;
 }

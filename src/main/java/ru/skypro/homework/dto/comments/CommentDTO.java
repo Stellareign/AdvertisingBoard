@@ -4,18 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.Comment;
-
-import java.time.LocalDateTime;
-
-import java.time.LocalDateTime;
 
 //
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 
 public class CommentDTO {
 
@@ -25,7 +18,7 @@ public class CommentDTO {
 
     private String authorFirstName;//    имя создателя комментария
 
-    private LocalDateTime createdAt; // дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
+    private Long createdAt; // дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
 
     private Integer pk;    // id комментания
 

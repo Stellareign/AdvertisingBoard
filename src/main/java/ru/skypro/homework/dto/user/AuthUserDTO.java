@@ -1,4 +1,4 @@
-package ru.skypro.homework.dto.authorization;
+package ru.skypro.homework.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,14 +9,12 @@ import ru.skypro.homework.dto.Role;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class Register {
-
-    private String username; //e-mail при регистрации
+@Component
+public class AuthUserDTO {
+    /**
+     * класс для авторизации по ролям
+     */
+    private String username;
     private String password;
-    private String firstName;
-    private String lastName;
-    private String phone;
     private Role role;
-
 }

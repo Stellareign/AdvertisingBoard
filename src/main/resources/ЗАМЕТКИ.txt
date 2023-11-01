@@ -1,31 +1,68 @@
-*) исходный код: https://github.com/skypro-backend/example-for-graduate-work
+*) исходный код:
+https://github.com/skypro-backend/example-for-graduate-work
 
  *) "currentPassword": "stringst",
   "newPassword": "stringst
   - что за тип stringst????
 
 
- *) Запуск докера из терминала: docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.19
+ *) Запуск докера из терминала:
+ docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.19
 
  *) in changelog-master написать:
  databaseChangeLog:
    - include:
        file: liquibase/init.sql::raw::includeAll
-
+//**************************************************************************************
 *) Регистрация в сваггер
 {
-  "username": "pupkin@poy.ru",
-  "password": "qwerty123",
-  "firstName": "Вася",
-  "lastName": "Пупкин",
-  "phone": "+7(123)456-78-90",
+  "username": "user@user.ru",
+  "password": "123456789",
+  "firstName": "Светослав",
+  "lastName": "Кожедубович",
+  "phone": "+7(123)456-78-56",
   "role": "USER"
 }
 
-*) логин:
+*) логин: (юзер)
 {
-  "username": "pupkin@poy.ru",
-  "password": "qwerty123"
+  "username": "user@user.ru",
+    "password": "123456789"
 }
 
+{
+  "username": "admin@gmail.com",
+  "password": "password"
+}
+//*******************************************************************************************************
 *) https://editor.swagger.io/
+
+*) для освобождения порта 8080 (через терминал)
+mac:
+ sudo lsof -i :8080 - найти процесс
+ sudo kill <PID> - остановить процесс, <PID> - нормер процесса
+win:
+netstat -ano | findstr :8080
+taskkill /PID <PID>
+
+
+
+***************************************** для подключения к БД  ***************************************
+spring.datasource.url=jdbc:postgresql://localhost:5432/diplom
+spring.datasource.username=postgres
+spring.datasource.password=1234
+spring.jpa.hibernate.ddl-auto=update
+logging.level.root=info
+spring.liquibase.change-log=classpath:liquibase/changelog-master.yml
+
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+#pereopredeenie binov:
+#spring.main.allow-bean-definition-overriding = true
+
+
+#vyvodit telo sql zaposa v konsol'
+spring.jpa.show-sql=true
+#dlya ustraneniya oshibki s sozdaniem tablitsy authors:
+spring.jpa.properties.hibernate.globally_quoted_identifiers=true
+
+path.to.image.folder=/images/

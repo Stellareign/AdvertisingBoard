@@ -3,26 +3,33 @@ package ru.skypro.homework.service.interfaces;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.entity.Avatar;
+import ru.skypro.homework.exceptions.RecordNotFoundException;
 
 import java.io.IOException;
 
 @Service
 public interface ImageService {
-    /**
-     * Метод загружает аватар пользователя (изображение)
-     * @param image - загружаемый файл
-     * @param authentication - аутентификаия текущего пользователя
-     * @return - возвращает сохранённую картику как резкльтат выполнения метода
-     * Метод может выкидывать исключение:
-     * @throws IOException
-     */
-    Avatar createAvatar(MultipartFile image, Authentication authentication) throws IOException;
+//
 
     /**
-     * Удаление аватара после замены
-     * @param avatarPath
      * @throws IOException
      */
-    void deleteImage(String avatarId) throws IOException;
+    void deleteOldAvatar(Authentication authentication) throws IOException;
+
+    /**
+     * @param image
+     * @return
+     * @throws IOException
+     */
+    String saveImage(MultipartFile image) throws IOException;
+
+
+    /**
+     * Извлечение аватара из БД через пользователя
+     *
+     * @param authentication
+     * @return
+     * @throws RecordNotFoundException
+     */
+    byte[] getAvatar(Authentication authentication) throws IOException;
 }

@@ -2,18 +2,19 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.user.AuthUserDTO;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.UserDTOFactory;
+
+import java.net.MalformedURLException;
+import java.nio.file.Path;
 
 @Service
 @RequiredArgsConstructor
 public class UserDTOFactoryImpl implements UserDTOFactory {
-
-   private final UserRepository userRepository;
 
     //******************************** пароли  *********************
 
@@ -36,9 +37,10 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     }
 
     @Override
-    public User fromUserDTOtoUser(UserDTO userDTO, User user) {
-        return new User(user.getId(), userDTO.getUsername(), user.getPassword(), userDTO.getFirstName(),
-                userDTO.getLastName(), userDTO.getPhone(), userDTO.getAvatar(),  userDTO.getRole(),
+    public User fromUserDTOtoUser(UserDTO userDTO, User user) throws MalformedURLException {
+
+        return new User(user.getId(), userDTO.getEmail(), user.getPassword(), userDTO.getFirstName(),
+                userDTO.getLastName(), userDTO.getPhone(), userDTO.getAvatar(), userDTO.getRole(),
                 user.getRegisterDate());
     }
 
@@ -48,10 +50,23 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
         return new UpdateUserDTO(user.getFirstName(), user.getLastName(), user.getPhone());
     }
 
+    @Override
     public User fromUpdateUserDTOtoUser(UpdateUserDTO updateUserDTO, User user) {
-        return new User(user.getId(), user.getUsername(), user.getPassword(), updateUserDTO.getFirstName(),
-                updateUserDTO.getLastName(), updateUserDTO.getPhone(),  user.getAvatarPath(), user.getRole(),
-                user.getRegisterDate());
+        user.setFirstName(updateUserDTO.getFirstName());
+        user.setLastName(updateUserDTO.getLastName());
+        user.setPhone(updateUserDTO.getPhone());
+        return user;
     }
 
+    // **************************** User to AuthUserDTO // AuthUserDTO to User ***************************
+    @Override
+    public AuthUserDTO fromUserToAuthUserDTO(User user) {
+        return new AuthUserDTO(user.getUsername(), user.getPassword(), user.getRole());
+    }
+    @Override
+    public User fromAuthUserDTOtoUser(User user, AuthUserDTO authUserDTO){
+        return new User(user.getId(), authUserDTO.getUsername(), authUserDTO.getPassword(),user.getFirstName(),
+                user.getLastName(), user.getPhone(),  user.getAvatarPath(), authUserDTO.getRole(),
+                user.getRegisterDate());
+    }
 }

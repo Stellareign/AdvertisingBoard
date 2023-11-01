@@ -2,9 +2,12 @@ package ru.skypro.homework.dto.ads;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-@AllArgsConstructor
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+
 @Data
-public class CreateOrUpdateAdDTO {
+
+public class CreateOrUpdateAd {
     private String title;
     private int price;
     private String description;

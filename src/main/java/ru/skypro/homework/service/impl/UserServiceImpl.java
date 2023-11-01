@@ -2,7 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,7 +11,6 @@ import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
-import ru.skypro.homework.entity.Avatar;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.ImageService;
@@ -108,7 +106,7 @@ public class UserServiceImpl implements UserService {
      * @param username      - логин (email) пользователя
      *                      Принимаемый параметр и возвращаемый объект:
      * @param updateUserDTO класса {@link UpdateUserDTO}
-     *                      Перед сохранением обновлённых данный указанный телефон проверяется на соответствие
+     *                      Перед сохранением обновлённых данных указанный телефон проверяется на соответствие
      *                      требованиям в методе {@link #checkPhoneFormat(String)}
      *                      Обновлённая сущность сохраняется в методе
      *                      {@link ru.skypro.homework.repository.UserRepository#save(Object)}
@@ -137,7 +135,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username) != null;
     }
 
-//**************************************** СОХРАНЕНИЕ ЮЗЕРА  ПРИ РЕГИСТРАЦИИ********************************************
+//**************************************** СОХРАНЕНИЕ ЮЗЕРА  ПРИ РЕГИСТРАЦИИ ********************************************
 
     /**
      * Сохранение пользователя в базу данных после ввода данных при регистрации
@@ -178,29 +176,26 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-//****************************************** ОБНОВЛЕНИЕ АВАТАРА ЮЗЕРА  *************************************************
-@Value("${path.to.image.folder}")
-String path;
+    //****************************************** ОБНОВЛЕНИЕ АВАТАРА ЮЗЕРА  *************************************************
+
     /**
      * Метод обновления аватара пользователя
      * Принимает на вход два параметра
-     * @param image - изображение
-     * @param authentication  - текущего пользователя
+     *
+     * @param image          - изображение
+     * @param authentication - текущего пользователя
      * @return объект класса {@link UserDTO}
      * @throws IOException
      */
     @Override
 //    @Transactional
-    public UserDTO updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
+    public String updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
-        Avatar avatar = imageService.createAvatar(image, authentication);
-        String imageUrl = path + avatar.getId() + avatar.getFileType();
-
-//        user.setAvatarPath(avatar.getId() + avatar.getFileType());
-        user.setAvatarPath(imageUrl);
+        imageService.deleteOldAvatar(authentication);
+        user.setAvatarPath(imageService.saveImage(image));
         userRepository.save(user);
 
-        return userDTOFactory.fromUserToUserDTO(user);
+        return user.getAvatarPath();
     }
 
 
@@ -210,16 +205,16 @@ String path;
         if (password.length() >= 8 && !password.isBlank()) {
             log.info("Пароль соответствует требованиям!");
             return true;
-        } else log.info("Пароль не соответствует требованиям! Пароль не должен состоять из пробелов, длина" +
-                "пароля должны быть не менее 8-ми символов!");
+        } log.info("Пароль не соответствует требованиям! Пароль не должен состоять из пробелов, длина" +
+                    "пароля должны быть не менее 8-ми символов!");
         return false;
     }
 
     private boolean checkPhoneFormat(String phone) {
         if (phone.matches("\\+7\\s?\\(\\d{3}\\)\\s?\\d{3}-\\d{2}-\\d{2}")) {
-            log.info("Телефон записан!");
+            log.info("Формат телефона верный.");
             return true;
-        } else log.info("Укажите номер телефона в формате +7(ХХХ)ХХХ-ХХ-ХХ!");
+        } log.info("Укажите номер телефона в формате +7(ХХХ)ХХХ-ХХ-ХХ!");
         return false;
     }
 
@@ -227,7 +222,7 @@ String path;
         if (username.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
             log.info("Логин указан верно");
             return true;
-        } else log.info("Проверьте указанный email. Логин должен быть указан в формате user@user.us!");
+        } log.info("Проверьте указанный email. Логин должен быть указан в формате user@user.us!");
         return false;
     }
 }

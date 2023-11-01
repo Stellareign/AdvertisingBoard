@@ -5,9 +5,15 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
+@AllArgsConstructor
+
 
 @Table(name = "ads")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
@@ -27,6 +33,17 @@ public class AdEntity {
     private User author;          // автор объявления
     private String image;                   //'ссылка на картинку объявления'
 
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ads")
+    private List<Comment> comments = new ArrayList<>();
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private ImageAd imageAd = new ImageAd();
+
+//        @OneToMany(mappedBy = "ads",
+//                orphanRemoval = true,
+//                fetch = FetchType.LAZY,
+//                cascade = CascadeType.ALL)
+//    private Set<Comment> comments = new HashSet<>();
     public AdEntity(String title, int price, String description, String image, User author) {
         this.title = title;
         this.price = price;
@@ -35,9 +52,7 @@ public class AdEntity {
         this.author = author;
     }
 
-    public AdEntity() {
-
-    }
+    public AdEntity() {}
 
     @Override
     public String toString() {

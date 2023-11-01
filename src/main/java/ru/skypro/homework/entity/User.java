@@ -7,6 +7,7 @@ import ru.skypro.homework.dto.Role;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -49,11 +50,6 @@ public class User {
 
     //**********************************
 
-//    @OneToOne
-//    @JoinColumn(name = "image_id")
-//    @Column(columnDefinition = "VARCHAR(255)")
-//    private Avatar userAvatar;
-
     @Column(name = "avatar_path")
     String avatarPath;  //
 
@@ -63,9 +59,13 @@ public class User {
     private Role role;
 
 
-    // ******************************************
     @Column(name = "register_date", nullable = false)
     private LocalDate registerDate;
+
+//    @OneToOne
+//    @JoinColumn(name = "image_id")
+////    @Column(columnDefinition = "VARCHAR(255)")
+//    private Avatar userAvatar;
 
 
 //*********************** конструкторы **************************
@@ -74,7 +74,7 @@ public class User {
         this.username = username;
     }
 
-    // конструктор при регистрации:
+    // ************** конструктор при регистрации: ***********
     public User(String username, String firstName, String lastName, Role role, String phone, String password,
                 LocalDate registerDate) {
         this.username = username;
@@ -86,6 +86,7 @@ public class User {
         this.registerDate = registerDate;
     }
 
+ // ********************************************************************
 
     @Override
     public boolean equals(Object o) {

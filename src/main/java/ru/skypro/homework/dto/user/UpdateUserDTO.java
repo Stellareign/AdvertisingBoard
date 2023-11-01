@@ -9,7 +9,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
-@Component
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateUserDTO {
@@ -22,7 +21,4 @@ public class UpdateUserDTO {
 
     @Pattern(regexp = "\\+7\\s?\\(\\d{3}\\)\\s?\\d{3}-\\d{2}-\\d{2}")
     private String phone;
-
-
-
 }

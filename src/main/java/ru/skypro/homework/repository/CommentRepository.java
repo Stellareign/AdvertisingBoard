@@ -8,9 +8,11 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
-    List<Comment> findByAdId(Integer adId);
+    List<Comment> findByAds_Pk(int adId);
 
-    void deleteByPkAndAdId(Integer pk, Integer adId);
+//    void deleteCommentByAds_PkAndPk(int adId, int commentId);
 
-    Comment findByPkAndAdId(Integer pk, Integer adId);
+    void deleteCommentsByAds_Pk(int adId);
+    Comment findCommentByPk (int pk);
+
 }

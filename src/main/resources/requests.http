@@ -1,0 +1,35 @@
+GET http://localhost:8080
+
+###2 user
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "user@user.ru",
+  "password": "123456789"
+}
+
+
+###3 admin
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "admin@gmail.com",
+  "password": "password"
+}
+
+###4 удаление ads
+DELETE http://localhost:8080/ads/22
+
+###5 ads по id
+GET  http://localhost:8080/ads/23
+
+###6 все ads
+GET  http://localhost:8080/ads
+
+###7 все ads пользователя
+GET  http://localhost:8080/ads/me
+
+###8 info о пользователе
+GET http://localhost:8080/users/me
