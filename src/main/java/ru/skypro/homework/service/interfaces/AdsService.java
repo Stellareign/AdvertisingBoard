@@ -53,5 +53,5 @@ public interface AdsService {
      * @return image - массив байт картинки
      * @throws IOException выбрасывается при ошибках, возникающих во время выгрузки изображения
      */
-    byte[] downloadAdImageFromFS(int adId) throws IOException;
+    byte[] getAdImageFromFS(int adId) throws IOException;
 }

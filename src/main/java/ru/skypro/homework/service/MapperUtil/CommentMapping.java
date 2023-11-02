@@ -22,7 +22,7 @@ public class CommentMapping {
         commentDTO.setPk(entity.getPk());
         commentDTO.setAuthor(entity.getAuthor().getId());
         commentDTO.setAuthorFirstName(entity.getAuthor().getFirstName());
-        commentDTO.setAuthorImage(entity.getAuthor().getAvatarPath());
+        commentDTO.setAuthorImage("/users/image/" + entity.getAuthor().getId());
         commentDTO.setCreatedAt(Objects.requireNonNullElse(entity.getCreatedAt(), 0L));
         commentDTO.setText(entity.getText());
 
@@ -38,5 +38,14 @@ public class CommentMapping {
         entity.setCreatedAt(System.currentTimeMillis());
         return  entity;
     }
-
+//    public Comment toComment(CommentEntity commentEntity) {
+//        Comment comment = new Comment();
+//        comment.setAuthor(commentEntity.getUserEntity().getId());
+//        comment.setAuthorImage("/users/image/" + commentEntity.getUserEntity().getId());
+//        comment.setAuthorFirstName(commentEntity.getUserEntity().getFirstName());
+//        comment.setCreatedAt(commentEntity.getCreatedAt());
+//        comment.setPk(commentEntity.getId());
+//        comment.setText(commentEntity.getText());
+//        return comment;
+//    }
 }

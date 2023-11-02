@@ -12,7 +12,9 @@ import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.interfaces.FileService;
 import ru.skypro.homework.service.interfaces.ImageService;
 import ru.skypro.homework.service.interfaces.UserDTOFactory;
 import ru.skypro.homework.service.interfaces.UserService;
@@ -49,6 +51,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserDTOFactory userDTOFactory;
     private final ImageService imageService;
+    private final FileService fileService;
 
 //************************************************** МЕТОДЫ ************************************************************
 
@@ -224,6 +227,23 @@ public class UserServiceImpl implements UserService {
             return true;
         } log.info("Проверьте указанный email. Логин должен быть указан в формате user@user.us!");
         return false;
+    }
+    @Override
+//    public byte[] getAdImageFromFS(int adId) throws IOException {
+//        AdEntity adEntity = adsRepository.findById(adId).orElseThrow(() -> new RecordNotFoundException("AD_NOT_FOUND"));
+//        byte[] image = fileService.downloadImage(adEntity.getImage());
+//        log.info("Download advertisement image from database method was invoked.");
+//        return image;
+//    }
+    public byte[] downloadAvatarFromFS(int userId) throws IOException {
+        User userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new RecordNotFoundException("Нет такого Юзера"));
+        if (userEntity.getAvatarPath() != null) {
+            byte[] image = fileService.downloadImage(userEntity.getAvatarPath());
+            log.info("Download avatar for user: {} method was invoked", userEntity.getUsername());
+            return image;
+        }
+        return new byte[0];
     }
 }
 

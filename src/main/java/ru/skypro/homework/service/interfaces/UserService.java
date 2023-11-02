@@ -27,4 +27,12 @@ public interface UserService {
 
     //****************************************** ОБНОВЛЕНИЕ АВАТАРА ЮЗЕРА  *********************************************
     String updateUserAvatar (Authentication authentication, MultipartFile image) throws IOException;
+
+    //    public byte[] getAdImageFromFS(int adId) throws IOException {
+//        AdEntity adEntity = adsRepository.findById(adId).orElseThrow(() -> new RecordNotFoundException("AD_NOT_FOUND"));
+//        byte[] image = fileService.downloadImage(adEntity.getImage());
+//        log.info("Download advertisement image from database method was invoked.");
+//        return image;
+//    }
+    byte[] downloadAvatarFromFS(int userId) throws IOException;
 }

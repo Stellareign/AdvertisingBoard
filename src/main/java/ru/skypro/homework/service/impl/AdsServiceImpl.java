@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,8 +43,8 @@ public class AdsServiceImpl implements AdsService {
     private final MapperUtilAds mapperUtil;
     private final ModelMapper modelMapper;
     private final CommentRepository commentRepository;
-//    @Value("${path.to.image.folder}")
-//    private String adsImageDir;
+    @Value("${path.to.image.folder}")
+    private String adsImageDir;
 
     @Override
     public AdsDTO getAdsDTO() {
@@ -160,11 +161,11 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public String saveImage(MultipartFile file, int id) throws IOException {
-        Path filePath = Path.of("/images/Фото_объявления_" + id + "."
+        Path filePath = Path.of(adsImageDir,"Фото_объявления_" + id + "."
                 + StringUtils.getFilenameExtension(file.getOriginalFilename()));
         String destination = filePath.toString();
-        Files.createDirectories(filePath.getParent());
-        Files.deleteIfExists(filePath);
+//        Files.deleteIfExists(filePath);
+//        Files.createDirectories(filePath.getParent());
 //        File newFile = new File(filePath.toUri());
 //        file.transferTo(newFile);
         fileService.uploadImage(file, filePath);
@@ -179,7 +180,7 @@ public class AdsServiceImpl implements AdsService {
      * @throws IOException выбрасывается при ошибках, возникающих во время выгрузки изображения
      */
     @Override
-    public byte[] downloadAdImageFromFS(int adId) throws IOException {
+    public byte[] getAdImageFromFS(int adId) throws IOException {
         AdEntity adEntity = adsRepository.findById(adId).orElseThrow(() -> new RecordNotFoundException("AD_NOT_FOUND"));
         byte[] image = fileService.downloadImage(adEntity.getImage());
         log.info("Download advertisement image from database method was invoked.");

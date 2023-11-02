@@ -150,8 +150,8 @@ public class AdsController {
         return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(adId, image));
     }
     @GetMapping(value = "/image/{adId}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public ResponseEntity<byte[]> downloadAdImageFromFS(@PathVariable int adId) throws IOException {
-        return ResponseEntity.ok(adsService.downloadAdImageFromFS(adId));
+    public ResponseEntity<byte[]> getAdImageFromFS(@PathVariable int adId) throws IOException {
+        return ResponseEntity.ok(adsService.getAdImageFromFS(adId));
     }
 }
 

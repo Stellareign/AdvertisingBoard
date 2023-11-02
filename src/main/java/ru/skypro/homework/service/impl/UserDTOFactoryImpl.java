@@ -33,7 +33,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     @Override
     public UserDTO fromUserToUserDTO(User user) {
         return new UserDTO(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(),
-                user.getPhone(), user.getAvatarPath(), user.getRole());
+                user.getPhone(), ("/users/image/" + user.getId()), user.getRole());
     }
 
     @Override

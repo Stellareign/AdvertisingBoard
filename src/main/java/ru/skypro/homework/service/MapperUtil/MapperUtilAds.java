@@ -40,7 +40,7 @@ public class MapperUtilAds {
                 ad.getDescription(),
                 ad.getPrice(),
                 ad.getTitle(),
-                ad.getImage(), // фото товара
+                ("/ads/image/"+ad.getPk()), // фото товара
                 user.getFirstName(),
                 user.getLastName(),
                 user.getUsername(),
@@ -65,21 +65,21 @@ public class MapperUtilAds {
                 adEntity.getPrice(),                // 'цена объявления'
                 adEntity.getTitle(),                // 'заголовок объявления'
                 adEntity.getAuthor().getId(),           // автор объявления
-                adEntity.getImage()                 // photo
-        );
+                ("/ads/image/"+adEntity.getPk()) // фото товара
+                 );
     }
-    public void uploadImage(MultipartFile image, Path filePath) throws IOException {
-        Files.createDirectories(filePath.getParent());
-        Files.deleteIfExists(filePath);
-
-        try (InputStream is = image.getInputStream();
-             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
-        ) {
-            bis.transferTo(bos);
-        }
-    }
+//    public void uploadImage(MultipartFile image, Path filePath) throws IOException {
+//        Files.createDirectories(filePath.getParent());
+//        Files.deleteIfExists(filePath);
+//
+//        try (InputStream is = image.getInputStream();
+//             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
+//             BufferedInputStream bis = new BufferedInputStream(is, 1024);
+//             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
+//        ) {
+//            bis.transferTo(bos);
+//        }
+//    }
     public List<Ad> convertListAdEntityToAd(List<AdEntity> adEntityList) {
         List<Ad> listAd = new ArrayList<>();
 
@@ -89,7 +89,7 @@ public class MapperUtilAds {
             ad.setPrice(adEntity.getPrice());               // 'цена объявления'
             ad.setTitle(adEntity.getTitle());               // 'заголовок объявления'
             ad.setAuthorId(adEntity.getAuthor().getId());   // id автора объявления
-            ad.setImage(adEntity.getImage());               //'ссылка на картинку объявления'
+            ad.setImage(("/ads/image/"+adEntity.getPk()));               //'ссылка на картинку объявления'
             listAd.add(ad);
         }
         return listAd;

@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.interfaces.FileService;
 import ru.skypro.homework.service.interfaces.ImageService;
 
 import java.io.File;
@@ -35,9 +36,10 @@ public class ImagesServiceImpl implements ImageService {
 
 
     private final UserRepository userRepository;
+    private final FileService fileService;
 
 
-    @Value("${path.to.image.folder}")
+    @Value("${path.to.avatar.folder}")
     private String pathToImage;
 
     @Override
@@ -64,16 +66,19 @@ public class ImagesServiceImpl implements ImageService {
      * @throws IOException
      */
     public String saveImage(MultipartFile image) throws IOException {
-        String fileName = UUID.randomUUID().toString();
-        Path imagePath = Path.of(pathToImage + fileName + "."
+//        String fileName = UUID.randomUUID().toString();
+        Path imagePath = Path.of(pathToImage + "avatar."
                 + getFilenameExtension(image.getOriginalFilename()));
 
-       URL avatarPath = imagePath.toUri().toURL();
-        Files.createDirectories(imagePath.getParent());
-
-        File newFile = new File(imagePath.toUri());
-        image.transferTo(newFile);
-        return avatarPath.toString().replace("file:/", "");
+//       URL avatarPath = imagePath.toUri().toURL();
+//        Files.createDirectories(imagePath.getParent());
+//
+//        File newFile = new File(imagePath.toUri());
+//        image.transferTo(newFile);
+//        return avatarPath.toString();
+//                .replace("file:/", "");
+        fileService.uploadImage(image, imagePath);
+        return imagePath.toString();
     }
 
 
@@ -87,7 +92,8 @@ public class ImagesServiceImpl implements ImageService {
     public byte[] getAvatar(Authentication authentication) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
         if (user.getAvatarPath() != null && !user.getAvatarPath().isEmpty()) {
-            Path path = Path.of(user.getAvatarPath());
+ //           Path path = Path.of(user.getAvatarPath());
+            Path path = Path.of("/users/image/"+user.getId());
             return Files.readAllBytes(path);
         }
         throw new RecordNotFoundException("Сейчас у пользователя нет аватара");
