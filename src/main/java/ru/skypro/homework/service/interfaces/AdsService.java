@@ -44,4 +44,14 @@ public interface AdsService {
     AdsDTO getAllAdsByUser(String currentUserName);
 
     String saveImage(MultipartFile file, int id) throws IOException;
+
+    /*
+     * Выгрузка изображения объявления из файловой системы.<br>
+     * - Поиск объявления в базе данных по идентификатору объявления {@link AdRepository#findById(Object)}.<br>
+     * - Копирование данных изображения. Входной поток получаем из метода {@link Files#newInputStream(Path, OpenOption...)}
+     * @param adId идентификатор объявления в БД
+     * @return image - массив байт картинки
+     * @throws IOException выбрасывается при ошибках, возникающих во время выгрузки изображения
+     */
+    byte[] downloadAdImageFromFS(int adId) throws IOException;
 }

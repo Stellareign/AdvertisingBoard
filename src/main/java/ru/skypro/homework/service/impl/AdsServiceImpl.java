@@ -21,9 +21,9 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.MapperUtil.MapperUtilAds;
 import ru.skypro.homework.service.interfaces.AdsService;
+import ru.skypro.homework.service.interfaces.FileService;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,6 +38,7 @@ public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
     private final UserRepository userRepository;
+    private final FileService fileService;
     private final MapperUtilAds mapperUtil;
     private final ModelMapper modelMapper;
     private final CommentRepository commentRepository;
@@ -164,11 +165,26 @@ public class AdsServiceImpl implements AdsService {
         String destination = filePath.toString();
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
-        File newFile = new File(filePath.toUri());
-        file.transferTo(newFile);
+//        File newFile = new File(filePath.toUri());
+//        file.transferTo(newFile);
+        fileService.uploadImage(file, filePath);
         return destination;
     }
-
+    /*
+     * Выгрузка изображения объявления из файловой системы.<br>
+     * - Поиск объявления в базе данных по идентификатору объявления {@link AdRepository#findById(Object)}.<br>
+     * - Копирование данных изображения. Входной поток получаем из метода {@link Files#newInputStream(Path, OpenOption...)}
+     * @param adId идентификатор объявления в БД
+     * @return image - массив байт картинки
+     * @throws IOException выбрасывается при ошибках, возникающих во время выгрузки изображения
+     */
+    @Override
+    public byte[] downloadAdImageFromFS(int adId) throws IOException {
+        AdEntity adEntity = adsRepository.findById(adId).orElseThrow(() -> new RecordNotFoundException("AD_NOT_FOUND"));
+        byte[] image = fileService.downloadImage(adEntity.getImage());
+        log.info("Download advertisement image from database method was invoked.");
+        return image;
+    }
 }
     /*
     из разбора с Волковым
