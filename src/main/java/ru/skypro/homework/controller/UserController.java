@@ -140,17 +140,16 @@ public class UserController {
     }
 
     //****************************** ПЕРЕДАЧА АВАТАРА ПОЛЬЗОВАТЕЛЯ НА ФРОНТ **************************
-//    @Operation(summary = "Передача картинки пользователя на фронт")
+    @Operation(summary = "Передача картинки пользователя на фронт")
 //    @GetMapping(value = "/me/image", produces = {MediaType.IMAGE_PNG_VALUE,
 //            MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE})
 //
 //    public ResponseEntity<?> getImage(Authentication authentication) throws IOException {
 //
 //        return ResponseEntity.ok().body(imageService.getAvatar(authentication));
-//
 //    }
     @GetMapping(value = "/image/{userId}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public ResponseEntity<byte[]> downloadUserAvatarFromFS(@PathVariable int userId) throws IOException {
+    public ResponseEntity<byte[]> getImage(@PathVariable int userId) throws IOException {
         return ResponseEntity.ok(userService.downloadAvatarFromFS(userId));
     }
 }

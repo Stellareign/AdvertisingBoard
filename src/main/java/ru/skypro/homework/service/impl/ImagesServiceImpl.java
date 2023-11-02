@@ -25,7 +25,7 @@ import static org.springframework.util.StringUtils.getFilenameExtension;
 @Service
 @RequiredArgsConstructor
 
-/**
+/*
  *@Transactional -  указывает на то, что метод или класс должен быть выполнен в транзакции.
  * Транзакция -  единица работы с БД>, которая должна быть выполнена целиком или не выполнена вообще.
  * @Transactional позволяет автоматически управлять транзакциями и обеспечить целостность данных при
@@ -65,18 +65,9 @@ public class ImagesServiceImpl implements ImageService {
      * @return
      * @throws IOException
      */
-    public String saveImage(MultipartFile image) throws IOException {
-//        String fileName = UUID.randomUUID().toString();
-        Path imagePath = Path.of(pathToImage + "avatar."
+    public String saveImage(MultipartFile image, int id) throws IOException {
+        Path imagePath = Path.of(pathToImage + "avatar"+ id +"."
                 + getFilenameExtension(image.getOriginalFilename()));
-
-//       URL avatarPath = imagePath.toUri().toURL();
-//        Files.createDirectories(imagePath.getParent());
-//
-//        File newFile = new File(imagePath.toUri());
-//        image.transferTo(newFile);
-//        return avatarPath.toString();
-//                .replace("file:/", "");
         fileService.uploadImage(image, imagePath);
         return imagePath.toString();
     }
@@ -91,7 +82,7 @@ public class ImagesServiceImpl implements ImageService {
      */
     public byte[] getAvatar(Authentication authentication) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
-        if (user.getAvatarPath() != null && !user.getAvatarPath().isEmpty()) {
+        if (!user.getAvatarPath().isEmpty()) {
  //           Path path = Path.of(user.getAvatarPath());
             Path path = Path.of("/users/image/"+user.getId());
             return Files.readAllBytes(path);

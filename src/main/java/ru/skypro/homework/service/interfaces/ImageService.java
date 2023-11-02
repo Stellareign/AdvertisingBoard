@@ -21,7 +21,7 @@ public interface ImageService {
      * @return
      * @throws IOException
      */
-    String saveImage(MultipartFile image) throws IOException;
+    String saveImage(MultipartFile image, int id) throws IOException;
 
 
     /**

@@ -11,6 +11,7 @@ import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
+import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.UserRepository;
@@ -195,7 +196,7 @@ public class UserServiceImpl implements UserService {
     public String updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
         imageService.deleteOldAvatar(authentication);
-        user.setAvatarPath(imageService.saveImage(image));
+        user.setAvatarPath(imageService.saveImage(image, user.getId()));
         userRepository.save(user);
 
         return user.getAvatarPath();
@@ -229,21 +230,13 @@ public class UserServiceImpl implements UserService {
         return false;
     }
     @Override
-//    public byte[] getAdImageFromFS(int adId) throws IOException {
-//        AdEntity adEntity = adsRepository.findById(adId).orElseThrow(() -> new RecordNotFoundException("AD_NOT_FOUND"));
-//        byte[] image = fileService.downloadImage(adEntity.getImage());
-//        log.info("Download advertisement image from database method was invoked.");
-//        return image;
-//    }
     public byte[] downloadAvatarFromFS(int userId) throws IOException {
         User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new RecordNotFoundException("Нет такого Юзера"));
-        if (userEntity.getAvatarPath() != null) {
             byte[] image = fileService.downloadImage(userEntity.getAvatarPath());
             log.info("Download avatar for user: {} method was invoked", userEntity.getUsername());
             return image;
-        }
-        return new byte[0];
     }
+
 }
 
