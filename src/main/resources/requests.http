@@ -1,5 +1,75 @@
-GET http://localhost:8080
+GET http://localhost:8080/ads
+Content-Type: application/json
+Authorization: Basic user0@mail.ru user0000
 
+###
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "user0@mail.ru",
+  "password": "user0000"
+}
+
+###
+POST http://localhost:8080/register
+Content-Type: application/json
+
+{
+  "username": "user0@mail.ru",
+  "password": "user0000",
+  "firstName": " asdad",
+  "lastName": " asdad",
+  "phone": " asdad",
+  "role": "USER"
+}
+
+###
+GET http://localhost:8080/ads/me
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+###
+GET http://localhost:8080/users/me
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+###
+PATCH http://localhost:8080/users/me
+Content-Type: application/json
+Authorization: Basic user@gmail.com password
+
+{
+  "phone": "1111111111",
+  "lastName": "Ivanov",
+  "firstName": "Ivan"
+}
+
+###
+GET http://localhost:8080/ads
+Content-Type: application/json
+Authorization: Basic user0@mail.ru user0000
+
+###
+POST http://localhost:8080/users/set_password
+Content-Type: application/json
+Authorization: Basic user0@mail.ru user0000
+
+{
+  "newPassword": "password0",
+  "currentPassword": "user0000"
+}
+
+###
+POST http://localhost:8080/ads
+Content-Type: application/json
+Authorization: Basic user0@mail.ru user0000
+
+{
+  "price": 123,
+  "description": "123",
+  "title": "123"
+}
 ###2 user
 POST http://localhost:8080/login
 Content-Type: application/json
@@ -10,20 +80,7 @@ Content-Type: application/json
 }
 
 
-###3 admin
-POST http://localhost:8080/login
-Content-Type: application/json
 
-{
-  "username": "admin@gmail.com",
-  "password": "password"
-}
-
-###4 удаление ads
-DELETE http://localhost:8080/ads/22
-
-###5 ads по id
-GET  http://localhost:8080/ads/23
 
 ###6 все ads
 GET  http://localhost:8080/ads

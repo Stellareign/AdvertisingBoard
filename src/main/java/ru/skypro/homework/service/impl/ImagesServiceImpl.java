@@ -83,7 +83,6 @@ public class ImagesServiceImpl implements ImageService {
     public byte[] getAvatar(Authentication authentication) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
         if (!user.getAvatarPath().isEmpty()) {
- //           Path path = Path.of(user.getAvatarPath());
             Path path = Path.of("/users/image/"+user.getId());
             return Files.readAllBytes(path);
         }
