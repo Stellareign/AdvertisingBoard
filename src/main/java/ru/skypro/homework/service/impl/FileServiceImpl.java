@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.service.interfaces.FileService;
 
 import java.io.*;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
@@ -19,6 +20,7 @@ public class FileServiceImpl implements FileService {
     /**
      * Копирование файла картинки. Входной поток получаем
      * из метода {@link Files#newInputStream(Path, OpenOption...)}
+     *
      * @param imagePath путь и название файла с картинкой
      * @return image - массив байт картинки
      * @throws IOException ошибка ввода - вывода
@@ -38,7 +40,8 @@ public class FileServiceImpl implements FileService {
      * Загрузка на сервер файла картинки. Входной поток получаем методом
      * {@link MultipartFile#getInputStream()}. Выходной поток получаем методом
      * {@link Files#newOutputStream(Path, OpenOption...)}
-     * @param image файл картинки
+     *
+     * @param image    файл картинки
      * @param filePath путь к файлу на сервере
      * @throws IOException ошибка ввода - вывода
      * @see Files#deleteIfExists(Path)

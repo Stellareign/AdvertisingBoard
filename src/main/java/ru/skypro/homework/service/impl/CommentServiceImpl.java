@@ -35,13 +35,17 @@ public class CommentServiceImpl implements CommentsService {
     private final AdsRepository adsRepository;
     private final UserRepository userRepository;
 
-
+    /**
+     * Метод для получения списка всех комментариев по идентификатору объявления.
+     *
+     * @param adId идентификатор объявления
+     * @return объект класса CommentsDTO, содержащий количество комментариев и список объектов класса CommentDTO
+     */
     @Override
     public CommentsDTO getAllComments(Integer adId) {
 
         List<Comment> commentsList = commentRepository.findByAds_Pk(adId);
         List<CommentDTO> commentDTO = new ArrayList<>();
-
         for (Comment comment : commentsList) {
             commentDTO.add(commentMapping.mapToDto(comment));
         }
@@ -54,7 +58,9 @@ public class CommentServiceImpl implements CommentsService {
      * @param createOrUpdateComment - файл DTO
      * @param adId - идентификатор объявления,к которому будет создан коммент
      * @param authentication - определение текущего пользователя - автора комментария
+     * @throws RecordNotFoundException если объявление с указанным идентификатором не найдено
      * @return commentDTO
+     * @throws RecordNotFoundException если комментарий с указанным id не найден
      */
     @Override
     public CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId,
@@ -113,6 +119,7 @@ public class CommentServiceImpl implements CommentsService {
      * @see CommentRepository#save(Object)
      * @see CommentMapping#mapToDto(Comment) - commentDTO
      * @return {@link CommentDTO}
+     * @throws RecordNotFoundException если комментарий с указанным id не найден
      */
     @Override
     public CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment) {

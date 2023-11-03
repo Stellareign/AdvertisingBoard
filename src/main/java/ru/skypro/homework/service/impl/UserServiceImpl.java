@@ -121,9 +121,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username);
 
         if (checkPhoneFormat(updateUserDTO.getPhone())) {
-            user.setFirstName(updateUserDTO.getFirstName());
-            user.setLastName(updateUserDTO.getLastName());
-            user.setPhone(updateUserDTO.getPhone());
             userRepository.save(user);
 
         }
@@ -134,6 +131,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Проверка наличия пользоателя в БД
+     *
      * @param username - логин (email) пользователя
      * @return true - если пользователь найден, false - есть запись отсутствует в БД
      */
@@ -188,37 +186,38 @@ public class UserServiceImpl implements UserService {
     /**
      * Метод обновления аватара пользователя
      * Принимает на вход два параметра
+     *
      * @param image          - изображение
-     * @param authentication - текущего пользователя
-     * Ищет пользователя по логину
+     * @param authentication - текущего пользователя.
+     *                       Ищет пользователя по логину
+     * @return объект класса {@link UserDTO}
+     * @throws IOException
      * @see UserRepository#findByUsername(String)
      * Перед сохранением аватара:
      * @see ImageService#saveImage(MultipartFile, int)
      * Удвляет старый аватар из дерриктории и заменяет ссылку на аватар у сущности в БД
      * @see ImageService#deleteOldAvatar(Authentication)
-     * @return объект класса {@link UserDTO}
-     * @throws IOException
      */
     @Override
 //    @Transactional
-    public String updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
+    public UserDTO updateUserAvatar(Authentication authentication, MultipartFile image) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
         imageService.deleteOldAvatar(authentication);
         user.setAvatarPath(imageService.saveImage(image, user.getId()));
         userRepository.save(user);
 
-        return user.getAvatarPath();
+        return userDTOFactory.fromUserToUserDTO(user);
     }
 
     /**
      * Метод для выгрузки аватара пользователя на веб-страницу
      * принимает на вход
+     *
      * @param userId -id пользователя
-     *               @see UserRepository#findById(Object)
+     * @return Может выбрасывать исключение:
+     * @throws RecordNotFoundException
+     * @see UserRepository#findById(Object)
      * возвращает массив байтов, полученных по адресу, извлечённому из сущности {@link User}
-     * @return
-     * Может выбрасывать исключение:
-     * @throws IOException
      */
     @Override
     public byte[] downloadAvatarFromFS(int userId) throws IOException {
@@ -235,8 +234,9 @@ public class UserServiceImpl implements UserService {
         if (password.length() >= 8 && !password.isBlank()) {
             log.info("Пароль соответствует требованиям!");
             return true;
-        } log.info("Пароль не соответствует требованиям! Пароль не должен состоять из пробелов, длина" +
-                    "пароля должны быть не менее 8-ми символов!");
+        }
+        log.info("Пароль не соответствует требованиям! Пароль не должен состоять из пробелов, длина" +
+                "пароля должны быть не менее 8-ми символов!");
         return false;
     }
 
@@ -244,7 +244,8 @@ public class UserServiceImpl implements UserService {
         if (phone.matches("\\+7\\s?\\(\\d{3}\\)\\s?\\d{3}-\\d{2}-\\d{2}")) {
             log.info("Формат телефона верный.");
             return true;
-        } log.info("Укажите номер телефона в формате +7(ХХХ)ХХХ-ХХ-ХХ!");
+        }
+        log.info("Укажите номер телефона в формате +7(ХХХ)ХХХ-ХХ-ХХ!");
         return false;
     }
 
@@ -252,7 +253,8 @@ public class UserServiceImpl implements UserService {
         if (username.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
             log.info("Логин указан верно");
             return true;
-        } log.info("Проверьте указанный email. Логин должен быть указан в формате user@user.us!");
+        }
+        log.info("Проверьте указанный email. Логин должен быть указан в формате user@user.us!");
         return false;
     }
 

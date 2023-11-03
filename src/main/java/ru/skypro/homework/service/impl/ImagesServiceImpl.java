@@ -66,7 +66,7 @@ public class ImagesServiceImpl implements ImageService {
      * @throws IOException
      */
     public String saveImage(MultipartFile image, int id) throws IOException {
-        Path imagePath = Path.of(pathToImage + "avatar"+ id +"."
+        Path imagePath = Path.of(pathToImage + "avatar" + id + "."
                 + getFilenameExtension(image.getOriginalFilename()));
         fileService.uploadImage(image, imagePath);
         return imagePath.toString();
@@ -83,8 +83,8 @@ public class ImagesServiceImpl implements ImageService {
     public byte[] getAvatar(Authentication authentication) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
         if (!user.getAvatarPath().isEmpty()) {
- //           Path path = Path.of(user.getAvatarPath());
-            Path path = Path.of("/users/image/"+user.getId());
+            //           Path path = Path.of(user.getAvatarPath());
+            Path path = Path.of("/users/image/" + user.getId());
             return Files.readAllBytes(path);
         }
         throw new RecordNotFoundException("Сейчас у пользователя нет аватара");

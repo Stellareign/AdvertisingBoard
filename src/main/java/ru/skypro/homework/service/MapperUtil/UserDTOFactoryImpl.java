@@ -30,6 +30,11 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     }
 
     // **************************** User to UserDTO // UserDTO to User ***************************
+    /**
+     * Метод преобразует объект класса User в объект класса UserDTO.
+     * @param user объект класса User, который будет преобразован.
+     * @return объект класса UserDTO, полученный из объекта класса User.
+     */
     @Override
     public UserDTO fromUserToUserDTO(User user) {
         return new UserDTO(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(),
@@ -59,15 +64,14 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     }
 
     // **************************** User to AuthUserDTO // AuthUserDTO to User ***************************
+    /**
+     * Преобразует объект типа User в объект типа AuthUserDTO.
+     * @param user объект типа User, который необходимо преобразовать
+     * @return объект типа AuthUserDTO, содержащий информацию о пользователе
+     */
     @Override
     public AuthUserDTO fromUserToAuthUserDTO(User user) {
         return new AuthUserDTO(user.getUsername(), user.getPassword(), user.getRole());
     }
 
-    @Override
-    public User fromAuthUserDTOtoUser(User user, AuthUserDTO authUserDTO) {
-        return new User(user.getId(), authUserDTO.getUsername(), authUserDTO.getPassword(), user.getFirstName(),
-                user.getLastName(), user.getPhone(), user.getAvatarPath(), authUserDTO.getRole(),
-                user.getRegisterDate());
-    }
 }

@@ -17,6 +17,12 @@ import java.util.Objects;
 
 @Service
 public class CommentMapping {
+
+    /**
+     * Метод, который преобразует объект класса Comment в объект класса CommentDTO.
+     * @param entity объект класса Comment, который необходимо преобразовать.
+     * @return объект класса CommentDTO с данными из объекта entity.
+     */
     public CommentDTO mapToDto(Comment entity) {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setPk(entity.getPk());
@@ -29,7 +35,13 @@ public class CommentMapping {
         return commentDTO;
     }
 
-
+    /**
+     * Метод, который преобразует объект класса CreateOrUpdateCommentDTO в объект класса Comment.
+     * @param createOrUpdateComment объект класса CreateOrUpdateCommentDTO, содержащий информацию о комментарии.
+     * @param author объект класса User, являющийся автором комментария.
+     * @param ad объект класса AdEntity, к которому относится комментарий.
+     * @return объект класса Comment, содержащий информацию о комментарии.
+     */
     public Comment mapToEntity(CreateOrUpdateCommentDTO createOrUpdateComment, User author, AdEntity ad) {
         Comment entity = new Comment();
         entity.setText(createOrUpdateComment.getText());

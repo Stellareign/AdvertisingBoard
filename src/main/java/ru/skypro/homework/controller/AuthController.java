@@ -46,11 +46,6 @@ public class AuthController {
         }
     }
 
-    /**
-     * Регистрация пользователя на сервисе
-     *
-     * @param register - форма запроса для ввода данных в виде объекта {@link Register}
-     */
 
     @PostMapping("/register")
     @ApiResponses(value = {
