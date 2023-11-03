@@ -9,15 +9,13 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.MapperUtil.UserDTOFactory;
 import ru.skypro.homework.service.interfaces.FileService;
 import ru.skypro.homework.service.interfaces.ImageService;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.UUID;
 
 import static org.springframework.util.StringUtils.getFilenameExtension;
 
@@ -37,15 +35,17 @@ public class ImagesServiceImpl implements ImageService {
 
     private final UserRepository userRepository;
     private final FileService fileService;
+    private final UserDTOFactory userDTOFactory;
 
 
     @Value("${path.to.avatar.folder}")
     private String pathToImage;
 
-    @Override
+
     /** Удаление старого аватара перед обновлением
      * @param authentication
      */
+    @Override
     public void deleteOldAvatar(Authentication authentication) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
 
@@ -59,12 +59,13 @@ public class ImagesServiceImpl implements ImageService {
         }
     }
 
-    @Override
+
     /**Сохранение картинки в указанную директорию
      * @param image
      * @return
      * @throws IOException
      */
+    @Override
     public String saveImage(MultipartFile image, int id) throws IOException {
         Path imagePath = Path.of(pathToImage + "avatar" + id + "."
                 + getFilenameExtension(image.getOriginalFilename()));
@@ -73,13 +74,14 @@ public class ImagesServiceImpl implements ImageService {
     }
 
 
-    @Override
+
     /**
      * Получение файла аватара
      * @param authentication
-     * @return
+     * @return массив байтов
      * @throws RecordNotFoundException
      */
+    @Override
     public byte[] getAvatar(Authentication authentication) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
         if (!user.getAvatarPath().isEmpty()) {

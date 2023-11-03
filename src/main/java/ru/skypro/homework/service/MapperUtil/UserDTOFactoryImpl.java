@@ -2,7 +2,6 @@ package ru.skypro.homework.service.MapperUtil;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.AuthUserDTO;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
@@ -10,7 +9,6 @@ import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
 
 import java.net.MalformedURLException;
-import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -38,14 +36,14 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     @Override
     public UserDTO fromUserToUserDTO(User user) {
         return new UserDTO(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(),
-                user.getPhone(), ("/users/image/" + user.getId()), user.getRole());
+                user.getPhone(), "/users/image/" + user.getId(), user.getRole());
     }
 
     @Override
-    public User fromUserDTOtoUser(UserDTO userDTO, User user) throws MalformedURLException {
-
+    public User fromUserDTOtoUser(UserDTO userDTO) throws MalformedURLException {
+        User user = new User();
         return new User(user.getId(), userDTO.getEmail(), user.getPassword(), userDTO.getFirstName(),
-                userDTO.getLastName(), userDTO.getPhone(), userDTO.getAvatar(), userDTO.getRole(),
+                userDTO.getLastName(), userDTO.getPhone(), "/users/image/" + user.getId(), userDTO.getRole(),
                 user.getRegisterDate());
     }
 
@@ -73,5 +71,11 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     public AuthUserDTO fromUserToAuthUserDTO(User user) {
         return new AuthUserDTO(user.getUsername(), user.getPassword(), user.getRole());
     }
-
+    @Override
+    public User fromAuthUserDTOtoUser(AuthUserDTO authUserDTO) {
+        User user= new User();
+        return new User(user.getId(), authUserDTO.getUsername(), authUserDTO.getPassword(), user.getFirstName(),
+                user.getLastName(), user.getPhone(), "/users/image/ " + user.getId(), authUserDTO.getRole(),
+                user.getRegisterDate());
+    }
 }
