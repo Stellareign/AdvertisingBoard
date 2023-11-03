@@ -40,7 +40,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     public User fromUserDTOtoUser(UserDTO userDTO, User user) throws MalformedURLException {
 
         return new User(user.getId(), userDTO.getEmail(), user.getPassword(), userDTO.getFirstName(),
-                userDTO.getLastName(), userDTO.getPhone(), userDTO.getAvatar(), userDTO.getRole(),
+                userDTO.getLastName(), userDTO.getPhone(), userDTO.getImage(), userDTO.getRole(),
                 user.getRegisterDate());
     }
 

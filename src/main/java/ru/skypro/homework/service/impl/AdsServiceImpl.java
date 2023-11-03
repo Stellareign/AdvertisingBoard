@@ -98,25 +98,6 @@ public class AdsServiceImpl implements AdsService {
         return modelMapper.map(newAd, Ad.class);
     }
 
-    //    @Override
-//    private Path createPath(MultipartFile image, AdEntity adEntity) throws IOException {
-//        Path filePath = Path.of(adsImageDir, "Объявление_" + adEntity.getId() + "."
-//                + StringUtils.getFilenameExtension(image.getOriginalFilename()));
-//        AccountServiceImpl.uploadImage(image, filePath);
-//        return filePath;
-//    }
-//    static void uploadImage(MultipartFile image, Path filePath) throws IOException {
-//        Files.createDirectories(filePath.getParent());
-//        Files.deleteIfExists(filePath);
-//
-//        try (InputStream is = image.getInputStream();
-//             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-//             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-//             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
-//        ) {
-//            bis.transferTo(bos);
-//        }
-//    }
     @Override
     public Ad editAdById(int id, CreateOrUpdateAd updateAd) {
         Optional<AdEntity> optionalAd = adsRepository.findById(id);
@@ -187,14 +168,6 @@ public class AdsServiceImpl implements AdsService {
         return image;
     }
 }
-    /*
-    из разбора с Волковым
-    .stream()
-                .filter(e -> e.getValue().getIngredients.stream()
-                .anyMatch(i -> i.getTitle()/equals(ingrediente.getTitle())))
-                .map(e -> RecipeDTO.from(e.getKey(), e.getValue())))
-                .collect(Collectors.toList());
-     */
 
 
 
