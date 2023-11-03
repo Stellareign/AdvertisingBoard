@@ -11,9 +11,9 @@
 
 **Пациенты палаты № 6:**
 
-* [Ахмедов Тимур] (https://github.com/Rumonz1) (Rumonz1);
-* [Корниенко Алексей] (https://github.com/alkor63)  (alkor63)
-* [Руднева Анастасия] (https://github.com/Stellareign) (Stellareign)
+* [Ахмедов Тимур](https://github.com/Rumonz1) (Rumonz1);
+* [Корниенко Алексей](https://github.com/alkor63)  (alkor63)
+* [Руднева Анастасия](https://github.com/Stellareign) (Stellareign)
 
 *****************************
 <h1 align="center">Интернет-сервис для размещения объявлений о продаже товаров и услуг от частных лиц</h1>
