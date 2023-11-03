@@ -11,8 +11,8 @@
 
 **Пациенты палаты № 6:**
 
-* [Ахмедов Тимур;] (https://github.com/Rumonz1) (Rumonz1);
-* [Корниенко Алексей;] (https://github.com/alkor63)  (alkor63)
+* [Ахмедов Тимур] (https://github.com/Rumonz1) (Rumonz1);
+* [Корниенко Алексей] (https://github.com/alkor63)  (alkor63)
 * [Руднева Анастасия] (https://github.com/Stellareign) (Stellareign)
 
 *****************************
