@@ -15,26 +15,12 @@ public interface CommentsService {
 
     void deleteComment(int adId, int pk);
 
-    boolean checkAccessToComments(int id, String username);
 
     CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment);
 
     CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId, Authentication authentication);
 
     User getAuthorByCommentId(Integer pk);
-
-
-//    User getUserId(int id);
-//
-//    User getUserImage (String authorImage);
-//
-//    Comments getCreatedMoment (int createdAt);
-//
-//    Comments getPk (int pk);
-//
-//    User getUserFirstName (String firstName );
-//
-//    Comments getText (String text)
 
 
 }

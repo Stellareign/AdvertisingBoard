@@ -60,7 +60,7 @@ public class ImagesServiceImpl implements ImageService {
     }
 
     @Override
-    /**
+    /**Сохранение картинки в указанную директорию
      * @param image
      * @return
      * @throws IOException

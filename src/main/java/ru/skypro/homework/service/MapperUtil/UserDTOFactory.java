@@ -1,4 +1,4 @@
-package ru.skypro.homework.service.interfaces;
+package ru.skypro.homework.service.MapperUtil;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.user.AuthUserDTO;

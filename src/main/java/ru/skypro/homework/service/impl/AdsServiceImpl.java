@@ -52,6 +52,14 @@ public class AdsServiceImpl implements AdsService {
         return new AdsDTO(adList.size(), adList);
     }
 
+    /**
+     * Получение оюъявления из БД по id
+     * @param adsId - id объявления
+     * @see AdsRepository#findById(Object)
+     * @return
+     * Может выбрасывать исключение:
+     * @throws RecordNotFoundException
+     */
     @Override
     public ExtendedAdDTO getAdById(int adsId) {
         Optional<AdEntity> optionalAds = adsRepository.findById(adsId);
@@ -62,6 +70,12 @@ public class AdsServiceImpl implements AdsService {
     }
 
     //+++++++++++++++++++++++++++++++++++++++++
+
+    /**
+     * Удаление объявления из БД по id
+     * @param adsId - id объявления
+     * @throws IOException
+     */
     @Override
     @Transactional
     public void deleteAdsById(int adsId) throws IOException {

@@ -1,16 +1,16 @@
-package ru.skypro.homework.service.impl;
+package ru.skypro.homework.service.MapperUtil;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.AuthUserDTO;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.service.interfaces.UserDTOFactory;
 
 import java.net.MalformedURLException;
-import java.nio.file.Path;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -63,10 +63,11 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     public AuthUserDTO fromUserToAuthUserDTO(User user) {
         return new AuthUserDTO(user.getUsername(), user.getPassword(), user.getRole());
     }
+
     @Override
-    public User fromAuthUserDTOtoUser(User user, AuthUserDTO authUserDTO){
-        return new User(user.getId(), authUserDTO.getUsername(), authUserDTO.getPassword(),user.getFirstName(),
-                user.getLastName(), user.getPhone(),  user.getAvatarPath(), authUserDTO.getRole(),
+    public User fromAuthUserDTOtoUser(User user, AuthUserDTO authUserDTO) {
+        return new User(user.getId(), authUserDTO.getUsername(), authUserDTO.getPassword(), user.getFirstName(),
+                user.getLastName(), user.getPhone(), user.getAvatarPath(), authUserDTO.getRole(),
                 user.getRegisterDate());
     }
 }

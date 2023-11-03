@@ -7,14 +7,16 @@ import ru.skypro.homework.service.interfaces.FileService;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Slf4j
 @Service
 public class FileServiceImpl implements FileService {
-    /*
+    /**
      * Копирование файла картинки. Входной поток получаем
      * из метода {@link Files#newInputStream(Path, OpenOption...)}
      * @param imagePath путь и название файла с картинкой
@@ -32,7 +34,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    /*
+    /**
      * Загрузка на сервер файла картинки. Входной поток получаем методом
      * {@link MultipartFile#getInputStream()}. Выходной поток получаем методом
      * {@link Files#newOutputStream(Path, OpenOption...)}

@@ -11,13 +11,12 @@ import ru.skypro.homework.dto.authorization.Register;
 import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
-import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.FileService;
 import ru.skypro.homework.service.interfaces.ImageService;
-import ru.skypro.homework.service.interfaces.UserDTOFactory;
+import ru.skypro.homework.service.MapperUtil.UserDTOFactory;
 import ru.skypro.homework.service.interfaces.UserService;
 
 import java.io.IOException;
@@ -37,6 +36,8 @@ public class UserServiceImpl implements UserService {
      * {@link #updateUser(String, UpdateUserDTO)} - обновление данных пользователя из запроса UpdateUserDTO
      * <p>
      * {@link #updateUserAvatar(Authentication, MultipartFile)} - обновление аватара пользователя
+     * <p>
+     * {@link #downloadAvatarFromFS(int)}  - выгрузка аватара на фронт
      * <p>
      * Приватные методы проверок:
      * {@link #checkUser(String)} - проверка наличия записи пользователя в БД
@@ -132,7 +133,9 @@ public class UserServiceImpl implements UserService {
 //***********************************************ПРОВЕРКА ЮЗЕРА ********************************************************
 
     /**
-     * Проверка наличия записи пользователя в базе данных
+     * Проверка наличия пользоателя в БД
+     * @param username - логин (email) пользователя
+     * @return true - если пользователь найден, false - есть запись отсутствует в БД
      */
     @Override
     public boolean checkUser(String username) {
@@ -185,9 +188,14 @@ public class UserServiceImpl implements UserService {
     /**
      * Метод обновления аватара пользователя
      * Принимает на вход два параметра
-     *
      * @param image          - изображение
      * @param authentication - текущего пользователя
+     * Ищет пользователя по логину
+     * @see UserRepository#findByUsername(String)
+     * Перед сохранением аватара:
+     * @see ImageService#saveImage(MultipartFile, int)
+     * Удвляет старый аватар из дерриктории и заменяет ссылку на аватар у сущности в БД
+     * @see ImageService#deleteOldAvatar(Authentication)
      * @return объект класса {@link UserDTO}
      * @throws IOException
      */
@@ -202,6 +210,24 @@ public class UserServiceImpl implements UserService {
         return user.getAvatarPath();
     }
 
+    /**
+     * Метод для выгрузки аватара пользователя на веб-страницу
+     * принимает на вход
+     * @param userId -id пользователя
+     *               @see UserRepository#findById(Object)
+     * возвращает массив байтов, полученных по адресу, извлечённому из сущности {@link User}
+     * @return
+     * Может выбрасывать исключение:
+     * @throws IOException
+     */
+    @Override
+    public byte[] downloadAvatarFromFS(int userId) throws IOException {
+        User userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new RecordNotFoundException("Нет такого Юзера"));
+        byte[] image = fileService.downloadImage(userEntity.getAvatarPath());
+        log.info("Download avatar for user: {} method was invoked", userEntity.getUsername());
+        return image;
+    }
 
 //****************************************** ПРОВЕРКА ВВОДИМЫХ ДАННЫХ *************************************************
 
@@ -228,14 +254,6 @@ public class UserServiceImpl implements UserService {
             return true;
         } log.info("Проверьте указанный email. Логин должен быть указан в формате user@user.us!");
         return false;
-    }
-    @Override
-    public byte[] downloadAvatarFromFS(int userId) throws IOException {
-        User userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new RecordNotFoundException("Нет такого Юзера"));
-            byte[] image = fileService.downloadImage(userEntity.getAvatarPath());
-            log.info("Download avatar for user: {} method was invoked", userEntity.getUsername());
-            return image;
     }
 
 }

@@ -89,7 +89,6 @@ public class AdsController {
     }
 
     // удаление объявления по id
-
     @Operation(summary = "Удалить объявление по id")
 
     @DeleteMapping("/{adId}")
@@ -102,7 +101,7 @@ public class AdsController {
     @PreAuthorize("hasRole('ADMIN') or " +
             "@adsRepository.findByPk(#adId).author.username == authentication.name")
 
-    public void removeAdById(@PathVariable int adId, Authentication authentication) throws IOException {
+    public void removeAdById(@PathVariable int adId) throws IOException {
 
         adsService.deleteAdsById(adId);
     }
@@ -117,9 +116,7 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestBody CreateOrUpdateAd updateAd,
-                                       Authentication authentication) throws AccessException {
-
+    public ResponseEntity<Ad> updateAd(@PathVariable int adId, @RequestBody CreateOrUpdateAd updateAd) throws AccessException {
         return ResponseEntity.ok().body(adsService.editAdById(adId, updateAd));
     }
 
@@ -144,11 +141,11 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
     public ResponseEntity<AdEntity> updateImage(@PathVariable int adId,
-                                                @RequestParam("image") MultipartFile image,
-                                                Authentication authentication) throws IOException {
+                                                @RequestParam("image") MultipartFile image) throws IOException {
 
         return ResponseEntity.status(HttpStatus.OK).body(adsService.updateImage(adId, image));
     }
+
     @GetMapping(value = "/image/{adId}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public ResponseEntity<byte[]> getAdImageFromFS(@PathVariable int adId) throws IOException {
         return ResponseEntity.ok(adsService.getAdImageFromFS(adId));

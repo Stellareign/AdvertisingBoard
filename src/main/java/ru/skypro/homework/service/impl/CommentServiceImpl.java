@@ -48,6 +48,14 @@ public class CommentServiceImpl implements CommentsService {
         return new CommentsDTO(commentDTO.size(), commentDTO);
     }
 
+    /**
+     * Метод создания комментария к объявлению.
+     * Принимает на вход три параметра:
+     * @param createOrUpdateComment - файл DTO
+     * @param adId - идентификатор объявления,к которому будет создан коммент
+     * @param authentication - определение текущего пользователя - автора комментария
+     * @return commentDTO
+     */
     @Override
     public CommentDTO addComment(CreateOrUpdateCommentDTO createOrUpdateComment, Integer adId,
                                  Authentication authentication) {
@@ -63,6 +71,14 @@ public class CommentServiceImpl implements CommentsService {
         return commentDTO;
     }
 
+    /**
+     * Метод поиска атора комментария по идентификатору комментария.
+     * Принимает на вход:
+     * @param pk - идентификатор комментария
+     *           Ищет автора комментария в БД
+     * @see CommentRepository#findCommentByPk(int) по id (pk) коммента
+     * @return {@link User}
+     */
     @Override
     public User getAuthorByCommentId(Integer pk) {
         if (commentRepository.findById(pk).isPresent()) {
@@ -72,6 +88,13 @@ public class CommentServiceImpl implements CommentsService {
         }
     }
 
+    /**
+     * Удаление комментария по id
+     * @param adId - id объявления
+     * @param pk- id комментария
+     * @see CommentRepository#findByAds_Pk(int)  - поиск комментария В БД по id объявления
+     * @see CommentRepository#deleteCommentsByAds_Pk(int) - удаление комментрария из БД по id комментария
+     */
     @Override
     public void deleteComment(int adId, int pk) {
         commentRepository.findByAds_Pk(adId);
@@ -80,12 +103,17 @@ public class CommentServiceImpl implements CommentsService {
             commentRepository.deleteById(pk);
         }
     }
-    @Override
-    public boolean checkAccessToComments(int id, String username) {
-        return commentRepository.findCommentByPk(id).getAuthor().getUsername().equals(username) ||
-                userRepository.findByUsername(username).getRole()== Role.ADMIN;
-    }
 
+    /**
+     * Обновление комментария
+     * @param adId - id  объявления
+     * @param pk - id комментария
+     * @param updateComment -тело запроса в контроллере
+     * @see CommentRepository#findCommentByPk(int)
+     * @see CommentRepository#save(Object)
+     * @see CommentMapping#mapToDto(Comment) - commentDTO
+     * @return {@link CommentDTO}
+     */
     @Override
     public CommentDTO updateComment(Integer adId, Integer pk, CreateOrUpdateCommentDTO updateComment) {
         Optional<Comment> commentOpt = commentRepository.findById(pk);
