@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Data
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateOrUpdateAd {
     private String title;
     private int price;

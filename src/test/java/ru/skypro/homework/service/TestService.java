@@ -32,6 +32,7 @@ public class TestService {
                     "",
                     LocalDate.now());  // Создаём через конструктор, чтоб появился id
             userEntity.setPassword("$2a$12$szT0GJQE0Zhkq.IB0zuGi.yO.xc8wNjOK42mqrMSL9UQvEjq7jR2C");
+            userRepository.save(userEntity);
             userEntity.setAvatarPath("/users/image/" + userEntity.getId());
             userRepository.save(userEntity);
             return userEntity;
@@ -41,11 +42,12 @@ public class TestService {
             User userEntity = createTestUser();
 
             AdEntity adEntity = new AdEntity(
-            "testDescription",
-            55555,
             "testTitle",
+            55555,
+            "testDescription",
             "",
             userEntity);  // Создаём через конструктор, чтоб появился pk
+            adsRepository.save(adEntity);
             adEntity.setImage("/ads/image/" + adEntity.getPk());
             adsRepository.save(adEntity);
             return adEntity;
