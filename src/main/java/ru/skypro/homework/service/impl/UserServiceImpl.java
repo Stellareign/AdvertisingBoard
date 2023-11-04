@@ -224,8 +224,10 @@ public class UserServiceImpl implements UserService {
         User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new RecordNotFoundException("Нет такого Юзера"));
         byte[] image = fileService.downloadImage(userEntity.getAvatarPath());
-        log.info("Download avatar for user: {} method was invoked", userEntity.getUsername());
-        return image;
+      if( image != null){
+            log.info("Download avatar for user: {} method was invoked", userEntity.getUsername());
+            return image;
+        } return null;
     }
 
 //****************************************** ПРОВЕРКА ВВОДИМЫХ ДАННЫХ *************************************************
