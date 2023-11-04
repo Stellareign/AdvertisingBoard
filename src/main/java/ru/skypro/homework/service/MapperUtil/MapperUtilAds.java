@@ -5,9 +5,6 @@ import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ads.ExtendedAdDTO;
@@ -15,16 +12,12 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.User;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Data
 @NoArgsConstructor
-//@Component
 @Configuration
 /**
  * Класс, содержащий методы преобразования сущности AdEntity в DTO и обратно

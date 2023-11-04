@@ -6,12 +6,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.user.AuthUserDTO;
-import ru.skypro.homework.entity.User;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 
 @Component
 @RequiredArgsConstructor

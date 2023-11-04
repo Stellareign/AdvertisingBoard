@@ -10,7 +10,6 @@ import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.interfaces.AuthService;
 import ru.skypro.homework.service.interfaces.UserService;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -43,6 +42,7 @@ public class AuthServiceImpl implements AuthService {
         }
         return encoder.matches(password, user.getPassword());
     }
+
 
     /**
      * Метод регистрации пользователя в сервисе

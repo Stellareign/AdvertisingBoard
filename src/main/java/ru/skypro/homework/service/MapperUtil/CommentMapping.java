@@ -1,18 +1,11 @@
 package ru.skypro.homework.service.MapperUtil;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.ads.Ad;
 import ru.skypro.homework.dto.comments.CommentDTO;
 import ru.skypro.homework.dto.comments.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.User;
-
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 @Service

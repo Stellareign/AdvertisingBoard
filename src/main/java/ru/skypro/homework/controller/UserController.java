@@ -18,7 +18,6 @@ import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.service.interfaces.ImageService;
 import ru.skypro.homework.service.interfaces.UserService;
 
 import java.io.IOException;
