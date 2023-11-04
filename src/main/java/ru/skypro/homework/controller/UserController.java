@@ -141,7 +141,7 @@ public class UserController {
 
     //****************************** ПЕРЕДАЧА АВАТАРА ПОЛЬЗОВАТЕЛЯ НА ФРОНТ **************************
     @Operation(summary = "Передача картинки пользователя на фронт")
-    @GetMapping(value = "/me/image", produces = {MediaType.IMAGE_PNG_VALUE,
+    @GetMapping(value = "/image{userId}", produces = {MediaType.IMAGE_PNG_VALUE,
             MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE})
 
     public ResponseEntity<?> getImage(Authentication authentication) throws IOException {
