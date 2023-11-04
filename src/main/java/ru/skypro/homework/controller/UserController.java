@@ -54,7 +54,7 @@ public class UserController {
     })
     public ResponseEntity<UpdatePasswordDTO> setPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO,
                                                          Authentication authentication) {
-        log.info("Изменить пароль: " + updatePasswordDTO);
+        log.info("Пароль изменён!");
         boolean checkPassword = userService.checkUpdatePassword(updatePasswordDTO, authentication.getName());
         if (checkPassword) {
             return ResponseEntity.ok().body(updatePasswordDTO);

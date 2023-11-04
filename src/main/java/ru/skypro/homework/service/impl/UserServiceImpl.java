@@ -119,12 +119,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(String username, UpdateUserDTO updateUserDTO) {
         User user = userRepository.findByUsername(username);
-
+        UserDTO userDTO = new UserDTO();
         if (checkPhoneFormat(updateUserDTO.getPhone())) {
+            userDTOFactory.fromUpdateUserDTOtoUser(updateUserDTO, user);
+            userDTO = userDTOFactory.fromUserToUserDTO(user);
             userRepository.save(user);
 
         }
-        return userDTOFactory.fromUserToUserDTO(user);
+        return userDTO;
     }
 
 //***********************************************ПРОВЕРКА ЮЗЕРА ********************************************************
