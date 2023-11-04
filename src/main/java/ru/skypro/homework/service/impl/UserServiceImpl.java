@@ -119,12 +119,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(String username, UpdateUserDTO updateUserDTO) {
         User user = userRepository.findByUsername(username);
-        UserDTO userDTO = new UserDTO();
-        if (checkPhoneFormat(updateUserDTO.getPhone())) {
-            userDTO = userDTOFactory.fromUserToUserDTO(userRepository.save(userDTOFactory
-                    .fromUpdateUserDTOtoUser(updateUserDTO, user)));
+        if (!checkPhoneFormat(updateUserDTO.getPhone())) {
+            log.info("Неверный формат номера телефона");
+            throw new IllegalArgumentException();
         }
-        return userDTO;
+        return userDTOFactory.fromUserToUserDTO(userRepository.save(userDTOFactory
+                .fromUpdateUserDTOtoUser(updateUserDTO, user)));
     }
 
 //***********************************************ПРОВЕРКА ЮЗЕРА ********************************************************
