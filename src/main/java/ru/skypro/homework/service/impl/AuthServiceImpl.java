@@ -14,49 +14,47 @@ import ru.skypro.homework.service.interfaces.UserService;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-//    private final UserDetailsManager manager;
+
     private final PasswordEncoder encoder;
-//    private final SecurityUserDetailsService securityUserDetailsService;
+
     private final UserService userService;
-//    private final MyUserDetails myUserDetails;
+
     private final UserRepository userRepository;
 
 
-//    @Override
-//    public boolean login(String userName, String password) {
-//        if (!manager.userExists(userName)) {
-//            return false;
-//        }
-//        UserDetails userDetails = manager.loadUserByUsername(userName);
-//        return encoder.matches(password, userDetails.getPassword());
-//    }
+    /**
+     * Метод входа пользователя в личный кабинет
+     *
+     * @param userName - логин (email) пользователя
+     * @param password - пароль
+     * @return
+     * @see UserRepository#findByUsername(String)
+     * расшифровка и проверка пароля
+     * @see PasswordEncoder#encode(CharSequence)
+     * @see PasswordEncoder#matches(CharSequence, String)
+     */
     @Override
     public boolean login(String userName, String password) {
         User user = userRepository.findByUsername(userName);
-       if (user == null) {
-           log.info("Неправильные имя пользователя или пароль!");
-           return false;
-       }return encoder.matches(password, user.getPassword());
+        if (user == null) {
+            log.info("Неправильные имя пользователя или пароль!");
+            return false;
+        }
+        return encoder.matches(password, user.getPassword());
     }
 
 
-//    @Override
-//    public boolean register(Register register) {
-//        if (manager.userExists(register.getUsername())) {
-//            return false;
-//        }
-//        manager.createUser(
-//                User.builder()
-//                        .passwordEncoder(this.encoder::encode)
-//                        .password(register.getPassword())
-//                        .username(register.getUsername())
-//                        .roles(register.getRole().name())
-//                        .build());
-//        return true;
-//    }
+    /**
+     * Метод регистрации пользователя в сервисе
+     *
+     * @param register
+     * @return true если пользователь ранее не был зарегистрирован с указанным username
+     * @see UserRepository#findByUsername(String)
+     * @see UserRepository#save(Object)
+     */
     @Override
-    public boolean register(Register register)  {
-        if (userRepository.findByUsername(register.getUsername())!= null) {
+    public boolean register(Register register) {
+        if (userRepository.findByUsername(register.getUsername()) != null) {
             return false;
         }
         userService.saveRegisterUser(register);

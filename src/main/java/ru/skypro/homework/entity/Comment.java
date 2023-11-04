@@ -3,9 +3,7 @@ package ru.skypro.homework.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 
 @Data
 @Entity

@@ -26,5 +26,7 @@ public interface UserService {
     void saveRegisterUser(Register register) ;
 
     //****************************************** ОБНОВЛЕНИЕ АВАТАРА ЮЗЕРА  *********************************************
-    String updateUserAvatar (Authentication authentication, MultipartFile image) throws IOException;
+    UserDTO updateUserAvatar (Authentication authentication, MultipartFile image) throws IOException;
+
+    byte[] downloadAvatarFromFS(int userId) throws IOException;
 }

@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.RecordNotFoundException;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.interfaces.FileService;
 import ru.skypro.homework.service.interfaces.ImageService;
 
 import java.io.File;
@@ -24,26 +25,23 @@ import static org.springframework.util.StringUtils.getFilenameExtension;
 @Service
 @RequiredArgsConstructor
 
-/**
- *@Transactional -  указывает на то, что метод или класс должен быть выполнен в транзакции.
- * Транзакция -  единица работы с БД>, которая должна быть выполнена целиком или не выполнена вообще.
- * @Transactional позволяет автоматически управлять транзакциями и обеспечить целостность данных при
- * работе с базой данных.
- */
+
 
 public class ImagesServiceImpl implements ImageService {
 
 
     private final UserRepository userRepository;
+    private final FileService fileService;
 
 
-    @Value("${path.to.image.folder}")
+    @Value("${path.to.avatar.folder}")
     private String pathToImage;
 
-    @Override
-    /** Удаление старого аватара перед обновлением
+    /**
+     *  Удаление старого аватара перед обновлением
      * @param authentication
      */
+    @Override
     public void deleteOldAvatar(Authentication authentication) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
 
@@ -57,37 +55,31 @@ public class ImagesServiceImpl implements ImageService {
         }
     }
 
-    @Override
     /**
      * @param image
      * @return
      * @throws IOException
      */
-    public String saveImage(MultipartFile image) throws IOException {
-        String fileName = UUID.randomUUID().toString();
-        Path imagePath = Path.of(pathToImage + fileName + "."
+    @Override
+    public String saveImage(MultipartFile image, int id) throws IOException {
+        Path imagePath = Path.of(pathToImage + "avatar" + id + "."
                 + getFilenameExtension(image.getOriginalFilename()));
-
-       URL avatarPath = imagePath.toUri().toURL();
-        Files.createDirectories(imagePath.getParent());
-
-        File newFile = new File(imagePath.toUri());
-        image.transferTo(newFile);
-        return avatarPath.toString().replace("file:/", "");
+        fileService.uploadImage(image, imagePath);
+        return imagePath.toString();
     }
 
 
-    @Override
     /**
      * Получение файла аватара
      * @param authentication
-     * @return
+     * @return массив байтов
      * @throws RecordNotFoundException
      */
+    @Override
     public byte[] getAvatar(Authentication authentication) throws IOException {
         User user = userRepository.findByUsername(authentication.getName());
-        if (user.getAvatarPath() != null && !user.getAvatarPath().isEmpty()) {
-            Path path = Path.of(user.getAvatarPath());
+        if (!user.getAvatarPath().isEmpty()) {
+            Path path = Path.of("/users/image/"+user.getId());
             return Files.readAllBytes(path);
         }
         throw new RecordNotFoundException("Сейчас у пользователя нет аватара");

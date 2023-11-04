@@ -19,29 +19,22 @@ public interface AdsService {
 
     public abstract ExtendedAdDTO getAdById(int adsId);
 
-
-
     //+++++++++++++++++++++++++++++++++++++++++
     @Transactional
     void deleteAdsById(int adsId) throws IOException;
-
-    boolean checkAccessToAd(int adId, String username);
 
     Ad createAd(CreateOrUpdateAd createAdDTO,
                 MultipartFile image, Authentication authentication
     ) throws IOException;
 
-
-
     Ad editAdById(int id, CreateOrUpdateAd updateAd) throws AccessException;
 
-
-    //       Обновляет изображение
-//    с заданным
-//    идентификатором.
     AdEntity updateImage(int id, MultipartFile image) throws IOException;
 
     AdsDTO getAllAdsByUser(String currentUserName);
 
     String saveImage(MultipartFile file, int id) throws IOException;
+
+
+    byte[] getAdImageFromFS(int adId) throws IOException;
 }

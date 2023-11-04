@@ -1,7 +1,6 @@
 package ru.skypro.homework.security_service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.user.AuthUserDTO;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.interfaces.UserDTOFactory;
+import ru.skypro.homework.service.MapperUtil.UserDTOFactory;
 import ru.skypro.homework.service.interfaces.UserService;
 
 @Service

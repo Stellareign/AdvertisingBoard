@@ -1,21 +1,15 @@
 package ru.skypro.homework.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.security_service.MyUserDetails;
-import ru.skypro.homework.service.interfaces.AdsService;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -32,11 +26,13 @@ public class WebSecurityConfig {
             "/register"
     };
 
-    /*
-     * Конфигурация для фильтра цепочки безопасности (SecurityFilterChain) в Spring Security.
-     * Он определяет правила доступа для различных URL-адресов и HTTP-методов.
+    /**
+     * Метод, который создаёт фильтр SecurityFilterChain для обработки запросов с помощью HttpSecurity.
+     *
+     * @param http объект класса HttpSecurity
+     * @return SecurityFilterChain для обработки запросов
+     * @throws Exception если возникли ошибки при создании SecurityFilterChain
      */
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()
@@ -46,7 +42,7 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .mvcMatchers(HttpMethod.GET, "/ads")
+                                        .mvcMatchers(HttpMethod.GET, "/ads", "/images")
                                         .permitAll()
 
                                         .mvcMatchers("/ads/**", "/users/**")
@@ -60,7 +56,11 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-
+    /**
+     * Метод, который возвращает объект класса PasswordEncoder для кодирования паролей.
+     *
+     * @return объект класса PasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

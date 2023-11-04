@@ -1,4 +1,4 @@
-package ru.skypro.homework.service.interfaces;
+package ru.skypro.homework.service.MapperUtil;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.user.AuthUserDTO;
@@ -19,7 +19,8 @@ public interface UserDTOFactory {
     // **************************** User to UserDTO // UserDTO to User ***************************
     UserDTO fromUserToUserDTO(User user);
 
-    User fromUserDTOtoUser(UserDTO userDTO, User user) throws MalformedURLException;
+
+    User fromUserDTOtoUser(UserDTO userDTO) throws MalformedURLException;
 
     // **************************** User to UpdateUserDTO // UpdateUserDTO to User ***************************
     UpdateUserDTO fromUserToUpdateUserDTO(User user);
@@ -29,5 +30,5 @@ public interface UserDTOFactory {
     // **************************** User to AuthUserDTO // AuthUserDTO to User ***************************
     AuthUserDTO fromUserToAuthUserDTO(User user);
 
-    User fromAuthUserDTOtoUser(User user, AuthUserDTO authUserDTO);
+    User fromAuthUserDTOtoUser(AuthUserDTO authUserDTO);
 }

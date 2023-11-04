@@ -1,9 +1,6 @@
 package ru.skypro.homework.dto.ads;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Data
 

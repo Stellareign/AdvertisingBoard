@@ -9,7 +9,6 @@ import java.io.IOException;
 
 @Service
 public interface ImageService {
-//
 
     /**
      * @throws IOException
@@ -21,11 +20,11 @@ public interface ImageService {
      * @return
      * @throws IOException
      */
-    String saveImage(MultipartFile image) throws IOException;
+    String saveImage(MultipartFile image, int id) throws IOException;
 
 
     /**
-     * Извлечение аватара из БД через пользователя
+     * Получение файла аватара
      *
      * @param authentication
      * @return
