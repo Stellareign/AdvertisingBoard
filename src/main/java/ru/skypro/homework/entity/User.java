@@ -95,6 +95,7 @@ public class User {
         this.avatarPath = avatarPath;
         this.role = role;
     }
+
 // ********************************************************************
 
     @Override
