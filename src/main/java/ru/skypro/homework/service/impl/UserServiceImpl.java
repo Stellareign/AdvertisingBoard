@@ -115,6 +115,9 @@ public class UserServiceImpl implements UserService {
      *                      требованиям в методе {@link #checkPhoneFormat(String)}
      *                      Обновлённая сущность сохраняется в методе
      *                      {@link ru.skypro.homework.repository.UserRepository#save(Object)}
+     * @see UserRepository#findById(Object) 
+     * @see UserDTOFactory#fromUserToUserDTO(User) 
+     * @see UserDTOFactory#fromUpdateUserDTOtoUser(UpdateUserDTO, User) 
      */
     @Override
     public UserDTO updateUser(String username, UpdateUserDTO updateUserDTO) {
