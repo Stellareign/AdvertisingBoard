@@ -115,9 +115,9 @@ public class UserServiceImpl implements UserService {
      *                      требованиям в методе {@link #checkPhoneFormat(String)}
      *                      Обновлённая сущность сохраняется в методе
      *                      {@link ru.skypro.homework.repository.UserRepository#save(Object)}
-     * @see UserRepository#findById(Object) 
-     * @see UserDTOFactory#fromUserToUserDTO(User) 
-     * @see UserDTOFactory#fromUpdateUserDTOtoUser(UpdateUserDTO, User) 
+     * @see UserRepository#findById(Object)
+     * @see UserDTOFactory#fromUserToUserDTO(User)
+     * @see UserDTOFactory#fromUpdateUserDTOtoUser(UpdateUserDTO, User)
      */
     @Override
     public UserDTO updateUser(String username, UpdateUserDTO updateUserDTO) {
@@ -260,6 +260,5 @@ public class UserServiceImpl implements UserService {
         log.info("Проверьте указанный email. Логин должен быть указан в формате user@user.us!");
         return false;
     }
-
 }
 
