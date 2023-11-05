@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include:
-      file: liquibase/init.sql::raw::includeAll
+      file: liquibase/users.sql
+  - include:
+      file: liquibase/ads.sql
+  - include:
+      file: liquibase/comments.sql

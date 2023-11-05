@@ -19,8 +19,7 @@ import java.util.List;
 public class AdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-//    @GeneratedValue(generator = "sequence")
-//    @Column(name = "id", nullable = false)
+
     private int pk;                         //'id объявления'
     private int price;                      // 'цена объявления'
     private String title;                   // 'заголовок объявления'

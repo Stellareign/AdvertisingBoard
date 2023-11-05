@@ -44,7 +44,7 @@ public class User {
     private String lastName;
 
     @Pattern(regexp = "\\+7\\s?\\(\\d{3}\\)\\s?\\d{3}-\\d{2}-\\d{2}", message = "Неверный формат номера телефона")
-    @Column(name = "phone", nullable = false, unique = true)
+    @Column(name = "phone", nullable = false)
     private String phone;
 
     //**********************************
@@ -85,7 +85,17 @@ public class User {
         this.registerDate = registerDate;
     }
 
- // ********************************************************************
+    public User(String username, String password, String firstName, String lastName, String phone, String avatarPath, Role role) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.avatarPath = avatarPath;
+        this.role = role;
+    }
+
+// ********************************************************************
 
     @Override
     public boolean equals(Object o) {
