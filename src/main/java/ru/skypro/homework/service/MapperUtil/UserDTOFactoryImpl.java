@@ -8,8 +8,6 @@ import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
 
-import java.net.MalformedURLException;
-
 @Service
 @RequiredArgsConstructor
 public class UserDTOFactoryImpl implements UserDTOFactory {
@@ -28,23 +26,34 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     }
 
     // **************************** User to UserDTO // UserDTO to User ***************************
+
     /**
      * Метод преобразует объект класса User в объект класса UserDTO.
+     *
      * @param user объект класса User, который будет преобразован.
      * @return объект класса UserDTO, полученный из объекта класса User.
      */
     @Override
     public UserDTO fromUserToUserDTO(User user) {
+        String pathToImage = checkPathToAvatar(user);
         return new UserDTO(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(),
-                user.getPhone(), "/users/image/" + user.getId(), user.getRole());
+                user.getPhone(), pathToImage, user.getRole());
     }
 
     @Override
-    public User fromUserDTOtoUser(UserDTO userDTO) throws MalformedURLException {
+    public User fromUserDTOtoUser(UserDTO userDTO) {
         User user = new User();
+        String pathToImage = checkPathToAvatar(user);
         return new User(user.getId(), userDTO.getEmail(), user.getPassword(), userDTO.getFirstName(),
-                userDTO.getLastName(), userDTO.getPhone(), "/users/image/" + user.getId(), userDTO.getRole(),
+                userDTO.getLastName(), userDTO.getPhone(), pathToImage, userDTO.getRole(),
                 user.getRegisterDate());
+    }
+
+    private String checkPathToAvatar(User user) {
+        if (user.getAvatarPath() != null && !user.getAvatarPath().isEmpty()) {
+            return "/users/image/" + user.getId();
+        }
+        return null;
     }
 
     // **************************** User to UpdateUserDTO // UpdateUserDTO to User ***************************
@@ -62,8 +71,10 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     }
 
     // **************************** User to AuthUserDTO // AuthUserDTO to User ***************************
+
     /**
      * Преобразует объект типа User в объект типа AuthUserDTO.
+     *
      * @param user объект типа User, который необходимо преобразовать
      * @return объект типа AuthUserDTO, содержащий информацию о пользователе
      */
@@ -71,11 +82,5 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
     public AuthUserDTO fromUserToAuthUserDTO(User user) {
         return new AuthUserDTO(user.getUsername(), user.getPassword(), user.getRole());
     }
-    @Override
-    public User fromAuthUserDTOtoUser(AuthUserDTO authUserDTO) {
-        User user= new User();
-        return new User(user.getId(), authUserDTO.getUsername(), authUserDTO.getPassword(), user.getFirstName(),
-                user.getLastName(), user.getPhone(), "/users/image/ " + user.getId(), authUserDTO.getRole(),
-                user.getRegisterDate());
-    }
+
 }

@@ -30,5 +30,4 @@ public interface UserDTOFactory {
     // **************************** User to AuthUserDTO // AuthUserDTO to User ***************************
     AuthUserDTO fromUserToAuthUserDTO(User user);
 
-    User fromAuthUserDTOtoUser(AuthUserDTO authUserDTO);
 }
