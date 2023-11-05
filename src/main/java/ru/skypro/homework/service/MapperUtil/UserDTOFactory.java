@@ -22,6 +22,7 @@ public interface UserDTOFactory {
 
     User fromUserDTOtoUser(UserDTO userDTO) throws MalformedURLException;
 
+
     // **************************** User to UpdateUserDTO // UpdateUserDTO to User ***************************
     UpdateUserDTO fromUserToUpdateUserDTO(User user);
 

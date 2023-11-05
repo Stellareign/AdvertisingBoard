@@ -40,7 +40,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
                 user.getPhone(), pathToImage, user.getRole());
     }
 
-    @Override
+
     public User fromUserDTOtoUser(UserDTO userDTO) {
         User user = new User();
         String pathToImage = checkPathToAvatar(user);
@@ -49,6 +49,13 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
                 user.getRegisterDate());
     }
 
+    /**
+     * Метод для проверки пути к аватару пользователя.
+     * Если путь к аватару не пустой, то возвращает путь к изображению пользователя,
+     * иначе возвращает null.
+     * @param user объект класса User, для которого проверяется путь к аватару
+     * @return путь к изображению пользователя или null, если путь пустой
+     */
     private String checkPathToAvatar(User user) {
         if (user.getAvatarPath() != null && !user.getAvatarPath().isEmpty()) {
             return "/users/image/" + user.getId();
