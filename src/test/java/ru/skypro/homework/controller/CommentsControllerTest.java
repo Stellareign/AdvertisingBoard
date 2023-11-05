@@ -60,8 +60,8 @@ class CommentsControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/ads/{id}/comments", commentEntity.getAds().getPk())
                         .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + HttpHeaders.encodeBasicAuth("testEmail@gmail.com",
-                                        "testPassword", StandardCharsets.UTF_8))
+                                "Basic " + HttpHeaders.encodeBasicAuth("user0@mail.ru",
+                                        "user0000", StandardCharsets.UTF_8))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.count").value(1))
@@ -85,8 +85,8 @@ class CommentsControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/ads/{id}/comments", adEntity.getPk())
                         .content(objectMapper.writeValueAsString(createOrUpdateComment))
                         .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + HttpHeaders.encodeBasicAuth("testEmail@gmail.com",
-                                        "testPassword", StandardCharsets.UTF_8))
+                                "Basic " + HttpHeaders.encodeBasicAuth("user0@mail.ru",
+                                        "user0000", StandardCharsets.UTF_8))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.author").value(adEntity.getAuthor().getId()))
@@ -106,8 +106,8 @@ class CommentsControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/ads/{adId}/comments/{commentId}",
                                 commentEntity.getAds().getPk(), commentEntity.getPk())
                         .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + HttpHeaders.encodeBasicAuth("testEmail@gmail.com",
-                                        "testPassword", StandardCharsets.UTF_8)))
+                                "Basic " + HttpHeaders.encodeBasicAuth("user0@mail.ru",
+                                        "user0000", StandardCharsets.UTF_8)))
                 .andExpect(status().isOk());
 
         Assertions.assertFalse(commentRepository.findById(commentEntity.getPk()).isPresent());
@@ -125,8 +125,8 @@ class CommentsControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.patch("/ads/{adId}/comments/{commentId}",
                                 commentEntity.getAds().getPk(), commentEntity.getPk())
                         .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + HttpHeaders.encodeBasicAuth("testEmail@gmail.com",
-                                        "testPassword", StandardCharsets.UTF_8))
+                                "Basic " + HttpHeaders.encodeBasicAuth("user0@mail.ru",
+                                        "user0000", StandardCharsets.UTF_8))
                         .content(objectMapper.writeValueAsString(createOrUpdateComment))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())

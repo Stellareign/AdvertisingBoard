@@ -47,7 +47,7 @@ public class TestService {
             "testDescription",
             "",
             userEntity);  // Создаём через конструктор, чтоб появился pk
-            adsRepository.save(adEntity);
+            adsRepository.save(adEntity); // pk появляется только после сохранения в БД
             adEntity.setImage("/ads/image/" + adEntity.getPk());
             adsRepository.save(adEntity);
             return adEntity;
