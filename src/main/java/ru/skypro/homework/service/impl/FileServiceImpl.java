@@ -31,9 +31,7 @@ public class FileServiceImpl implements FileService {
         Path path = Path.of(imagePath);
         try (InputStream is = Files.newInputStream(path)) {
             byte[] image = is.readAllBytes();
-
             log.info("Image was downloaded successfully.");
-
             return image;
         }
     }
