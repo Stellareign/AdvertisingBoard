@@ -39,7 +39,11 @@ public class TestService {
         }
 
         public AdEntity createTestAd() {
-            User userEntity = createTestUser();
+            User userEntity;
+            if (userRepository.findByUsername("user0@mail.ru") == null) {
+                userEntity = createTestUser();
+            }
+            else userEntity = userRepository.findByUsername("user0@mail.ru");
 
             AdEntity adEntity = new AdEntity(
             "testTitle",
@@ -54,8 +58,9 @@ public class TestService {
         }
 
         public Comment createTestComment() {
-            AdEntity adEntity = createTestAd();
-
+            AdEntity adEntity = adsRepository.findAdEntityByAuthor_Username("user0@mail.ru");
+            if (adEntity == null)
+                adEntity = createTestAd();
             Comment commentEntity = new Comment();
             commentEntity.setText("testText");
             commentEntity.setCreatedAt(Instant.now().toEpochMilli()); // or we can use System.currentTimeMillis()

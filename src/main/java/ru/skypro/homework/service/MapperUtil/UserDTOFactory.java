@@ -11,7 +11,7 @@ import java.net.MalformedURLException;
 
 @Service
 public interface UserDTOFactory {
-    //******************************** пароли  *********************
+
     UpdateUserDTO fromUserToUpdatePassworDTO(User user);
 
     User fromUpdatePasswordDTOtoUser(User user, UpdatePasswordDTO updatePasswordDTO);
@@ -19,8 +19,7 @@ public interface UserDTOFactory {
     // **************************** User to UserDTO // UserDTO to User ***************************
     UserDTO fromUserToUserDTO(User user);
 
-
-    User fromUserDTOtoUser(UserDTO userDTO) throws MalformedURLException;
+    User fromUserDTOtoUser(UserDTO userDTO, User user) throws MalformedURLException;
 
     // **************************** User to UpdateUserDTO // UpdateUserDTO to User ***************************
     UpdateUserDTO fromUserToUpdateUserDTO(User user);
@@ -30,5 +29,5 @@ public interface UserDTOFactory {
     // **************************** User to AuthUserDTO // AuthUserDTO to User ***************************
     AuthUserDTO fromUserToAuthUserDTO(User user);
 
-    User fromAuthUserDTOtoUser(AuthUserDTO authUserDTO);
+    User fromAuthUserDTOtoUser(User user, AuthUserDTO authUserDTO);
 }

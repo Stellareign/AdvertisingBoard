@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
 //************************************************ ОБНОВЛЕНИЕ ЮЗЕРА ***************************************************
 
-    /**
+    /*
      * Обновление данных пользователя из запроса UpdateUserDTO и сохранение
      * изменений в базу данных
      *
@@ -122,7 +122,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(String username, UpdateUserDTO updateUserDTO) {
         User user = userRepository.findByUsername(username);
-        if (!checkPhoneFormat(updateUserDTO.getPhone())) {
+        String phone = updateUserDTO.getPhone();
+        if (!checkPhoneFormat(phone)) {
             log.info("Неверный формат номера телефона");
             throw new IllegalArgumentException();
         }
@@ -248,7 +249,7 @@ public class UserServiceImpl implements UserService {
             log.info("Формат телефона верный.");
             return true;
         }
-        log.info("Укажите номер телефона в формате +7(ХХХ)ХХХ-ХХ-ХХ!");
+        log.info("Укажите номер телефона в формате +7(ХХХ)ХХХ-ХХ-ХХ !");
         return false;
     }
 

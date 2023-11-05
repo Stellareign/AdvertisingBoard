@@ -23,6 +23,8 @@ public interface AdsService {
     @Transactional
     void deleteAdsById(int adsId) throws IOException;
 
+    boolean checkAccessToAd(int adId, String username);
+
     Ad createAd(CreateOrUpdateAd createAdDTO,
                 MultipartFile image, Authentication authentication
     ) throws IOException;

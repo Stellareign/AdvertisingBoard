@@ -7,10 +7,9 @@ import ru.skypro.homework.dto.user.UpdatePasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.service.interfaces.UserDTOFactory;
+import ru.skypro.homework.service.MapperUtil.UserDTOFactory;
 
 import java.net.MalformedURLException;
-import java.nio.file.Path;
 
 @Service
 @RequiredArgsConstructor
