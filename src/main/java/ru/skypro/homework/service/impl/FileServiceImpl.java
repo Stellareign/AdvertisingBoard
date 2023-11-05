@@ -28,16 +28,14 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     public byte[] downloadImage(String imagePath) throws IOException {
-        if (imagePath != null ) {
-            Path path = Path.of(imagePath);
-            try (InputStream is = Files.newInputStream(path)) {
-                byte[] image = is.readAllBytes();
+        Path path = Path.of(imagePath);
+        try (InputStream is = Files.newInputStream(path)) {
+            byte[] image = is.readAllBytes();
 
-                log.info("Image was downloaded successfully.");
-                return image;
-            }
+            log.info("Image was downloaded successfully.");
+
+            return image;
         }
-            return null;
     }
 
     /**
