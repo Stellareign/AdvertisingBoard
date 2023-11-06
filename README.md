@@ -1,5 +1,4 @@
-
-![SkyPRO](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/de0be796-faa6-4fb1-9c6f-1b5ab20a4f2f) 
+![SkyPRO](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/d7f92bee-15da-4105-989d-4a301e2d405c)
 # DIPLOMA 
 
 <h2 align="center"> Учебный проект</h2>
