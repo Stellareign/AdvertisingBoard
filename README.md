@@ -42,14 +42,16 @@
 
 **Применяемые технологии:**
 
-* Maven![МАВЕН](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/85200863-62ce-430f-bcd9-0318eb75c6a6)
-* SpringBoot
-* SpringSecurity
-* PostgreSQL
-* Liquibase
-* REST API
-* SwaggerUI
-* Docker
+* ![МАВЕН](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/85200863-62ce-430f-bcd9-0318eb75c6a6)
+* ![СПРИНГ](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/749acef9-6a2a-4cf0-b0e7-11ba979a1e0e)
+
+* ![CGHBYUCTRRMHBNB](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/5d5e6100-fa98-40c5-8cc0-5d930f2053b4)
+* ![ПОСТГРЕС](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/9d168759-aa8d-41cd-b105-f9b39f329823)
+* ![ЛИКВИБЭЙС](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/0dcf8c08-4b4e-4c46-b2c5-91474c65018f)
+* ![РЕСТАПИ](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/440a3d1f-ed5e-471f-b3d5-3c5b1235b788)
+* ![СВАГГЕР](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/676162f2-ac12-4eaa-a79f-9386269976b6)
+*V![ДОКЕР](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/23a6c423-3eed-4e06-8f30-b840f92465eb)
+
 
 
 <br /> 
