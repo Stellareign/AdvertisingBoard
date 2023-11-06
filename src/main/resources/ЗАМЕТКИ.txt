@@ -1,11 +1,6 @@
 *) исходный код:
 https://github.com/skypro-backend/example-for-graduate-work
 
- *) "currentPassword": "stringst",
-  "newPassword": "stringst
-  - что за тип stringst????
-
-
  *) Запуск докера из терминала:
  docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.19
 
@@ -40,7 +35,7 @@ https://github.com/skypro-backend/example-for-graduate-work
 *) для освобождения порта 8080 (через терминал)
 mac:
  sudo lsof -i :8080 - найти процесс
- sudo kill <PID> - остановить процесс, <PID> - нормер процесса
+ sudo kill <PID> - остановить процесс, <PID> - номер процесса
 win:
 netstat -ano | findstr :8080
 taskkill /PID <PID>
