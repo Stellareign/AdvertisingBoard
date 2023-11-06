@@ -41,8 +41,8 @@
 <br /> 
 
 **Применяемые технологии:**
-*
- Maven![МАВЕН](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/85200863-62ce-430f-bcd9-0318eb75c6a6)
+
+* Maven![МАВЕН](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/85200863-62ce-430f-bcd9-0318eb75c6a6)
 * SpringBoot
 * SpringSecurity
 * PostgreSQL
