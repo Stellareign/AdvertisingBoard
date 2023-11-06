@@ -1,4 +1,5 @@
-# DIPLOMA
+# DIPLOMA ![SkyPRO](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/de0be796-faa6-4fb1-9c6f-1b5ab20a4f2f)
+
 <h2 align="center"> Учебный проект</h2>
 <h3 align="center"> группа SkyPro JAVA-14</h3>
 <h3 align="center"> ДИПЛОМ </h3>
