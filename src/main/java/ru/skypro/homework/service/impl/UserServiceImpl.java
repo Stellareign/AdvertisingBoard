@@ -226,6 +226,7 @@ public class UserServiceImpl implements UserService {
         byte[] image = fileService.downloadImage(userEntity.getAvatarPath());
         log.info("Download avatar for user: {} method was invoked", userEntity.getUsername());
         return image;
+
     }
 
 //****************************************** ПРОВЕРКА ВВОДИМЫХ ДАННЫХ *************************************************

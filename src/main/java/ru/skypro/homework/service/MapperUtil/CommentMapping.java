@@ -18,10 +18,11 @@ public class CommentMapping {
      */
     public CommentDTO mapToDto(Comment entity) {
         CommentDTO commentDTO = new CommentDTO();
+        String pathToImage = checkPathToAvatar(entity);
         commentDTO.setPk(entity.getPk());
         commentDTO.setAuthor(entity.getAuthor().getId());
         commentDTO.setAuthorFirstName(entity.getAuthor().getFirstName());
-        commentDTO.setAuthorImage("/users/image/" + entity.getAuthor().getId());
+        commentDTO.setAuthorImage(pathToImage);
         commentDTO.setCreatedAt(Objects.requireNonNullElse(entity.getCreatedAt(), 0L));
         commentDTO.setText(entity.getText());
 
@@ -43,14 +44,19 @@ public class CommentMapping {
         entity.setCreatedAt(System.currentTimeMillis());
         return  entity;
     }
-//    public Comment toComment(CommentEntity commentEntity) {
-//        Comment comment = new Comment();
-//        comment.setAuthor(commentEntity.getUserEntity().getId());
-//        comment.setAuthorImage("/users/image/" + commentEntity.getUserEntity().getId());
-//        comment.setAuthorFirstName(commentEntity.getUserEntity().getFirstName());
-//        comment.setCreatedAt(commentEntity.getCreatedAt());
-//        comment.setPk(commentEntity.getId());
-//        comment.setText(commentEntity.getText());
-//        return comment;
-//    }
+
+    /**
+     * Метод для проверки пути к аватару автора комментария.
+     * Если путь существует и не пустой, то возвращает путь к аватару,
+     * иначе возвращает null.
+     *
+     * @param comment комментарий, для которого нужно проверить путь к аватару
+     * @return путь к аватару, если он существует, иначе null
+     */
+    private String checkPathToAvatar(Comment comment) {
+        if (comment.getAuthor().getAvatarPath() != null && !comment.getAuthor().getAvatarPath().isEmpty()) {
+            return "/users/image/" + comment.getAuthor().getId();
+        }
+        return null;
+    }
 }

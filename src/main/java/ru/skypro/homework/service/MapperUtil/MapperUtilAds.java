@@ -29,6 +29,8 @@ public class MapperUtilAds {
         return new ModelMapper();
     }
 
+    UserDTOFactory userDTOFactory;
+
     /**
      * Метод, создающий объект класса ExtendedAdDTO на основе сущности AdEntity.
      *
@@ -79,7 +81,6 @@ public class MapperUtilAds {
      * @throws IOException если возникла ошибка при обработке фото товара
      */
     public Ad createAdFromEntity(AdEntity adEntity) throws IOException {
-
         return new Ad(
                 adEntity.getPk(),                     //'id объявления'
                 adEntity.getPrice(),                // 'цена объявления'
@@ -88,6 +89,7 @@ public class MapperUtilAds {
                 ("/ads/image/" + adEntity.getPk()) // фото товара
         );
     }
+
 
     /**
      * Метод преобразует список объектов типа AdEntity в список объектов типа Ad.
