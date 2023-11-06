@@ -1,8 +1,8 @@
-![SkyPRO](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/de0be796-faa6-4fb1-9c6f-1b5ab20a4f2f)
+![SkyPRO](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/de0be796-faa6-4fb1-9c6f-1b5ab20a4f2f)                       ![джава](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/85fc193c-e455-447f-a278-662f5de1daba)
+
+
 
 # DIPLOMA 
-![джава](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/85fc193c-e455-447f-a278-662f5de1daba)
-
 
 <h2 align="center"> Учебный проект</h2>
 <h3 align="center"> группа SkyPro JAVA-14</h3>
