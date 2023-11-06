@@ -1,6 +1,5 @@
 
 ![SkyPRO](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/de0be796-faa6-4fb1-9c6f-1b5ab20a4f2f) 
-
 # DIPLOMA 
 
 <h2 align="center"> Учебный проект</h2>
