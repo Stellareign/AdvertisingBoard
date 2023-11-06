@@ -42,15 +42,17 @@
 
 **Применяемые технологии:**
 
-* ![МАВЕН](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/85200863-62ce-430f-bcd9-0318eb75c6a6)
-* ![СПРИНГ](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/749acef9-6a2a-4cf0-b0e7-11ba979a1e0e)
+* ![СПРИНГ](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/ea5552e4-071b-445d-88ce-a99fa33cd810)
+* ![CGHBYUCTRRMHBNB](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/9a9ab0b4-795d-4e5d-94f9-ee5cf3a556c5)
+* ![МАВЕН](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/2584dde9-474a-42ad-a44c-3173545e02f8)
+* ![ПОСТГРЕС](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/6ac566df-0031-4334-b63d-f0d47cf292c8)
+* ![ЛИКВИБЭЙС](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/f3291751-49c3-48db-b78d-e27f17d7494b)
+* ![РЕСТАПИ](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/5dd36ef2-f1c5-4bf9-b573-f21c10c718e9)
+* ![СВАГГЕР](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/3ceba63f-dc58-4e5e-b975-682459d68f21)
+* ![ДОКЕР](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/a3d5c7ea-916d-4328-bd20-0be2191403fc)
+* ![ГИТХАБ](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/954ac850-7165-4382-9ef3-bc632e34159d)
 
-* ![CGHBYUCTRRMHBNB](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/5d5e6100-fa98-40c5-8cc0-5d930f2053b4)
-* ![ПОСТГРЕС](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/9d168759-aa8d-41cd-b105-f9b39f329823)
-* ![ЛИКВИБЭЙС](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/0dcf8c08-4b4e-4c46-b2c5-91474c65018f)
-* ![РЕСТАПИ](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/440a3d1f-ed5e-471f-b3d5-3c5b1235b788)
-* ![СВАГГЕР](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/676162f2-ac12-4eaa-a79f-9386269976b6)
-* ![ДОКЕР](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/e59ab849-6d1f-469d-9515-446392d86c53)
+
 
 
 
