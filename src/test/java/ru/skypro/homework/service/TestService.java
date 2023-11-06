@@ -23,14 +23,24 @@ public class TestService {
         //Создаем "подопытных" Юзера, Объявление и Комментарий
         public User createTestUser() {
 //            userEntity.setPassword("user0000");
-            User userEntity = new User(
-                    "user0@mail.ru",
-                    "testFirstName",
-                    "testLastName",
-                    Role.USER,
-                    "+79000000000",
-                    "",
-                    LocalDate.now());  // Создаём через конструктор, чтоб появился id
+
+            User userEntity = userRepository.findByUsername("user0@mail.ru");
+            if (userEntity == null) {
+                userEntity = new User(
+                        "user0@mail.ru",
+                        "testFirstName",
+                        "testLastName",
+                        Role.ADMIN,
+                        "+79000000000",
+                        "",
+                        LocalDate.now());  // Создаём через конструктор, чтоб появился id
+            }
+            else {
+                userEntity.setFirstName("testFirstName");
+                userEntity.setLastName("testLastName");
+                        userEntity.setRole(Role.ADMIN);
+                        userEntity.setPhone("+79000000000");
+            }
             userEntity.setPassword("$2a$12$szT0GJQE0Zhkq.IB0zuGi.yO.xc8wNjOK42mqrMSL9UQvEjq7jR2C");
             userRepository.save(userEntity);
             userEntity.setAvatarPath("/users/image/" + userEntity.getId());
@@ -39,7 +49,11 @@ public class TestService {
         }
 
         public AdEntity createTestAd() {
-            User userEntity = createTestUser();
+            User userEntity = new User();
+            if (userRepository.findByUsername("user0@mail.ru") == null) {
+                userEntity = createTestUser();
+            }
+            else userEntity = userRepository.findByUsername("user0@mail.ru");
 
             AdEntity adEntity = new AdEntity(
             "testTitle",
@@ -54,8 +68,10 @@ public class TestService {
         }
 
         public Comment createTestComment() {
-            AdEntity adEntity = createTestAd();
-
+            AdEntity adEntity = new AdEntity();
+            adEntity = adsRepository.findAdEntityByAuthor_Username("user0@mail.ru");
+            if (adEntity == null)
+                adEntity = createTestAd();
             Comment commentEntity = new Comment();
             commentEntity.setText("testText");
             commentEntity.setCreatedAt(Instant.now().toEpochMilli()); // or we can use System.currentTimeMillis()

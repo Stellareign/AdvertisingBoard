@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import ru.skypro.homework.config.WebSecurityConfig;
 import ru.skypro.homework.dto.ads.CreateOrUpdateAd;
@@ -54,11 +55,12 @@ class AdsControllerTest {
     private TestService testService;
     @MockBean
     private AuthService authService;
-
-
+//    public AdEntity adEntity = new AdEntity();
 
     @BeforeEach
     public void init() {
+//        adsRepository.deleteAllByAuthor_Username("user0@mail.ru");
+
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .apply(springSecurity())
@@ -66,9 +68,12 @@ class AdsControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
     }
 
+    @Transactional
     @AfterEach
     public void clearDB() {
         adsRepository.deleteAll();
+//        adsRepository.deleteAllByAuthor_Username("user0@mail.ru");
+//        userRepository.deleteUserByUsername("user0@mail.ru");
         userRepository.deleteAll();
     }
 
