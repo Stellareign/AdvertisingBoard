@@ -5,11 +5,11 @@
 <h3 align="center"> группа SkyPro JAVA-14</h3>
 <h3 align="center"> ДИПЛОМ </h3>
 <h3 align="center"> Командная работа.</h3>
-<br /> Курс 4
+<br /> Курс 
 <br /> 2023 г.
 <br /> Разработал:
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=КОМАНДА+ПАЛАТА+№6)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=КОМАНДА+ПАЛАТА+№_6)](https://git.io/typing-svg)
 
 *****************************
 
