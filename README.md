@@ -41,14 +41,16 @@
 <br /> 
 
 **Применяемые технологии:**
-* Maven
+*![МАВЕН](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/85200863-62ce-430f-bcd9-0318eb75c6a6)
+ Maven
 * SpringBoot
+* SpringSecurity
 * PostgreSQL
 * Liquibase
 * REST API
 * SwaggerUI
 * Docker
-* SpringSecurity
+
 
 <br /> 
 
