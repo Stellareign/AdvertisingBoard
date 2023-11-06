@@ -27,7 +27,9 @@
 взаимодействия с бэкендом применяется Docker.
 <br />
 
-* Для запуска front-части приложения необходимо ипользовать команду:  docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.20
+* Для запуска front-части приложения необходимо ипользовать команду:
+<br />
+  docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.20
 
 <br />
 <br /> 
