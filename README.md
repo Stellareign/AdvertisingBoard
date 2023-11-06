@@ -9,7 +9,8 @@
 <h3 align="center"> Командная работа.</h3>
 <br /> Курс 4
 <br /> 2023 г.
-<br /> Разработал: [![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=команда+Палата+№6)](https://git.io/typing-svg)
+<br /> Разработал:
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=команда+Палата+№6)](https://git.io/typing-svg)
 
 *****************************
 
