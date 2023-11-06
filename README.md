@@ -50,7 +50,9 @@
 * ![ЛИКВИБЭЙС](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/0dcf8c08-4b4e-4c46-b2c5-91474c65018f)
 * ![РЕСТАПИ](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/440a3d1f-ed5e-471f-b3d5-3c5b1235b788)
 * ![СВАГГЕР](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/676162f2-ac12-4eaa-a79f-9386269976b6)
-*V![ДОКЕР](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/23a6c423-3eed-4e06-8f30-b840f92465eb)
+* ![ДОКЕР](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/e59ab849-6d1f-469d-9515-446392d86c53)
+
+
 
 
 
