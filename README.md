@@ -3,15 +3,13 @@
 
 # DIPLOMA 
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=На+связи+Палата+№6)](https://git.io/typing-svg)
-
 <h2 align="center"> Учебный проект</h2>
 <h3 align="center"> группа SkyPro JAVA-14</h3>
 <h3 align="center"> ДИПЛОМ </h3>
 <h3 align="center"> Командная работа.</h3>
 <br /> Курс 4
 <br /> 2023 г.
-<br /> Разработал: команда ПАЛАТА № 6 
+<br /> Разработал: [![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=команда+Палата+№6)](https://git.io/typing-svg)
 
 *****************************
 
