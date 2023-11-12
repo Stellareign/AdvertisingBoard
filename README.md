@@ -9,6 +9,7 @@
 <br /> 2023 г.
 <br /> Разработал:
 
+
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=КОМАНДА+ПАЛАТА+№6)](https://git.io/typing-svg)
 
 *****************************
