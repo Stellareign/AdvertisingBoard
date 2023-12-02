@@ -5,8 +5,8 @@
 <h3 align="center"> группа SkyPro JAVA-14</h3>
 <h3 align="center"> ДИПЛОМ </h3>
 <h3 align="center"> Командная работа.</h3>
-<br /> Курс 4
-<br /> 2023 г.-->
+<br /> Курс 4-->
+<br /> 2023 г.
 
 <br /> Разработал:
 
