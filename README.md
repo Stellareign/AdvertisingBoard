@@ -1,4 +1,4 @@
-##### ![SkyPRO](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/d7f92bee-15da-4105-989d-4a301e2d405c) 
+<!--##### ![SkyPRO](https://github.com/Stellareign/DIPLOMA_WORK/assets/115870673/d7f92bee-15da-4105-989d-4a301e2d405c) 
 # DIPLOMA 
 
 <h2 align="center"> Учебный проект</h2>
@@ -6,7 +6,7 @@
 <h3 align="center"> ДИПЛОМ </h3>
 <h3 align="center"> Командная работа.</h3>
 <br /> Курс 4
-<br /> 2023 г.
+<br /> 2023 г.-->
 <br /> Разработал:
 
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=КОМАНДА+ПАЛАТА+№6)](https://git.io/typing-svg)
